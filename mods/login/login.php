@@ -1,6 +1,5 @@
 <?php
 include('../../php/jslib.php');
-include('../../mods/route.php');
 ?>
 <!DOCTYPE html>
 <html>

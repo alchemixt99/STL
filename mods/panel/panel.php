@@ -1,3 +1,9 @@
+<?php
+include('../../php/jslib.php');
+include('../../mods/route.php');
+$rt = new route();
+$rt->check_session();
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -115,7 +121,7 @@
 
       <div class="content mtr-grey-100">
         <ul class="nav">
-          <li><a href="#">Salir</a></li>
+          <li><a href="#" id="btn_logout">Salir</a></li>
         </ul>
       </div>
     </nav>
@@ -262,6 +268,22 @@
         else
           $headerTitle.removeClass('small');
       });
+
+      //==============AJAX===============
+      $('#btn_logout').on('click', function() {
+        $.ajax({      
+          url: "../../php/logout.php",     
+          dataType: "json",     
+          type: "POST",     
+          success: function(data){    
+          if(data.res==true){         
+            $(location).attr('href',data.mes); 
+          }
+          else{
+            alert(data.mes);
+          }
+        }});
+      });  
 
     });
   </script>

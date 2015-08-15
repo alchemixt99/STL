@@ -1,4 +1,6 @@
 <?php
-$newURL="mods/login/login.php";
-header('Location: '.$newURL);
+require("mods/route.php");
+
+$rt = new route();
+$rt->routing("mods/login/login.php");
 ?>
