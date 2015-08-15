@@ -1,5 +1,6 @@
 <?php
-include('../../mods/jslib.php');
+include('../../php/jslib.php');
+include('../../mods/route.php');
 ?>
 <!DOCTYPE html>
 <html>
@@ -314,7 +315,7 @@ include('../../mods/jslib.php');
 						$(location).attr('href',"../panel/panel.php"); 
 					}
 					else{
-						alert("problems")
+						alert(data.mes)
 						//$(location).attr('href',"http://google.com"); 
 					}
 				}});

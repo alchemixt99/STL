@@ -1,7 +1,10 @@
 <?php 
 session_start();
 
-require("../../mods/funciones.php");
+require("../../php/funciones.php");
+require("../../php/messages.php");
+
+$msg = new messages();
 
 $fun = new funciones();
 if(!$fun->isAjax()){header ("Location: login.php");}
@@ -33,7 +36,7 @@ $existe = mysql_fetch_assoc($row_cons);
 //$existe = 1;
 if($existe){
 	$res = true;
-	$mes = "Welcome";
+	$mes = $msg->get_msg("e001");
 	
 	$_SESSION["ses_id"] = $existe['us_id'];
 	$_SESSION["ses_tipo"] = $existe['us_tipo'];
@@ -41,7 +44,7 @@ if($existe){
 	//$menu = 1;
 }else{
 	$res = false;
-	$mes = "Usuario y/o contraseña incorrectos";
+	$mes = $msg->get_msg("e002");
 }
 
 $response->res = $res;
