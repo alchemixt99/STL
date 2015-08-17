@@ -1,18 +1,8 @@
-<?php
-include('../../mods/route.php');
-include('../../php/jslib.php');
-include('../../php/app_menu.php');
-//menu aplicacion
-$app_menu = new app_menu();
-
-$rt = new route();
-$rt->check_session();
-?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Inicio - STL SAS</title>
+    <title>Material Design Bootstrap theme</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     
@@ -113,11 +103,10 @@ $rt->check_session();
   <body class="mtr-grey-50">
     <!-- Off canvas menu for mobile -->
     <nav class="navbar-panel">
-      <div class="header container-fluid mtr-cyan-900">
+      <div class="header container-fluid mtr-red-500">
         <div class="row">
           <div class="col-xs-12">
             <h2><b>Materia</b></h2>
-            <h1></h1>
             <h4>Off canvas panel</h4>
           </div>
         </div>
@@ -125,7 +114,11 @@ $rt->check_session();
 
       <div class="content mtr-grey-100">
         <ul class="nav">
-          <li><a href="#" id="btn_logout">Salir</a></li>
+          <li><a href="#">Item 1</a></li>
+          <li><a href="#">Item 2</a></li>
+          <li><a href="#">Item 3</a></li>
+          <li><a href="#">Item 4</a></li>
+          <li><a href="#">Item 5</a></li>
         </ul>
       </div>
     </nav>
@@ -150,8 +143,9 @@ $rt->check_session();
         </div>
       </div>
     </nav>
+
     <div class="nav-placeholder"></div>
-<?php echo $app_menu->build_menu(); ?>
+
     <div class="container-fluid">
 
       <div class="page-header" id="banner">
@@ -161,6 +155,11 @@ $rt->check_session();
           </div>
         </div>
       </div>
+
+
+
+
+
 
       <div id="source-modal" class="modal fade">
         <div class="modal-dialog modal-lg">
@@ -272,24 +271,6 @@ $rt->check_session();
         else
           $headerTitle.removeClass('small');
       });
-
-      //==============AJAX===============
-      $('#btn_logout').on('click', function() {
-        $.ajax({      
-          url: "../../php/logout.php",     
-          dataType: "json",     
-          type: "POST",     
-          success: function(data){    
-          if(data.res==true){         
-            $(location).attr('href',data.mes); 
-          }
-          else{
-            alert(data.mes);
-          }
-        }});
-      });
-      //==============Activar menuitem====================  
-      $("#Inicio").parents(1).addClass("active");
 
     });
   </script>

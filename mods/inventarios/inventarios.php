@@ -1,9 +1,12 @@
 <?php
 include('../../mods/route.php');
 include('../../php/jslib.php');
+require("../../php/funciones.php");
 include('../../php/app_menu.php');
+include('../../php/inventarios.php');
 //menu aplicacion
 $app_menu = new app_menu();
+$inventario = new inventarios();
 
 $rt = new route();
 $rt->check_session();
@@ -12,7 +15,7 @@ $rt->check_session();
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Inicio - STL SAS</title>
+    <title>Inventarios - STL SAS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     
@@ -151,29 +154,79 @@ $rt->check_session();
       </div>
     </nav>
     <div class="nav-placeholder"></div>
-<?php echo $app_menu->build_menu(); ?>
+        <?php echo $app_menu->build_menu(); ?>
     <div class="container-fluid">
 
       <div class="page-header" id="banner">
         <div class="row">
+          <div class="col-sm-12 text-right">
+            <div id='add-button' class='btn btn-floating-mini btn-danger' title="Nuevo"><i class='md  md-add'></i></div>
+          </div>
           <div class="col-sm-12 text-center">
-            <p class="lead">A Bootstrap theme inspired by Google Material Design.</p>
+            <p class="lead">Gestión de Inventarios.<br><br></p>
+            <p><?php echo $inventario->get_inventario(); ?></p>
           </div>
         </div>
       </div>
-
-      <div id="source-modal" class="modal fade">
+      <div id="add-modal" class="modal fade">
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="md md-close"></i></button>
-              <h4 class="modal-title">Source Code</h4>
+              <h4 class="modal-title">Registrar Finca</h4>
             </div>
             <div class="modal-body">
-              <pre></pre>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-flat btn-primary" data-dismiss="modal">Close</button>
+              <!-- caja para mensajes -->
+              <div class="alert alert-dismissible alert-info">
+                <button type="button" class="close" data-dismiss="alert"><i class="md md-clear"></i></button>
+                <strong>Aviso: </strong> <div id="texto-mensaje"></div>
+              </div>
+
+              <!-- formulario -->
+              <form class="form-horizontal" action="/" method="GET">
+                <fieldset>
+                  <div class="form-group">
+                    <label class="col-lg-2 control-label"></label>
+                    <div class="col-lg-10" style="margin-top: 30px">
+                      <input type="text" class="form-control " id="cod">
+                      <label for="cod" class="">Código Finca(*)</label>
+                    </div>
+                    <label class="col-lg-2 control-label"></label>
+                    <div class="col-lg-10" style="margin-top: 30px">
+                      <input type="text" class="form-control " id="nombre">
+                      <label for="nombre" class="">Nombre Finca(*)</label>
+                    </div>
+                    <label class="col-lg-2 control-label"></label>
+                    <div class="col-lg-10" style="margin-top: 30px">
+                      <input type="text" class="form-control " id="supervisor">
+                      <label for="supervisor" class="">Supervisor(*)</label>
+                    </div>
+                    <label class="col-lg-2 control-label"></label>
+                    <div class="col-lg-10" style="margin-top: 30px">
+                      <input type="text" class="form-control " id="ciudad">
+                      <label for="ciudad" class="">Ciudad(*)</label>
+                    </div>
+                    <label class="col-lg-2 control-label"></label>
+                    <div class="col-lg-10" style="margin-top: 30px">
+                      <input type="text" class="form-control " id="dir">
+                      <label for="dir" class="">Dirección(*)</label>
+                    </div>
+                    <label class="col-lg-2 control-label"></label>
+                    <div class="col-lg-10" style="margin-top: 30px">
+                      <input type="text" class="form-control " id="tel">
+                      <label for="tel" class="">Teléfono(*)</label>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-12 text-right">
+                      <button type="button" class="btn btn-flat btn-primary" data-dismiss="modal">Cerrar</button>
+                      <button type="reset" class="btn btn-flat btn-primary">Limpiar</button>
+                      <a href="#" id="btn_save" class="btn btn-primary">Guardar</a>
+                    </div>
+                  </div>
+                </fieldset>
+              </form>
+              <!-- -->
             </div>
           </div>
         </div>
@@ -195,14 +248,14 @@ $rt->check_session();
 
     <script>
       (function(){
-        var $button = $("<div id='source-button' class='btn btn-floating-mini btn-primary'><i class='md  md-developer-mode'></i></div>").click(function(){
+        $("#add-button").click(function(){
           // Clean ripple
-          $(this).parent().find('.mtr-ripple-wrapper').remove();
+          /*$(this).parent().find('.mtr-ripple-wrapper').remove();
           $(this).parent().find('.mtr-btn').removeClass('mtr-btn');
           var html = $(this).parent().html();
           html = cleanSource(html);
-          $("#source-modal pre").text(html);
-          $("#source-modal").modal();
+          $("#source-modal pre").text(html);*/
+          $("#add-modal").modal();
         });
 
         $('.bs-component [data-toggle="popover"]').popover();
@@ -273,7 +326,13 @@ $rt->check_session();
           $headerTitle.removeClass('small');
       });
 
+      //==============Activar menuitem====================  
+      $("#Inventarios").parents(1).addClass("active");
+
+    });
+  $(document).ready(function(){
       //==============AJAX===============
+      //logout
       $('#btn_logout').on('click', function() {
         $.ajax({      
           url: "../../php/logout.php",     
@@ -288,10 +347,31 @@ $rt->check_session();
           }
         }});
       });
-      //==============Activar menuitem====================  
-      $("#Inicio").parents(1).addClass("active");
-
-    });
+      //guardar finca
+      $('#btn_save').on('click', function() {
+        $.ajax({      
+          url: "../../php/ajax_fincas.php",     
+          dataType: "json",     
+          type: "POST",     
+          data: { 
+                  action: "save",
+                  cod: $("#cod").val(),
+                  nombre: $("#nombre").val(),
+                  supervisor: $("#supervisor").val(),
+                  ciudad: $("#ciudad").val(),
+                  dir: $("#dir").val(),
+                  tel: $("#tel").val()
+                },
+          success: function(data){    
+            if(data.res==true){
+              $("#texto-mensaje").text(data.mes);
+            }else if(data.res==false){
+              $("#texto-mensaje").text(data.mes);
+            }
+          }
+        });
+      });
+  });
   </script>
   </body>
 </html>

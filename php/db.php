@@ -24,7 +24,7 @@ class con {
 		  
 		return ($this->lid);  
  	}//termina conexion  
-	  
+
 	//funcion de desconexion  
 	function disconnect()  
 	{  
