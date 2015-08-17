@@ -27,7 +27,7 @@ class app_menu{
       $script ="<script>$(document).ready(function(){";
       while($row_res = mysql_fetch_assoc($res)) {
         //$menuitem.='<li><a href="'.$row_res['mo_ruta'].'" class="">'.$row_res['mo_nombre'].'</a></li>';
-        $menuitem.='<li><a href="#" id="'.$row_res['mo_nombre'].'" class="">'.$row_res['mo_nombre'].'</a></li>';
+        $menuitem.='<li><a href="#" id="'.$row_res['mo_nombre'].'" class="">'.$row_res['mo_descripcion'].'</a></li>';
         $script.='$("#'.$row_res['mo_nombre'].'").on("click", function(){$(location).attr("href","'.$row_res['mo_ruta'].'"); });';
       }
       $script.='});</script>';

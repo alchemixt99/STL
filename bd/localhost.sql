@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 17-08-2015 a las 10:34:16
+-- Tiempo de generación: 17-08-2015 a las 22:25:29
 -- Versión del servidor: 5.6.25
 -- Versión de PHP: 5.5.27
 
@@ -21,6 +21,22 @@ SET time_zone = "+00:00";
 --
 CREATE DATABASE IF NOT EXISTS `bd_stl_logistica` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
 USE `bd_stl_logistica`;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tb_cancelar_remisiones`
+--
+
+CREATE TABLE IF NOT EXISTS `tb_cancelar_remisiones` (
+  `cr_id` int(11) NOT NULL,
+  `cr_rf_id` int(11) NOT NULL,
+  `cr_codigo` int(11) NOT NULL COMMENT 'codigo a cancelar',
+  `cr_motivo` varchar(180) NOT NULL,
+  `cr_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `cr_created` int(11) NOT NULL,
+  `cr_estado` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -90,16 +106,18 @@ CREATE TABLE IF NOT EXISTS `tbl_modulos` (
   `mo_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `mo_created` int(11) NOT NULL,
   `mo_estado` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `tbl_modulos`
 --
 
 INSERT INTO `tbl_modulos` (`mo_id`, `mo_nombre`, `mo_ruta`, `mo_descripcion`, `mo_timestamp`, `mo_created`, `mo_estado`) VALUES
-(1, 'Inicio', '../panel/panel.php', 'Panel inicial', '2015-08-16 22:25:04', 1, 1),
-(2, 'Fincas', '../fincas/fincas.php', 'Gestión de fincas', '2015-08-16 22:39:01', 1, 1),
-(3, 'Inventarios', '../inventarios/inventarios.php', 'Módulo en el que se gestionarán los inventarios por cada finca', '2015-08-17 08:06:19', 1, 1);
+(1, 'Inicio', '../panel/panel.php', 'Inicio', '2015-08-17 17:04:46', 1, 1),
+(2, 'Fincas', '../fincas/fincas.php', 'Fincas', '2015-08-17 17:04:51', 1, 1),
+(3, 'Inventarios', '../inventarios/inventarios.php', 'Inventarios', '2015-08-17 17:05:02', 1, 1),
+(4, 'Remisiones', '../rfisicas/rfisicas.php', 'Remisiones F&iacute;sicas', '2015-08-17 17:05:33', 1, 1),
+(5, 'cremisiones', '../cremisiones/cremisiones.php', 'Cancelar Remisi&oacute;n', '2015-08-17 17:07:04', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -158,7 +176,7 @@ CREATE TABLE IF NOT EXISTS `tbl_permisos_x_modulo` (
   `pxm_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `pxm_created` int(11) NOT NULL,
   `pxm_estado` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `tbl_permisos_x_modulo`
@@ -167,7 +185,33 @@ CREATE TABLE IF NOT EXISTS `tbl_permisos_x_modulo` (
 INSERT INTO `tbl_permisos_x_modulo` (`pxm_id`, `pxm_pe_id`, `pxm_mo_id`, `pxm_timestamp`, `pxm_created`, `pxm_estado`) VALUES
 (1, 1, 1, '2015-08-16 18:33:30', 1, 1),
 (2, 1, 2, '2015-08-16 22:40:11', 1, 1),
-(3, 1, 3, '2015-08-17 08:07:03', 1, 1);
+(3, 1, 3, '2015-08-17 08:07:03', 1, 1),
+(4, 1, 4, '2015-08-17 08:59:20', 1, 1),
+(5, 1, 5, '2015-08-17 17:06:45', 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tbl_remisiones_fisicas`
+--
+
+CREATE TABLE IF NOT EXISTS `tbl_remisiones_fisicas` (
+  `rf_id` int(11) NOT NULL,
+  `rf_tipo_doc` varchar(60) NOT NULL,
+  `rf_dig_ini` int(11) NOT NULL,
+  `rf_dig_fin` int(11) NOT NULL,
+  `rf_cant_usados` int(11) NOT NULL,
+  `rf_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `rf_created` int(11) NOT NULL,
+  `rf_estado` int(11) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `tbl_remisiones_fisicas`
+--
+
+INSERT INTO `tbl_remisiones_fisicas` (`rf_id`, `rf_tipo_doc`, `rf_dig_ini`, `rf_dig_fin`, `rf_cant_usados`, `rf_timestamp`, `rf_created`, `rf_estado`) VALUES
+(1, 'ICA Agosto 2015', 5000, 15000, 7500, '2015-08-17 09:19:16', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -197,6 +241,12 @@ INSERT INTO `tbl_usuarios` (`us_id`, `us_cc`, `us_tipo`, `us_nombre`, `us_usuari
 --
 -- Índices para tablas volcadas
 --
+
+--
+-- Indices de la tabla `tb_cancelar_remisiones`
+--
+ALTER TABLE `tb_cancelar_remisiones`
+  ADD PRIMARY KEY (`cr_id`);
 
 --
 -- Indices de la tabla `tbl_fincas`
@@ -235,6 +285,12 @@ ALTER TABLE `tbl_permisos_x_modulo`
   ADD PRIMARY KEY (`pxm_id`);
 
 --
+-- Indices de la tabla `tbl_remisiones_fisicas`
+--
+ALTER TABLE `tbl_remisiones_fisicas`
+  ADD PRIMARY KEY (`rf_id`);
+
+--
 -- Indices de la tabla `tbl_usuarios`
 --
 ALTER TABLE `tbl_usuarios`
@@ -245,6 +301,11 @@ ALTER TABLE `tbl_usuarios`
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
+--
+-- AUTO_INCREMENT de la tabla `tb_cancelar_remisiones`
+--
+ALTER TABLE `tb_cancelar_remisiones`
+  MODIFY `cr_id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `tbl_fincas`
 --
@@ -259,7 +320,7 @@ ALTER TABLE `tbl_inventario`
 -- AUTO_INCREMENT de la tabla `tbl_modulos`
 --
 ALTER TABLE `tbl_modulos`
-  MODIFY `mo_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+  MODIFY `mo_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT de la tabla `tbl_per_x_usu`
 --
@@ -274,7 +335,12 @@ ALTER TABLE `tbl_permisos`
 -- AUTO_INCREMENT de la tabla `tbl_permisos_x_modulo`
 --
 ALTER TABLE `tbl_permisos_x_modulo`
-  MODIFY `pxm_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+  MODIFY `pxm_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+--
+-- AUTO_INCREMENT de la tabla `tbl_remisiones_fisicas`
+--
+ALTER TABLE `tbl_remisiones_fisicas`
+  MODIFY `rf_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `tbl_usuarios`
 --
