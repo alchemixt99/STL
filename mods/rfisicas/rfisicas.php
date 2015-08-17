@@ -3,10 +3,10 @@ include('../../mods/route.php');
 include('../../php/jslib.php');
 require("../../php/funciones.php");
 include('../../php/app_menu.php');
-include('../../php/inventarios.php');
+include('../../php/rfisicas.php');
 //menu aplicacion
 $app_menu = new app_menu();
-$inventario = new inventarios();
+$rf = new rfisicas();
 
 $rt = new route();
 $rt->check_session();
@@ -15,7 +15,7 @@ $rt->check_session();
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Inventarios - STL SAS</title>
+    <title>Remisiones Fisicas - STL SAS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     
@@ -163,8 +163,8 @@ $rt->check_session();
             <div id='add-button' class='btn btn-floating-mini btn-danger' title="Nuevo"><i class='md  md-add'></i></div>
           </div>
           <div class="col-sm-12 text-center">
-            <p class="lead">Gestión de Inventarios.<br><br></p>
-            <p><?php echo $inventario->get_inventario(); ?></p>
+            <p class="lead">Gestión de Remisiones Físicas.<br><br></p>
+            <p><?php echo $rf->get_rfisicas(); ?></p>
           </div>
         </div>
       </div>
@@ -173,7 +173,7 @@ $rt->check_session();
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="md md-close"></i></button>
-              <h4 class="modal-title">Registrar Inventario</h4>
+              <h4 class="modal-title">Registrar Finca</h4>
             </div>
             <div class="modal-body">
               <!-- caja para mensajes -->
@@ -327,7 +327,7 @@ $rt->check_session();
       });
 
       //==============Activar menuitem====================  
-      $("#Inventarios").parents(1).addClass("active");
+      $("#Remisiones Fisicas").parents(1).addClass("active");
 
     });
   $(document).ready(function(){
