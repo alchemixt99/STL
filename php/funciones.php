@@ -44,5 +44,17 @@ class funciones{
 	    {return false;}
 	}	
 
+	function existe($tbl,$field,$var){
+		$con = new con();
+		$con->connect();
+		//preguntamos si existe la finca en la matriz entregada
+		$selectSQL ="SELECT * FROM tbl_".$tbl." WHERE `$field` = '$var'";
+		$row_cons = mysql_query($selectSQL);
+		if(mysql_num_rows($row_cons)>0){$respuesta=true;}else{$respuesta=false;}
+		
+		/*Termina Consulta*/
+		return $respuesta;
+	}
+
 }
 ?>

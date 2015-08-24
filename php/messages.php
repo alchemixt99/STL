@@ -9,6 +9,8 @@ class messages{
 			"e003" => "Error al intentar almacenar el registro, por favor intentelo nuevamente.",
 			"e004" => "Registrado con éxito.",
 			"e005" => "Campos Vacíos, verifique que los campos sean correctos e intentelo de nuevo.",
+			"e006" => "El código de finca ingresado no coincide con el de la base de datos, favor verificar el código e intentar nuevamente.",
+			"e007" => "El código de finca ingresado ya fué registrado, favor verificar el código e intentar nuevamente.",
 		];
 		/* ====================== */
 		return $msg[$e];

@@ -177,20 +177,19 @@ $rt->check_session();
             </div>
             <div class="modal-body">
               <!-- caja para mensajes -->
-              <div class="alert alert-dismissible alert-info">
-                <button type="button" class="close" data-dismiss="alert"><i class="md md-clear"></i></button>
-                <strong>Aviso: </strong> <div id="texto-mensaje"></div>
-              </div>
+              <div id="msg_box"></div>
 
               <!-- formulario -->
-              <form class="form-horizontal" action="/" method="GET">
+              <form class="form-horizontal" action="/" method="GET" id="frm_finca">
                 <fieldset>
-                  <div class="form-group">
+                  <div class="form-group" id="gr_cod_finca">
                     <label class="col-lg-2 control-label"></label>
                     <div class="col-lg-10" style="margin-top: 30px">
-                      <input type="text" class="form-control " id="cod">
+                        <?php echo $fincas->get_options_fincas(); ?>
                       <label for="cod" class="">Código Finca(*)</label>
                     </div>
+                  </div>
+                  <div class="form-group">
                     <label class="col-lg-2 control-label"></label>
                     <div class="col-lg-10" style="margin-top: 30px">
                       <input type="text" class="form-control " id="nombre">
@@ -198,29 +197,14 @@ $rt->check_session();
                     </div>
                     <label class="col-lg-2 control-label"></label>
                     <div class="col-lg-10" style="margin-top: 30px">
-                      <input type="text" class="form-control " id="supervisor">
-                      <label for="supervisor" class="">Supervisor(*)</label>
-                    </div>
-                    <label class="col-lg-2 control-label"></label>
-                    <div class="col-lg-10" style="margin-top: 30px">
-                      <input type="text" class="form-control " id="ciudad">
-                      <label for="ciudad" class="">Ciudad(*)</label>
-                    </div>
-                    <label class="col-lg-2 control-label"></label>
-                    <div class="col-lg-10" style="margin-top: 30px">
-                      <input type="text" class="form-control " id="dir">
-                      <label for="dir" class="">Dirección(*)</label>
-                    </div>
-                    <label class="col-lg-2 control-label"></label>
-                    <div class="col-lg-10" style="margin-top: 30px">
-                      <input type="text" class="form-control " id="tel">
-                      <label for="tel" class="">Teléfono(*)</label>
+                      <label for="lote_especie" class="">Autorizar Lotes</label>
+                      <div class="checkbox" id="lote_especie">
+                        
+                      </div>
                     </div>
                   </div>
                   <div class="form-group">
                     <div class="col-sm-12 text-right">
-                      <button type="button" class="btn btn-flat btn-primary" data-dismiss="modal">Cerrar</button>
-                      <button type="reset" class="btn btn-flat btn-primary">Limpiar</button>
                       <a href="#" id="btn_save" class="btn btn-primary">Guardar</a>
                     </div>
                   </div>
@@ -347,8 +331,33 @@ $rt->check_session();
           }
         }});
       });
+      //acción al cambiar el select id=cod
+      $("#cod").change(function(){
+        $.ajax({      
+          url: "../../php/ajax_fincas.php",     
+          dataType: "json",     
+          type: "POST",     
+          data: { 
+                  action: "get_lotes",
+                  cod: $("#cod").val()
+                },
+          success: function(data){    
+            if(data.res==true){
+              $("#lote_especie").fadeIn();
+              $("#lote_especie").html(data.mes);
+            }
+          }
+        });
+      });
       //guardar finca
       $('#btn_save').on('click', function() {
+        //traemos arreglo de lotes
+        var lotes_val = new Array();
+        $("input[name='lotes[]']:checked").each(function(){
+          lotes_val.push($(this).val());
+        });
+
+        //ejecutamos ajax
         $.ajax({      
           url: "../../php/ajax_fincas.php",     
           dataType: "json",     
@@ -357,16 +366,21 @@ $rt->check_session();
                   action: "save",
                   cod: $("#cod").val(),
                   nombre: $("#nombre").val(),
-                  supervisor: $("#supervisor").val(),
-                  ciudad: $("#ciudad").val(),
-                  dir: $("#dir").val(),
-                  tel: $("#tel").val()
+                  arr_lotes: lotes_val
                 },
           success: function(data){    
             if(data.res==true){
-              $("#texto-mensaje").text(data.mes);
+              $("#msg_box").fadeIn();
+              $("#msg_box").text(data.mes);
+              $("#frm_finca").trigger("reset");
             }else if(data.res==false){
-              $("#texto-mensaje").text(data.mes);
+              $("#msg_box").fadeIn();
+              $("#gr_cod_finca").addClass("has-error");
+              setTimeout(function(){
+                $("#gr_cod_finca").removeClass("has-error");
+                $("#msg_box").fadeOut();
+              },5000);
+              $("#msg_box").text(data.mes);
             }
           }
         });

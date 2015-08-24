@@ -14,11 +14,6 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 
 		/*recibimos variables*/
 		$cod=$_POST["cod"];
-		$nombre=$_POST["nombre"];
-		$supervisor=$_POST["supervisor"];
-		$ciudad=$_POST["ciudad"];
-		$dir=$_POST["dir"];
-		$tel=$_POST["tel"];
 
 		if($nombre==""){
 			$res=false;
@@ -26,8 +21,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 		}else{
 			$con = new con();
 			$con->connect();
-
-			
+		
 
 			/* ingresamos datos de la finca */
 			$qry ="INSERT INTO tbl_fincas (fi_codigo, fi_nombre, fi_supervisor, fi_ciudad, fi_dir, fi_tel, fi_created, fi_estado)
@@ -50,11 +44,17 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 
 	}
 
+	//traemos lotes autorizados
+	function lotes_au(){
+		//cargar lotes segun la finca que se seleccione, lotes de la tabla lotes_autorizados
+	}
+
   //validamos si es una petición ajax
   if(isset($_POST['action']) && !empty($_POST['action'])) {
       $action = $_POST['action'];
       switch($action) {
           case 'save' : add_finca();break;
+          case 'get_lotes' : add_finca();break;
       }
   }
 ?>

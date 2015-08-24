@@ -60,5 +60,41 @@ class inventarios{
     $con->disconnect();
     return $script.$html;
   }
+
+  //LISTADO DE FINCAS [combo]
+  function get_fincas_list(){
+    $con = new con();
+    $msg = new messages();
+    $rt = new route();
+
+    $con->connect();
+
+
+    //consultamos fincas desde la tabla de fincas
+    if(isset($_SESSION["ses_id"])){
+      $qry='SELECT * FROM tbl_fincas WHERE fi_estado=1 ORDER BY fi_nombre ASC';
+      $res = mysql_query($qry);
+
+      $item =" ";
+      $script ="<script>$(document).ready(function(){";
+      while($row_res = mysql_fetch_assoc($res)) {
+        $item.='
+              <option value="'.$row_res["fi_id"].'">'.$row_res["fi_nombre"].' ('.$row_res["fi_codigo"].')</option>
+        ';
+        $script.='';
+      }
+      $script.='});</script>';
+    }
+    else{$rt->routing($rt->path("login"));}
+
+    $html='
+        <select class="form-control valued" id="cod">
+          '.$item.'
+        </select>
+    ';
+    $con->disconnect();
+    return $script.$html;
+  }
+
 }
 ?>

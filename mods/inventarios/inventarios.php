@@ -177,10 +177,7 @@ $rt->check_session();
             </div>
             <div class="modal-body">
               <!-- caja para mensajes -->
-              <div class="alert alert-dismissible alert-info">
-                <button type="button" class="close" data-dismiss="alert"><i class="md md-clear"></i></button>
-                <strong>Aviso: </strong> <div id="texto-mensaje"></div>
-              </div>
+              <div id="msg_box"></div>
 
               <!-- formulario -->
               <form class="form-horizontal" action="/" method="GET">
@@ -188,39 +185,16 @@ $rt->check_session();
                   <div class="form-group">
                     <label class="col-lg-2 control-label"></label>
                     <div class="col-lg-10" style="margin-top: 30px">
-                      <input type="text" class="form-control " id="cod">
-                      <label for="cod" class="">Código Finca(*)</label>
+                      <?php echo $inventario->get_fincas_list(); ?>
+                      <label for="cod" class="">Finca (Autorizada por Gerencia)</label>
                     </div>
                     <label class="col-lg-2 control-label"></label>
-                    <div class="col-lg-10" style="margin-top: 30px">
-                      <input type="text" class="form-control " id="nombre">
-                      <label for="nombre" class="">Nombre Finca(*)</label>
-                    </div>
-                    <label class="col-lg-2 control-label"></label>
-                    <div class="col-lg-10" style="margin-top: 30px">
-                      <input type="text" class="form-control " id="supervisor">
-                      <label for="supervisor" class="">Supervisor(*)</label>
-                    </div>
-                    <label class="col-lg-2 control-label"></label>
-                    <div class="col-lg-10" style="margin-top: 30px">
-                      <input type="text" class="form-control " id="ciudad">
-                      <label for="ciudad" class="">Ciudad(*)</label>
-                    </div>
-                    <label class="col-lg-2 control-label"></label>
-                    <div class="col-lg-10" style="margin-top: 30px">
-                      <input type="text" class="form-control " id="dir">
-                      <label for="dir" class="">Dirección(*)</label>
-                    </div>
-                    <label class="col-lg-2 control-label"></label>
-                    <div class="col-lg-10" style="margin-top: 30px">
-                      <input type="text" class="form-control " id="tel">
-                      <label for="tel" class="">Teléfono(*)</label>
+                    <div class="col-lg-10" style="margin-top: 30px" id="lote">
+                      <select class="form-control valued" id="lotes"> </select>
                     </div>
                   </div>
                   <div class="form-group">
                     <div class="col-sm-12 text-right">
-                      <button type="button" class="btn btn-flat btn-primary" data-dismiss="modal">Cerrar</button>
-                      <button type="reset" class="btn btn-flat btn-primary">Limpiar</button>
                       <a href="#" id="btn_save" class="btn btn-primary">Guardar</a>
                     </div>
                   </div>
@@ -347,7 +321,25 @@ $rt->check_session();
           }
         }});
       });
-      //guardar finca
+      //acción al cambiar el select id=cod
+      $("#cod").change(function(){
+        $.ajax({      
+          url: "../../php/ajax_inventarios.php",     
+          dataType: "json",     
+          type: "POST",     
+          data: { 
+                  action: "get_lotes",
+                  cod: $("#cod").val()
+                },
+          success: function(data){    
+            if(data.res==true){
+              $("#lote_especie").fadeIn();
+              $("#lote_especie").html(data.mes);
+            }
+          }
+        });
+      });
+      //guardar inventario
       $('#btn_save').on('click', function() {
         $.ajax({      
           url: "../../php/ajax_fincas.php",     

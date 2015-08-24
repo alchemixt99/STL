@@ -23,16 +23,11 @@ class fincas{
               <tr>
                 <td>'.$row_res["fi_codigo"].'</td>
                 <td>'.$row_res["fi_nombre"].'</td>
-                <td>'.$row_res["fi_supervisor"].'</td>
-                <td>'.$row_res["fi_ciudad"].'</td>
-                <td>'.$row_res["fi_dir"].'</td>
-                <td>'.$row_res["fi_tel"].'</td>
                 <td>
-                  <div id="edt-button" onclick="" class="btn btn-floating-mini btn-success" title="Modificar"><i class="md  md-edit"></i></div>
+                  <div id="edt-button" onclick="" class="btn btn-floating-mini btn-success" title="Lotes Autorizados"><i class="md  md-edit"></i></div>
                   <div id="del-button" onclick="" class="btn btn-floating-mini btn-danger" title="Borrar"><i class="md  md-delete"></i></div>
                 </td>
               </tr>
-
         ';
         $script.='';
       }
@@ -46,10 +41,6 @@ class fincas{
               <tr>
                 <th>Código</th>
                 <th>Nombre</th>
-                <th>Supervisor</th>
-                <th>Ciudad</th>
-                <th>Telefono</th>
-                <th>Dirección</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -57,6 +48,39 @@ class fincas{
               '.$item.'
             </tbody>
           </table> 
+    ';
+    $con->disconnect();
+    return $script.$html;
+  }
+  function get_options_fincas(){
+    $con = new con();
+    $msg = new messages();
+    $rt = new route();
+
+    $con->connect();
+
+
+    //consultamos fincas desde la matriz ica
+    if(isset($_SESSION["ses_id"])){
+      $qry='SELECT DISTINCT codfinca, municipio, depto FROM tbl_matriz_ica ORDER BY codfinca ASC';
+      $res = mysql_query($qry);
+
+      $item =" ";
+      $script ="<script>$(document).ready(function(){";
+      while($row_res = mysql_fetch_assoc($res)) {
+        $item.='
+              <option value="'.$row_res["codfinca"].'">'.$row_res["codfinca"].' ('.$row_res["municipio"].' - '.$row_res["depto"].')</option>
+        ';
+        $script.='';
+      }
+      $script.='});</script>';
+    }
+    else{$rt->routing($rt->path("login"));}
+
+    $html='
+        <select class="form-control valued" id="cod">
+          '.$item.'
+        </select>
     ';
     $con->disconnect();
     return $script.$html;
