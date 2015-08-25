@@ -183,7 +183,6 @@ $rt->check_session();
               <form class="form-horizontal" action="/" method="GET">
                 <fieldset>
                   <div class="form-group">
-                    <label class="col-lg-2 control-label"></label>
                     <div class="col-lg-10" style="margin-top: 30px">
                       <?php echo $inventario->get_fincas_list(); ?>
                       <label for="cod" class="">Finca (Autorizada por Gerencia)</label>
