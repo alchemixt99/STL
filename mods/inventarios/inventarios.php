@@ -188,9 +188,23 @@ $rt->check_session();
                       <?php echo $inventario->get_fincas_list(); ?>
                       <label for="cod" class="">Finca (Autorizada por Gerencia)</label>
                     </div>
+                    <div class="col-lg-10" style="margin-top: 30px">
+                      <input type="text" class="form-control" id="sup">
+                      <label for="sup" class="">Supervisor</label>
+                    </div>
                     <label class="col-lg-2 control-label"></label>
-                    <div class="col-lg-10" style="margin-top: 30px" id="lote">
-                      <select class="form-control valued" id="lotes"> </select>
+                    <div class="col-lg-10" style="margin-top: 30px" id="lotes">
+                    </div>
+                    <div class="col-lg-10" style="margin-top: 30px">
+                      <input type="text" class="form-control" id="inventario">
+                      <label for="inventario" class="">Inventario (m3)</label>
+                    </div>
+                    <div class="col-lg-10" style="margin-top: 30px">
+                      <select class="form-control valued" id="tipo_madera">
+                        <option value="1">Troza</option>
+                        <option value="2">Pulpa</option>
+                      </select>
+                      <label for="lote" class="">Tipo de Madera</label>
                     </div>
                   </div>
                   <div class="form-group">
@@ -333,8 +347,16 @@ $rt->check_session();
                 },
           success: function(data){    
             if(data.res==true){
-              $("#lote_especie").fadeIn();
-              $("#lote_especie").html(data.mes);
+              $("#lotes").fadeIn();
+              $("#lotes").html(data.mes);
+            }else{
+              $("#msg_box").fadeIn();
+              $("#lote").addClass("has-error");
+              $("#msg_box").text(data.mes);
+              setTimeout(function(){
+                $("#lote").removeClass("has-error");
+                $("#msg_box").fadeOut();
+              },5000);
             }
           }
         });
@@ -342,17 +364,16 @@ $rt->check_session();
       //guardar inventario
       $('#btn_save').on('click', function() {
         $.ajax({      
-          url: "../../php/ajax_fincas.php",     
+          url: "../../php/ajax_inventarios.php",     
           dataType: "json",     
           type: "POST",     
           data: { 
                   action: "save",
                   cod: $("#cod").val(),
-                  nombre: $("#nombre").val(),
-                  supervisor: $("#supervisor").val(),
-                  ciudad: $("#ciudad").val(),
-                  dir: $("#dir").val(),
-                  tel: $("#tel").val()
+                  sup: $("#sup").val(),
+                  lote: $("#lote").val(),
+                  inv: $("#inventario").val(),
+                  tipom: $("#tipo_madera").val()
                 },
           success: function(data){    
             if(data.res==true){
