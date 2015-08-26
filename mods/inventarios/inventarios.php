@@ -376,9 +376,9 @@ $rt->check_session();
                 },
           success: function(data){    
             if(data.res==true){
-              $("#texto-mensaje").text(data.mes);
+              $("#msg_box").text(data.mes);
             }else if(data.res==false){
-              $("#texto-mensaje").text(data.mes);
+              $("#msg_box").text(data.mes);
             }
           }
         });

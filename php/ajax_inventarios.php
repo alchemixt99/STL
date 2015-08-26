@@ -19,7 +19,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 		$inv=$_POST["inv"];
 		$tipom=$_POST["tipom"];
 
-		if($nombre==""){
+		if($inv==""){
 			$res=false;
 			$mes=$msg->get_msg("e005");
 		}else{
@@ -28,9 +28,10 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 		
 
 			/* ingresamos datos de la finca */
-			$qry ="INSERT INTO tbl_inventarios (in_fi_id, in_supervisor, in_la_id, in_mt_cubico, in_tipo_madera)
-					VALUES ('".$cod."','".$sup."',".$lote.",'".$ciudad."','".$dir."','".$tel."',".$_SESSION["ses_id"].",1);";
+			$qry ="INSERT INTO tbl_inventario (in_fi_id, in_supervisor, in_lote, in_mt_cubico, in_tipo_materia, in_created, in_estado)
+					VALUES (".$cod.",'".$sup."','".$lote."',".$inv.",".$tipom.",".$_SESSION["ses_id"].",1);";
 
+			//echo "<br>Consulta: ".$qry;
 			$resp = mysql_query($qry);
 			if(!$resp){
 				$res=false;
