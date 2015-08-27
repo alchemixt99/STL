@@ -362,26 +362,39 @@ $rt->check_session();
       });
       //guardar inventario
       $('#btn_save').on('click', function() {
-        $.ajax({      
-          url: "../../php/ajax_inventarios.php",     
-          dataType: "json",     
-          type: "POST",     
-          data: { 
-                  action: "save",
-                  cod: $("#cod").val(),
-                  sup: $("#sup").val(),
-                  lote: $("#lote").val(),
-                  inv: $("#inventario").val(),
-                  tipom: $("#tipo_madera").val()
-                },
-          success: function(data){    
-            if(data.res==true){
-              $("#msg_box").text(data.mes);
-            }else if(data.res==false){
-              $("#msg_box").text(data.mes);
+        var body = "Está seguro que desea registrar la siguiente información:"+"\n"+
+                    "Código: "+$("#cod").val()+"\n"+
+                    "Supervisor: "+$("#sup").val()+"\n"+
+                    "Lote: "+$("#lote").val()+"\n"+
+                    "Inventario: "+$("#inventario").val()+"\n"+
+                    "Tipo Madera: "+$("#tipo_madera").val()+"\n";
+        var c = confirm(body);
+        if(c == true){
+          $.ajax({      
+            url: "../../php/ajax_inventarios.php",     
+            dataType: "json",     
+            type: "POST",     
+            data: { 
+                    action: "save",
+                    cod: $("#cod").val(),
+                    sup: $("#sup").val(),
+                    lote: $("#lote").val(),
+                    inv: $("#inventario").val(),
+                    tipom: $("#tipo_madera").val()
+                  },
+            success: function(data){    
+              if(data.res==true){
+                $("#msg_box").text(data.mes);
+                setTimeout(function(){location.reload();},5000);
+              }else if(data.res==false){
+                $("#msg_box").text(data.mes);
+              }
             }
-          }
-        });
+          });
+        }else{
+          location.reload();
+        }
+        
       });
   });
   </script>

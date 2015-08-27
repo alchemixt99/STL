@@ -25,7 +25,7 @@ class inventarios{
         $item.='
               <tr>
                 <td>'.$row_res["fi_codigo"].'</td>
-                <td>'.$row_res["in_mt_cubico"].'</td>
+                <td>'.$row_res["in_mt_cubico"].' m<sup>3</sup></td>
                 <td>'.$row_res["in_lote"].'</td>
                 <td>'.$tipo_materia.'</td>
                 <td>
@@ -46,7 +46,7 @@ class inventarios{
             <thead>
               <tr>
                 <th>Código Finca</th>
-                <th>M3</th>
+                <th>Inventario</th>
                 <th>Lote</th>
                 <th>Tipo Madera</th>
                 <th>Acciones</th>
@@ -89,6 +89,7 @@ class inventarios{
 
     $html='
         <select class="form-control valued" id="cod">
+          <option>Seleccione</option>
           '.$item.'
         </select>
     ';

@@ -19,7 +19,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 		$inv=$_POST["inv"];
 		$tipom=$_POST["tipom"];
 
-		if($inv==""){
+		if($inv=="" || $cod==""){
 			$res=false;
 			$mes=$msg->get_msg("e005");
 		}else{
@@ -27,18 +27,21 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 			$con->connect();
 		
 
-			/* ingresamos datos de la finca */
+			/* ingresamos datos del inventario */
 			$qry ="INSERT INTO tbl_inventario (in_fi_id, in_supervisor, in_lote, in_mt_cubico, in_tipo_materia, in_created, in_estado)
 					VALUES (".$cod.",'".$sup."','".$lote."',".$inv.",".$tipom.",".$_SESSION["ses_id"].",1);";
-
-			//echo "<br>Consulta: ".$qry;
 			$resp = mysql_query($qry);
-			if(!$resp){
-				$res=false;
-				$mes=$msg->get_msg("e003");
+			if(upd_matriz()){
+				if(!$resp){
+					$res=false;
+					$mes=$msg->get_msg("e003");
+				}else{
+					$res=true;
+					$mes=$msg->get_msg("e004");
+				}
 			}else{
-				$res=true;
-				$mes=$msg->get_msg("e004");
+				$res=false;
+				$mes=$msg->get_msg("e009");
 			}
 		}
 		$response->res = $res;
@@ -47,6 +50,69 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 
 		$con->disconnect();
 
+	}
+	//Actualizamos inventario de la matriz
+	function upd_matriz(){
+		$msg = new messages();
+		$response = new StdClass;
+
+		//traemos datos del inventario
+		$qry_inv = "SELECT * FROM tbl_inventario ORDER BY in_id DESC LIMIT 1";
+		$res_inv = mysql_query($qry_inv);
+		$can_inv = mysql_num_rows($res_inv);
+		$row_inv = mysql_fetch_assoc($res_inv);
+
+		//traemos datos asociados a la finca y al lote desde la matriz ica
+		$qry_fxm = "SELECT I.in_fi_id, M.codfinca, F.fi_nombre, L.la_idlote, I.in_lote , M.vol_ica_m3 FROM tbl_inventario AS I
+					INNER JOIN tbl_fincas AS F ON F.fi_id = I.in_fi_id
+					INNER JOIN tbl_lotes_autorizados AS L ON L.la_fi_id = F.fi_id
+					INNER JOIN tbl_matriz_ica AS M ON M.idlote = L.la_idlote
+					WHERE
+					F.fi_codigo = M.codfinca AND
+					F.fi_id = ".$row_inv['in_fi_id']." AND 
+					L.la_id = ".$row_inv['in_lote'].";";
+		$res_fxm = mysql_query($qry_fxm);
+		$can_fxm = mysql_num_rows($res_fxm);
+		$row_fxm = mysql_fetch_assoc($res_fxm);
+
+		//traemos datos del control de inventarios
+		$qry_lot = "SELECT * FROM tbl_control_inventarios WHERE ci_in_lote = ".$row_inv['in_lote'].";";
+		//echo "<br>LOTES: ".$qry_lot;
+		$res_lot = mysql_query($qry_lot);
+		$can_lot = mysql_num_rows($res_lot);
+
+		//echo "<br>cantidad de lotes: ".$can_lot;
+
+		//verificamos si es la primera vez que se registra un cambio en ese lote
+		if($can_lot==0){
+			//si es primera vez, creamos el registro
+			$nv = $row_fxm['vol_ica_m3']-$row_inv['in_mt_cubico'];
+			$qry_new = "INSERT INTO tbl_control_inventarios (ci_fi_id, ci_in_lote, ci_vol_ini, ci_vol_act, ci_created, ci_estado)
+					VALUES(".$row_fxm['in_fi_id'].",".$row_fxm['in_lote'].",".$row_fxm['vol_ica_m3'].",".$nv.",".$_SESSION["ses_id"].",1);";
+		    $res_new= mysql_query($qry_new);
+		    if(!$res_new){$res=false;}else{$res=true;}
+		}else{
+			//de lo contrario, actualizamos el registro existente
+			//traemos vol actual de ese lote de esa finca
+			$qry_get = "SELECT * FROM tbl_control_inventarios WHERE ci_fi_id=".$row_fxm['in_fi_id']." AND ci_in_lote=".$row_fxm['in_lote'].";";
+			//echo "<br>GET: ".$qry_get;
+			$res_get = mysql_query($qry_get);
+			$can_get = mysql_num_rows($res_get);
+			$row_get = mysql_fetch_assoc($res_get);
+
+			//calculamos nuevo volumen
+			$vol_act_nuevo = $row_get['ci_vol_act'] - $row_inv['in_mt_cubico'];
+
+			//actualizamos datos
+			$qry_upd = "UPDATE tbl_control_inventarios SET
+						ci_vol_act=".$vol_act_nuevo."
+						WHERE ci_id=".$row_get['ci_id'].";";
+			//echo "<br> UPD: ".$qry_upd;
+		    $res_upd= mysql_query($qry_upd);
+		    if(!$res_upd){$res=false;}else{$res=true;}			
+		}
+		//retornamos response
+		return $res;
 	}
 
 	//traemos lotes autorizados
@@ -66,11 +132,12 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 			$con->connect();
 		
 			/* Consultamos los lotes de la finca autorizados por gerencia con anterioridad */
-			$qry ="SELECT DISTINCT L.la_id, F.fi_nombre, L.la_idlote, F.fi_codigo FROM tbl_lotes_autorizados AS L 
+			$qry ="SELECT DISTINCT L.la_id, F.fi_nombre, L.la_idlote, F.fi_codigo, M.especie_ica FROM tbl_lotes_autorizados AS L 
 					INNER JOIN tbl_fincas AS F 
 					INNER JOIN tbl_matriz_ica AS M 
 					WHERE 
 					F.fi_id = L.la_fi_id AND 
+					F.fi_codigo = M.codfinca AND
 					M.idlote = L.la_idlote AND 
 					L.la_fi_id = $cod
 					ORDER BY L.la_idlote ASC;";
@@ -80,7 +147,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 			if($cant>0){
 				$item='';
 				while($row_resp = mysql_fetch_assoc($resp)){
-					$item.='<option value="'.$row_resp["la_id"].'">'.$row_resp["la_idlote"].'</option>';
+					$item.='<option value="'.$row_resp["la_id"].'">'.$row_resp["la_idlote"].' - '.$row_resp["especie_ica"].'</option>';
 				}	
 
 				$html='
