@@ -26,6 +26,7 @@ class app_menu{
       $menuitem =" ";
       $script ="<script>$(document).ready(function(){";
       while($row_res = mysql_fetch_assoc($res)) {
+        $tipo_us = $row_res['pxu_pe_id'];
         //$menuitem.='<li><a href="'.$row_res['mo_ruta'].'" class="">'.$row_res['mo_nombre'].'</a></li>';
         $menuitem.='<li><a href="#" id="'.$row_res['mo_nombre'].'" class="">'.$row_res['mo_descripcion'].'</a></li>';
         $script.='$("#'.$row_res['mo_nombre'].'").on("click", function(){$(location).attr("href","'.$row_res['mo_ruta'].'"); });';
@@ -33,6 +34,17 @@ class app_menu{
       $script.='});</script>';
     }
     else{$rt->routing($rt->path("login"));}
+
+    //generamos menú tipo dropdown para el usuario gerente
+    if($tipo_us==1){
+      $dropdown = '<li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Gestionar <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                    '.$menuitem.'
+                    </ul>
+                  </li>';
+      $menuitem=$dropdown;      
+    }
 
     $html='
             <nav class="navbar navbar-inverse">
@@ -52,7 +64,7 @@ class app_menu{
                   </ul>
                   <ul class="nav navbar-nav navbar-right">
                     
-                    <li><a href="#" class="">fecha / hora</a></li>
+                    <li><a href="#" id="reloj">fecha / hora</a></li>
                   </ul>
                 </div>
               </div>

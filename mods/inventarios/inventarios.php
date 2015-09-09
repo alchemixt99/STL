@@ -3,9 +3,13 @@ include('../../mods/route.php');
 include('../../php/jslib.php');
 require("../../php/funciones.php");
 include('../../php/app_menu.php');
+include('../../php/aside_menu.php');
 include('../../php/inventarios.php');
+include('../../php/html_snippets.php');
 //menu aplicacion
 $app_menu = new app_menu();
+$aside_menu = new aside_menu();
+$html_snippet = new html_snippets();
 $inventario = new inventarios();
 
 $rt = new route();
@@ -38,6 +42,7 @@ $rt->check_session();
     -->
 
     <style>
+    <?php echo $html_snippet->load_header_css(); ?>
       html, body {
         height: 100%;
         width: 100%;
@@ -71,7 +76,7 @@ $rt->check_session();
       }
 
       #topbar.toolbar-expanded {
-        height: 282px;
+        height: 400px;
         position: relative;
       }
 
@@ -115,23 +120,7 @@ $rt->check_session();
   </head>
   <body class="mtr-grey-50">
     <!-- Off canvas menu for mobile -->
-    <nav class="navbar-panel">
-      <div class="header container-fluid mtr-cyan-900">
-        <div class="row">
-          <div class="col-xs-12">
-            <h2><b>Materia</b></h2>
-            <h1></h1>
-            <h4>Off canvas panel</h4>
-          </div>
-        </div>
-      </div>
-
-      <div class="content mtr-grey-100">
-        <ul class="nav">
-          <li><a href="#" id="btn_logout">Salir</a></li>
-        </ul>
-      </div>
-    </nav>
+    <?php echo $aside_menu->build_menu_aside(); ?>
 
     <!-- top navbar -->
     <nav id="topbar" class="toolbar toolbar-expanded mtr-light-blue-800">
@@ -187,9 +176,8 @@ $rt->check_session();
                       <?php echo $inventario->get_fincas_list(); ?>
                       <label for="cod" class="">Finca (Autorizada por Gerencia)</label>
                     </div>
-                    <div class="col-lg-10" style="margin-top: 30px">
-                      <input type="text" class="form-control" id="sup">
-                      <label for="sup" class="">Supervisor</label>
+                    <label class="col-lg-2 control-label"></label>
+                    <div class="col-lg-10" style="margin-top: 30px" id="supervisores">
                     </div>
                     <label class="col-lg-2 control-label"></label>
                     <div class="col-lg-10" style="margin-top: 30px" id="lotes">
@@ -219,19 +207,7 @@ $rt->check_session();
         </div>
       </div>
     </div>
-
-    <footer class="container-fluid mtr-blue-grey-700">
-      <div class="row text-center">
-        <div class="col-sm-12">
-          <p class="lead">Materia by Johann Troendle.</p>
-        </div>
-        <div class="col-sm-12">
-          <p>Initial Boostrap template from <a href="http://thomaspark.me" rel="nofollow">Thomas Park</a>.
-          <p>Code released under the <a href="https://github.com/thomaspark/bootswatch/blob/gh-pages/LICENSE">MIT License</a>.</p>
-          <p>Based on <a href="http://getbootstrap.com" rel="nofollow">Bootstrap</a>. Icons from <a href="http://zavoloklom.github.io/material-design-iconic-font/" rel="nofollow">Material Design Iconic Font / Sergey Kupletsky</a>. Web fonts from <a href="http://www.google.com/webfonts" rel="nofollow">Google</a>.</p>
-        </div>
-      </div>
-    </footer>
+<?php echo $html_snippet->load_footer(); ?>
 
     <script>
       (function(){
@@ -359,6 +335,31 @@ $rt->check_session();
             }
           }
         });
+        $.ajax({      
+          url: "../../php/ajax_inventarios.php",     
+          dataType: "json",     
+          type: "POST",     
+          data: { 
+                  action: "get_supervisores",
+                  cod: $("#cod").val()
+                },
+          success: function(data){    
+            if(data.res==true){
+              $("#btn_save").removeClass("disabled");
+              $("#supervisores").fadeIn();
+              $("#supervisores").html(data.mes);
+            }else{
+              $("#msg_box").fadeIn();
+              $("#supervisores").addClass("has-error");
+              $("#msg_box").text(data.mes);
+              $("#btn_save").addClass("disabled");
+              setTimeout(function(){
+                $("#supervisores").removeClass("has-error");
+                $("#msg_box").fadeOut();
+              },5000);
+            }
+          }
+        });
       });
       //guardar inventario
       $('#btn_save').on('click', function() {
@@ -384,8 +385,8 @@ $rt->check_session();
                   },
             success: function(data){    
               if(data.res==true){
-                $("#msg_box").text(data.mes);
-                setTimeout(function(){location.reload();},5000);
+                $("#msg_box").html(data.mes);
+                setTimeout(function(){location.reload();},2000);
               }else if(data.res==false){
                 $("#msg_box").text(data.mes);
               }

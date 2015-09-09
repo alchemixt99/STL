@@ -10,12 +10,12 @@ class inventarios{
 
     $con->connect();
 
-
     //consultamos Inventarios
     if(isset($_SESSION["ses_id"])){
       $qry='SELECT * FROM tbl_inventario AS I
-            INNER JOIN tbl_fincas AS F
-            ON I.in_fi_id = F.fi_id ORDER BY F.fi_codigo ASC  ';
+            INNER JOIN tbl_fincas AS F ON I.in_fi_id = F.fi_id
+            INNER JOIN tbl_supervisores AS S ON S.su_id = I.in_supervisor
+            ORDER BY F.fi_codigo ASC';
       $res = mysql_query($qry);
 
       $item =" ";
@@ -25,6 +25,7 @@ class inventarios{
         $item.='
               <tr>
                 <td>'.$row_res["fi_codigo"].'</td>
+                <td>'.$row_res["su_nombre"].'</td>
                 <td>'.$row_res["in_mt_cubico"].' m<sup>3</sup></td>
                 <td>'.$row_res["in_lote"].'</td>
                 <td>'.$tipo_materia.'</td>
@@ -46,6 +47,7 @@ class inventarios{
             <thead>
               <tr>
                 <th>Código Finca</th>
+                <th>Supervisor</th>
                 <th>Inventario</th>
                 <th>Lote</th>
                 <th>Tipo Madera</th>
@@ -79,7 +81,7 @@ class inventarios{
       $script ="<script>$(document).ready(function(){";
       while($row_res = mysql_fetch_assoc($res)) {
         $item.='
-              <option value="'.$row_res["fi_id"].'">'.$row_res["fi_nombre"].' ('.$row_res["fi_codigo"].')</option>
+              <option value="'.$row_res["fi_id"].'">'.$row_res["fi_codigo"].'</option>
         ';
         $script.='';
       }

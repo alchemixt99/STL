@@ -2,8 +2,12 @@
 include('../../mods/route.php');
 include('../../php/jslib.php');
 include('../../php/app_menu.php');
+include('../../php/aside_menu.php');
+include('../../php/html_snippets.php');
 //menu aplicacion
 $app_menu = new app_menu();
+$aside_menu = new aside_menu();
+$html_snippet = new html_snippets();
 
 $rt = new route();
 $rt->check_session();
@@ -35,6 +39,7 @@ $rt->check_session();
     -->
 
     <style>
+    <?php echo $html_snippet->load_header_css(); ?>
       html, body {
         height: 100%;
         width: 100%;
@@ -68,7 +73,7 @@ $rt->check_session();
       }
 
       #topbar.toolbar-expanded {
-        height: 282px;
+        height: 400px;
         position: relative;
       }
 
@@ -112,29 +117,13 @@ $rt->check_session();
   </head>
   <body class="mtr-grey-50">
     <!-- Off canvas menu for mobile -->
-    <nav class="navbar-panel">
-      <div class="header container-fluid mtr-cyan-900">
-        <div class="row">
-          <div class="col-xs-12">
-            <h2><b>Materia</b></h2>
-            <h1></h1>
-            <h4>Off canvas panel</h4>
-          </div>
-        </div>
-      </div>
-
-      <div class="content mtr-grey-100">
-        <ul class="nav">
-          <li><a href="#" id="btn_logout">Salir</a></li>
-        </ul>
-      </div>
-    </nav>
+    <?php echo $aside_menu->build_menu_aside(); ?>
 
     <!-- top navbar -->
     <nav id="topbar" class="toolbar toolbar-expanded mtr-light-blue-800">
       <div class="container-fluid header-title">
         <div class="row">
-          <div class="col-sm-12">STL SAS Logistic APP</div>
+          <div class="col-sm-12">STL SAS - Logistik</div>
         </div>
       </div>
     </nav>
@@ -157,7 +146,7 @@ $rt->check_session();
       <div class="page-header" id="banner">
         <div class="row">
           <div class="col-sm-12 text-center">
-            <p class="lead">A Bootstrap theme inspired by Google Material Design.</p>
+            <p class="lead"><br><br><br><br><br><br><br><br><br></p>
           </div>
         </div>
       </div>
@@ -179,20 +168,7 @@ $rt->check_session();
         </div>
       </div>
     </div>
-
-    <footer class="container-fluid mtr-blue-grey-700">
-      <div class="row text-center">
-        <div class="col-sm-12">
-          <p class="lead">Materia by Johann Troendle.</p>
-        </div>
-        <div class="col-sm-12">
-          <p>Initial Boostrap template from <a href="http://thomaspark.me" rel="nofollow">Thomas Park</a>.
-          <p>Code released under the <a href="https://github.com/thomaspark/bootswatch/blob/gh-pages/LICENSE">MIT License</a>.</p>
-          <p>Based on <a href="http://getbootstrap.com" rel="nofollow">Bootstrap</a>. Icons from <a href="http://zavoloklom.github.io/material-design-iconic-font/" rel="nofollow">Material Design Iconic Font / Sergey Kupletsky</a>. Web fonts from <a href="http://www.google.com/webfonts" rel="nofollow">Google</a>.</p>
-        </div>
-      </div>
-    </footer>
-
+<?php echo $html_snippet->load_footer(); ?>
     <script>
       (function(){
         var $button = $("<div id='source-button' class='btn btn-floating-mini btn-primary'><i class='md  md-developer-mode'></i></div>").click(function(){

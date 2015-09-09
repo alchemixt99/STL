@@ -55,6 +55,5 @@ class funciones{
 		/*Termina Consulta*/
 		return $respuesta;
 	}
-
 }
 ?>

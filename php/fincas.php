@@ -22,7 +22,6 @@ class fincas{
         $item.='
               <tr>
                 <td>'.$row_res["fi_codigo"].'</td>
-                <td>'.$row_res["fi_nombre"].'</td>
                 <td>
                   <div id="edt-button" onclick="" class="btn btn-floating-mini btn-success" title="Lotes Autorizados"><i class="md  md-edit"></i></div>
                   <div id="del-button" onclick="" class="btn btn-floating-mini btn-danger" title="Borrar"><i class="md  md-delete"></i></div>
@@ -40,7 +39,7 @@ class fincas{
             <thead>
               <tr>
                 <th>Código</th>
-                <th>Nombre</th>
+                
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -52,7 +51,7 @@ class fincas{
     $con->disconnect();
     return $script.$html;
   }
-  function get_options_fincas(){
+  function get_options_fincas($select_id=null){
     $con = new con();
     $msg = new messages();
     $rt = new route();
@@ -77,8 +76,14 @@ class fincas{
     }
     else{$rt->routing($rt->path("login"));}
 
+    if($select_id!=null){
+      $id = 'id="'.$select_id.'"';
+    }else{
+      $id = 'id="cod"';
+    }
+
     $html='
-        <select class="form-control valued" id="cod">
+        <select class="form-control valued" '.$id.'>
           '.$item.'
         </select>
     ';

@@ -58,7 +58,7 @@
       }
 
       #topbar.toolbar-expanded {
-        height: 282px;
+        height: 400px;
         position: relative;
       }
 

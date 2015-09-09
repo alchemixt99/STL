@@ -15,9 +15,9 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 
 		/*recibimos variables*/
 		$cod=$_POST["cod"];
-		$nombre=$_POST["nombre"];
+		$nombre="";
 
-		if($nombre==""){
+		if($cod==""){
 			$res=false;
 			$mes=$msg->get_msg("e005");
 		}else
@@ -33,8 +33,8 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 			if($res_finca){
 				if(!$res_existe){
 					/* ingresamos datos de la finca */
-					$qry ="INSERT INTO tbl_fincas (fi_codigo, fi_nombre, fi_created, fi_estado)
-							VALUES ('".$cod."','".$nombre."',".$_SESSION["ses_id"].",1);";
+					$qry ="INSERT INTO tbl_fincas (fi_codigo, fi_created, fi_estado)
+							VALUES ('".$cod."',".$_SESSION["ses_id"].",1);";
 
 					$resp = mysql_query($qry);
 					if(!$resp){
@@ -108,10 +108,10 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 
 		/* ingresamos datos de la finca */
 		$item="";
-		$qry_lotes ='SELECT idlote, especie_ica FROM tbl_matriz_ica WHERE codfinca="'.$cod.'";';
+		$qry_lotes ='SELECT idlote, especie_ica, ano_plant, vol_ica_m3 FROM tbl_matriz_ica WHERE codfinca="'.$cod.'";';
 		$res_lotes = mysql_query($qry_lotes);
 		while($row_lotes = mysql_fetch_assoc($res_lotes)) {
-			$item.='<label class=""><input type="checkbox" name="lotes[]" value="'.$row_lotes['idlote'].'">'.$row_lotes['idlote'].' - '.$row_lotes['especie_ica'].'</label><br>';
+			$item.='<label class=""><input type="checkbox" name="lotes[]" value="'.$row_lotes['idlote'].'">'.$row_lotes['idlote'].' - '.$row_lotes['especie_ica'].' ('.$row_lotes['ano_plant'].') Volumen: '.$row_lotes['vol_ica_m3'].' m<sup>3</sup></label><br>';
 		}
 		$res=true;
 		$mes=$item;

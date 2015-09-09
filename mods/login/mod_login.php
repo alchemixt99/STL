@@ -27,7 +27,6 @@ $pass_encriptada4 = crypt($pass_encriptada3, "xtemp"); //Encriptacion nivel 2 */
 
 /*Consulta a la Bd*/
 $selectSQL ="SELECT * FROM `tbl_usuarios` WHERE `us_usuario` = '$usu' AND `us_clave` = '$pass'";
-
 $row_cons = mysql_query($selectSQL);
 $existe = mysql_fetch_assoc($row_cons);
 /*Termina Consulta*/
