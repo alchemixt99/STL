@@ -211,16 +211,6 @@ $rt->check_session();
 
     <script>
       (function(){
-        $("#add-button").click(function(){
-          // Clean ripple
-          /*$(this).parent().find('.mtr-ripple-wrapper').remove();
-          $(this).parent().find('.mtr-btn').removeClass('mtr-btn');
-          var html = $(this).parent().html();
-          html = cleanSource(html);
-          $("#source-modal pre").text(html);*/
-          $("#add-modal").modal();
-        });
-
         $('.bs-component [data-toggle="popover"]').popover();
         $('.bs-component [data-toggle="tooltip"]').tooltip();
 
@@ -258,6 +248,15 @@ $rt->check_session();
 
     <script type="text/javascript">
     $(function() {
+      $("#add-button").click(function(){
+        // Clean ripple
+        /*$(this).parent().find('.mtr-ripple-wrapper').remove();
+        $(this).parent().find('.mtr-btn').removeClass('mtr-btn');
+        var html = $(this).parent().html();
+        html = cleanSource(html);
+        $("#source-modal pre").text(html);*/
+        $("#add-modal").modal();
+      });
       
       $('.btn, .dropdown-menu a, .navbar a, .navbar-panel a, .toolbar a, .nav-pills a, .nav-tabs a, .pager a, .pagination a, .list-group a').mtrRipple({live: true}).on('click', function(e) {
         e.preventDefault();
@@ -358,8 +357,9 @@ $rt->check_session();
               setTimeout(function(){
                 $("#gr_cod_finca").removeClass("has-error");
                 $("#msg_box").fadeOut();
-              },5000);
+              },2000);
               $("#msg_box").text(data.mes);
+              setTimeout(function(){location.reload();}, 3000);
             }
           }
         });

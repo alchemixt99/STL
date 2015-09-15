@@ -124,6 +124,52 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 		$con->disconnect();
 
 	}
+	//consultamos fincas con sus respectivos lotes
+	function get_fincas_lotes(){	
+		$fun = new funciones();
+		$msg = new messages();
+		$response = new StdClass;
+
+		/*recibimos variables*/
+		$cod=$_POST["cod"];
+		$lot=$_POST["lot"];
+
+		$con = new con();
+		$con->connect();
+
+		/* ingresamos datos de la finca */
+		$item="";
+		$qry_lotes ='SELECT * FROM tbl_control_inventarios
+						INNER JOIN tbl_fincas ON tbl_fincas.fi_id=tbl_control_inventarios.ci_fi_id 
+						INNER JOIN tbl_lotes_autorizados ON tbl_lotes_autorizados.la_id = tbl_control_inventarios.ci_in_lote ;';
+		$res_lotes = mysql_query($qry_lotes);
+		
+		while($row_res = mysql_fetch_assoc($res_lotes)) {
+	        $item.='
+	              <option value="'.$row_res["fi_id"].'">'.$row_res["fi_codigo"].'</option>
+	        ';
+	        $script.='';
+	    }
+	    $script.='});</script>';
+		
+		$html='
+	        <select class="form-control valued" id="cod">
+	          <option>Seleccione</option>
+	          '.$item.'
+	        </select>
+	    ';
+
+		$res=true;
+		$mes=$item;
+				
+		
+		$response->res = $res;
+		$response->mes = $mes;
+		echo json_encode($response);
+
+		$con->disconnect();
+
+	}
 
   //validamos si es una petición ajax
   if(isset($_POST['action']) && !empty($_POST['action'])) {
@@ -131,6 +177,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
       switch($action) {
           case 'save' : add_finca();break;
           case 'get_lotes' : get_lotes();break;
+          case 'get_fxl' : get_fincas_lotes();break;
       }
   }
 ?>

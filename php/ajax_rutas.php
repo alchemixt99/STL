@@ -94,35 +94,146 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 		$con->disconnect();
 
 	}
-	//consultamos lotes de la finca desde la matriz ica
-	function get_lotes(){	
+	//construimos los turnos según sea el inventario y los conductores
+	function get_turnos_generados(){	
+		$fun = new funciones();
+		$msg = new messages();
+		$response = new StdClass;
+
+		/*recibimos variables*/
+		$cod_inv=$_POST["cod_inv"];
+		$finca = $_POST["fin"];
+
+		$con = new con();
+		$con->connect();
+
+		/* PILA DE TURNOS */
+		$turnos = array();
+
+		//Generamos turnos según inventario seleccionado
+		//buscamos inventario
+		$qry_inv = 'SELECT * FROM tbl_inventario WHERE in_estado = 1 AND in_id = '.$cod_inv.';';
+		$res_inv = mysql_query($qry_inv);
+		$html ="";
+		$row_inv = mysql_fetch_assoc($res_inv);
+		$vol_inv = $row_inv['in_mt_cubico'];
+
+		//listamos conductores (aplicando restricciones)
+		$qry_cond = 'SELECT pe_nombre, pe_cedula, ve_placa, ve_capacidad_m3 FROM tbl_personas 
+					INNER JOIN tbl_vehiculos ON ve_id = pe_ve_id
+					WHERE pe_estado = 1
+					AND pe_f1 = '.$finca.'
+					OR pe_f2 = '.$finca.'
+					OR pe_f3 = '.$finca.' ORDER BY pe_timestamp ASC;';
+		$res_cond = mysql_query($qry_cond);
+		$i=0;
+		while($row_cond = mysql_fetch_assoc($res_cond)){
+			$cond_lista[$i]=$row_cond;
+			$i++;
+		}
+		//terminamos de listar conductores
+
+		//asignamos turnos mientras se evacua el inventario
+		$turno=1;
+		$positivo=true;
+		while($vol_inv>0){
+			$cond_cant = count($cond_lista);
+			for ($i=0; $i < $cond_cant; $i++) { 
+				if($positivo==true){
+					$vol_restante = $vol_inv-$cond_lista[$i]['ve_capacidad_m3'];
+					$html.="<tr class='info'>";
+					$html.='<td>'.$turno.'</td>';
+					$html.='<td>'.$cond_lista[$i]['pe_nombre'].'</td>';
+					$html.='<td>'.$cond_lista[$i]['ve_capacidad_m3'].'</td>';
+					$html.='<td>'.$vol_restante.'</td>';
+					$html.='
+					<td>
+						<a href="#" class="btn btn-floating-mini btn-success" data-ripple-centered=""><i class="md md-save"></i></a>
+						<a href="#" class="btn btn-floating-mini btn-info" data-ripple-centered=""><i class="md md-edit"></i></a>
+					</td>';
+					$html.="</tr>";
+					if($vol_restante<=0) {
+						$vol_inv=0;
+						$positivo=false;
+						$i=$cond_cant;
+					}else if($vol_restante>0){
+						$vol_inv = $vol_restante;
+					}
+					$turno++;
+				}
+			}
+		}
+
+		$res=true;
+		$mes=$html;
+				
+		$con->disconnect();
+		
+		$response->res = $res;
+		$response->mes = $mes;
+		echo json_encode($response);
+	}
+
+	//construimos los valores a cargar en el modal
+	function get_modal_values(){	
 		$fun = new funciones();
 		$msg = new messages();
 		$response = new StdClass;
 
 		/*recibimos variables*/
 		$cod=$_POST["cod"];
+		$lot=$_POST["lot"];
 
 		$con = new con();
 		$con->connect();
 
 		/* ingresamos datos de la finca */
-		$item="";
-		$qry_lotes ='SELECT idlote, especie_ica FROM tbl_matriz_ica WHERE codfinca="'.$cod.'";';
+		$item="<option>Seleccione Inventario</option>";
+		$qry_lotes ='SELECT * FROM tbl_inventario AS I
+					INNER JOIN tbl_fincas AS F ON F.fi_id=I.in_fi_id
+					INNER JOIN tbl_lotes_autorizados AS L ON L.la_id=I.in_lote
+					WHERE in_fi_id ='.$cod.' AND in_lote = '.$lot.';';
+		//echo $qry_lotes;
 		$res_lotes = mysql_query($qry_lotes);
 		while($row_lotes = mysql_fetch_assoc($res_lotes)) {
-			$item.='<label class=""><input type="checkbox" name="lotes[]" value="'.$row_lotes['idlote'].'">'.$row_lotes['idlote'].' - '.$row_lotes['especie_ica'].'</label><br>';
+			$item.='<option value="'.$row_lotes['in_id'].'">Finca: '.$row_lotes['fi_codigo'].' - Lote: '.$row_lotes['la_idlote'].' ('.$row_lotes['in_mt_cubico'].' m<sup>3</sup>) </option>';
 		}
+		$scr='
+		<script>
+		  //acción al cambiar el select id=inv
+	      $("#combo_inv").on("change", function(){
+      		$("#progress").fadeIn();
+	        $.ajax({      
+	          url: "../../php/ajax_rutas.php",     
+	          dataType: "json",     
+	          type: "POST",     
+	          data: { 
+	                  action: "get_turnos",
+	                  cod_inv: $("#combo_inv").val(),
+	                  fin: $("#cod_finca").val()
+	                },
+	          success: function(data){    
+	            if(data.res==true){
+	              $("#turnos_box").fadeIn();
+	              $("#turnos_box").html(data.mes);
+      			  $("#progress").fadeOut();
+	            }
+	          }
+	        });
+	      });
+
+		</script>';
+		$html = '<select class="form-control" id="combo_inv">
+	            '.$item.'
+	             </select>';
 		$res=true;
-		$mes=$item;
+		$mes=$scr.$html;
 				
+		$con->disconnect();
 		
 		$response->res = $res;
 		$response->mes = $mes;
 		echo json_encode($response);
-
-		$con->disconnect();
-
 	}
 
   //validamos si es una petición ajax
@@ -130,7 +241,8 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
       $action = $_POST['action'];
       switch($action) {
           case 'save' : add_finca();break;
-          case 'get_lotes' : get_lotes();break;
+          case 'get_rutas' : get_modal_values();break;
+          case 'get_turnos' : get_turnos_generados();break;
       }
   }
 ?>

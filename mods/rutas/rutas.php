@@ -23,6 +23,7 @@ $rt->check_session();
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Roboto:500,300,400' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" type="text/css">
 
@@ -43,6 +44,30 @@ $rt->check_session();
 
     <style>
     <?php echo $html_snippet->load_header_css(); ?>
+    .material-icons {
+      font-family: 'Material Icons';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 24px;  /* Preferred icon size */
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      line-height: 1;
+      text-transform: none;
+      letter-spacing: normal;
+      word-wrap: normal;
+
+      /* Support for all WebKit browsers. */
+      -webkit-font-smoothing: antialiased;
+      /* Support for Safari and Chrome. */
+      text-rendering: optimizeLegibility;
+
+      /* Support for Firefox. */
+      -moz-osx-font-smoothing: grayscale;
+
+      /* Support for IE. */
+      font-feature-settings: 'liga';
+    }
       html, body {
         height: 100%;
         width: 100%;
@@ -114,6 +139,7 @@ $rt->check_session();
         font-size: 25px;
         margin-bottom: 15px;
       }
+      .navbar{margin-bottom: 0px;}
 
       #headerToggle { color: rgba(255,255,255,.9);}
     </style>
@@ -144,7 +170,11 @@ $rt->check_session();
     </nav>
     <div class="nav-placeholder"></div>
         <?php echo $app_menu->build_menu(); ?>
+    <div id="progress" class="progress progress-striped active" style="margin-bottom: 20px; display:none;">
+      <div class="progress-bar" style="width: 100%"></div>
+    </div>
     <div class="container-fluid">
+    
 
       <div class="page-header" id="banner">
         <div class="row">
@@ -156,123 +186,31 @@ $rt->check_session();
           <label class="col-lg-2 control-label"></label>
         </div>
       </div>
-      <div id="add-modal" class="modal fade">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="md md-close"></i></button>
-              <h4 class="modal-title">Registrar Ruta</h4>
+      <div id="modalx" style="display:none;">
+        <div class="row">
+          <label class="col-lg-2 control-label"></label>
+          <div class="col-sm-8 text-center">
+            <p class="lead" style="margin-top:40px;">Gestión de Rutas.<br><br></p>
+            <div class="row">
+              <input type="hidden" id="cod_finca">
+              <div class="col-lg-10" id="inv_box"></div>
+              <div class="col-lg-2"><a href="#" id="btn_back" class="btn btn-floating-mini btn-danger" data-ripple-centered=""><i class="md md-close"></i></a></div>
             </div>
-            <div class="modal-body">
-              <!-- caja para mensajes -->
-              <div id="msg_box"></div>
-
-              <!-- formulario -->
-              <form class="form-horizontal" action="/" method="GET" id="frm_finca">
-                <fieldset>
-                  <div class="form-group">
-                    <label class="col-lg-2 control-label"></label>
-                    <div class="col-lg-10" style="margin-top: 15px">
-                      <div class="col-lg-5" style="margin-top: 15px">
-                        <input type="text" class="form-control " id="nombre">
-                        <label for="nombre" class="">Cédula(*)</label>
-                      </div>
-                      <div class="col-lg-5" style="margin-top: 15px">
-                        <input type="text" class="form-control " id="nombre" disabled="">
-                        <label for="nombre" class="">Nombre</label>
-                      </div>
-                    </div>
-                    <label class="col-lg-2 control-label"></label>
-                    <div class="col-lg-10" style="margin-top: 15px">
-                      <div class="col-lg-3" style="margin-top: 15px">
-                        <input type="text" class="form-control " id="nombre">
-                        <label for="nombre" class="">Placas</label>
-                      </div>
-                      <div class="col-lg-4" style="margin-top: 15px">
-                        <input type="text" class="form-control " id="nombre" disabled="">
-                        <label for="nombre" class="">Empresa</label>
-                      </div>
-                      <div class="col-lg-3" style="margin-top: 15px">
-                        <input type="text" class="form-control " id="nombre" disabled="">
-                        <label for="nombre" class="">Tipo Vehiculo</label>
-                      </div>
-                    </div>
-                    <label class="col-lg-2 control-label"></label>
-                    <div class="col-lg-10" style="margin-top: 15px">
-                      <div class="col-lg-3" style="margin-top: 15px">
-                        <select class="form-control valued" id="select">
-                          <option> Seleccione </option>
-                        </select>
-                        <label for="nombre" class="">Finca</label>
-                      </div>
-                      <div class="col-lg-4" style="margin-top: 15px">
-                        <select class="form-control valued" id="select">
-                          <option> Seleccione </option>
-                        </select>
-                        <label for="nombre" class="">Lote</label>
-                      </div>
-                      <div class="col-lg-3" style="margin-top: 15px">
-                        <input type="text" class="form-control " id="nombre">
-                        <label for="nombre" class="">m<sup>3</sup></label>
-                      </div>
-                    </div>
-                    <label class="col-lg-2 control-label"></label>
-                    <div class="col-lg-8" style="margin-top: 15px">
-                      <div class="panel panel-primary">
-                        <div class="panel-heading">
-                          <h3 class="panel-title">Generación de Turnos</h3>
-                        </div>
-                        <div class="panel-body">
-                          <table class="table table-striped table-hover ">
-                            <thead>
-                              <tr>
-                                <th>ID Turno</th>
-                                <th>Conductor</th>
-                                <th>Fecha - Hora</th>
-                                <th>Comentarios</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr class="success">
-                                <td>1</td>
-                                <td>12 de Septiembre</td>
-                                <td>12-09-2015 07:00:00</td>
-                                <td>Turno tomado</td>
-                              </tr>
-                              <tr class="success">
-                                <td>1</td>
-                                <td>12 de Septiembre</td>
-                                <td>12-09-2015 07:30:00</td>
-                                <td>Turno tomado</td>
-                              </tr>
-                              <tr class="active">
-                                <td>1</td>
-                                <td>12 de Septiembre</td>
-                                <td>12-09-2015 08:00:00</td>
-                                <td>Turno disponible</td>
-                              </tr>
-                              <tr class="active">
-                                <td>1</td>
-                                <td>12 de Septiembre</td>
-                                <td>12-09-2015 08:30:00</td>
-                                <td>Turno disponible</td>
-                              </tr>
-                            </tbody>
-                          </table> 
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <div class="col-sm-12 text-right">
-                      <a href="#" id="btn_save" class="btn btn-primary">Guardar</a>
-                    </div>
-                  </div>
-                </fieldset>
-              </form>
-              <!-- -->
-            </div>
+            <table class="table table-striped table-hover ">
+            <thead>
+              <tr>
+                <th>Turno</th>
+                <th>Conductor</th>
+                <th>Capacidad</th>
+                <th>Inv. Restante</th>
+                <th>Opciones</th>
+              </tr>
+            </thead>
+            <tbody id="turnos_box">
+            </tbody>
+          </table> 
           </div>
+          <label class="col-lg-2 control-label"></label>
         </div>
       </div>
     </div>
@@ -280,16 +218,6 @@ $rt->check_session();
 
     <script>
       (function(){
-        $("#add-button").click(function(){
-          // Clean ripple
-          /*$(this).parent().find('.mtr-ripple-wrapper').remove();
-          $(this).parent().find('.mtr-btn').removeClass('mtr-btn');
-          var html = $(this).parent().html();
-          html = cleanSource(html);
-          $("#source-modal pre").text(html);*/
-          $("#add-modal").modal();
-        });
-
         $('.bs-component [data-toggle="popover"]').popover();
         $('.bs-component [data-toggle="tooltip"]').tooltip();
 
@@ -326,6 +254,37 @@ $rt->check_session();
     </script>
 
     <script type="text/javascript">
+    function modalx(x){
+      switch(x){
+        case 'on': $("#banner").fadeOut();$("#modalx").fadeIn(); break;
+        case 'off': $("#banner").fadeIn();$("#modalx").fadeOut(); break;
+      }
+    }
+    $("#btn_back").on("click", function(){$("#progress").fadeIn(); modalx("off"); $("#progress").fadeOut();});
+    function load_modal(f,l){
+      $("#progress").fadeIn();
+      $.ajax({      
+        url: "../../php/ajax_rutas.php",     
+        dataType: "json",     
+          type: "POST",     
+          data: { 
+                  action: "get_rutas",
+                  cod: f,
+                  lot: l
+                },
+        success: function(data){    
+          if(data.res==true){       
+            $("#cod_finca").val(f);
+            $("#inv_box").html(data.mes);
+            modalx("on");
+            $("#progress").fadeOut();
+          }
+          else{
+            modalx("on");
+          }
+        }
+      });
+    }
     $(function() {
       
       $('.btn, .dropdown-menu a, .navbar a, .navbar-panel a, .toolbar a, .nav-pills a, .nav-tabs a, .pager a, .pagination a, .list-group a').mtrRipple({live: true}).on('click', function(e) {
@@ -379,60 +338,8 @@ $rt->check_session();
           }
         }});
       });
-      //acción al cambiar el select id=cod
-      $("#cod").change(function(){
-        $.ajax({      
-          url: "../../php/ajax_fincas.php",     
-          dataType: "json",     
-          type: "POST",     
-          data: { 
-                  action: "get_lotes",
-                  cod: $("#cod").val()
-                },
-          success: function(data){    
-            if(data.res==true){
-              $("#lote_especie").fadeIn();
-              $("#lote_especie").html(data.mes);
-            }
-          }
-        });
-      });
-      //guardar finca
-      $('#btn_save').on('click', function() {
-        //traemos arreglo de lotes
-        var lotes_val = new Array();
-        $("input[name='lotes[]']:checked").each(function(){
-          lotes_val.push($(this).val());
-        });
+      
 
-        //ejecutamos ajax
-        $.ajax({      
-          url: "../../php/ajax_fincas.php",     
-          dataType: "json",     
-          type: "POST",     
-          data: { 
-                  action: "save",
-                  cod: $("#cod").val(),
-                  nombre: $("#nombre").val(),
-                  arr_lotes: lotes_val
-                },
-          success: function(data){    
-            if(data.res==true){
-              $("#msg_box").fadeIn();
-              $("#msg_box").text(data.mes);
-              $("#frm_finca").trigger("reset");
-            }else if(data.res==false){
-              $("#msg_box").fadeIn();
-              $("#gr_cod_finca").addClass("has-error");
-              setTimeout(function(){
-                $("#gr_cod_finca").removeClass("has-error");
-                $("#msg_box").fadeOut();
-              },5000);
-              $("#msg_box").text(data.mes);
-            }
-          }
-        });
-      });
   });
   </script>
   </body>

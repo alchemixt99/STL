@@ -107,7 +107,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 			//si es primera vez, creamos el registro
 			$nv = $row_fxm['vol_ica_m3']-$row_inv['in_mt_cubico'];
 			$qry_new = "INSERT INTO tbl_control_inventarios (ci_fi_id, ci_in_lote, ci_vol_ini, ci_vol_act, ci_created, ci_estado)
-					VALUES(".$row_fxm['in_fi_id'].",".$row_fxm['in_lote'].",".$row_fxm['vol_ica_m3'].",".$nv.",".$_SESSION["ses_id"].",1);";
+					VALUES(".$row_fxm['in_fi_id'].",".$row_inv['in_lote'].",".$row_fxm['vol_ica_m3'].",".$nv.",".$_SESSION["ses_id"].",1);";
 		    $res_new= mysql_query($qry_new);
 
 		    $vol_perc=(($nv/$row_fxm['vol_ica_m3']) * 100);

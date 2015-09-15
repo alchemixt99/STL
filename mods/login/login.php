@@ -301,9 +301,8 @@ include('../../php/jslib.php');
 		  $ripples.on('animationend webkitAnimationEnd mozAnimationEnd oanimationend MSAnimationEnd', function(e) {
 		  	$(this).removeClass('is-active');
 		  });
-
 			//==============AJAX LOGIN===============
-			$('button').on('click', function() {
+			function ajax_login(){
 				$.ajax({			
 					url: "mod_login.php",			
 					dataType: "json",			
@@ -318,6 +317,15 @@ include('../../php/jslib.php');
 						//$(location).attr('href',"http://google.com"); 
 					}
 				}});
+			}
+		  	//=====================================//
+		 	 $("#pass").keypress(function(e) {
+			    if(e.which == 13) {
+			       ajax_login();
+			    }
+			});
+			$('button').on('click', function() {
+				ajax_login();
 			});  
 		});
 	</script>

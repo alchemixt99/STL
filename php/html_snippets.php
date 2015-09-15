@@ -25,6 +25,9 @@ class html_snippets{
 		$pos=rand(2, count($files)-1);
 		$css = "
 				#topbar.toolbar-expanded{background-image: url('../../img/".$files[$pos]."');}
+				.stroke {
+					text-shadow: -1px -1px 1px #333, 1px -1px 1px #333, -1px 1px 1px #333, 1px 1px 1px #333;
+				}
 		";
 		return $css;
 	}
