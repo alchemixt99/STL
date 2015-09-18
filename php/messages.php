@@ -16,6 +16,11 @@ class messages{
 			"e008" => "No hay lotes seleccionados para esta finca, comuniquese con gerencia para validar información.",
 			"e009" => "Problemas Actualizando el volumen en la matriz de datos.",
 			"e010" => "No hay Supervisores asignados a esta finca, comuniquese con gerencia para validar información.",
+			"e011" => "Este usuario ya está registrado en el sistema.",
+			"e012" => "Ocurrió un error al asignar permisos, comuniquese con soporte, gracias.",
+			"e013" => "Ocurrió un error al cambiar la contraseña, comuniquese con soporte, gracias.",
+			"e014" => "Este usuario no se puede eliminar, comuniquese con soporte, gracias.",
+			"e015" => "Esta finca no se puede eliminar, comuniquese con soporte, gracias.",
 		];
 		/* ====================== */
 		return $msg[$e];

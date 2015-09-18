@@ -108,10 +108,26 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 
 		/* ingresamos datos de la finca */
 		$item="";
+		$checked = "";
 		$qry_lotes ='SELECT idlote, especie_ica, ano_plant, vol_ica_m3 FROM tbl_matriz_ica WHERE codfinca="'.$cod.'";';
 		$res_lotes = mysql_query($qry_lotes);
 		while($row_lotes = mysql_fetch_assoc($res_lotes)) {
-			$item.='<label class=""><input type="checkbox" name="lotes[]" value="'.$row_lotes['idlote'].'">'.$row_lotes['idlote'].' - '.$row_lotes['especie_ica'].' ('.$row_lotes['ano_plant'].') Volumen: '.$row_lotes['vol_ica_m3'].' m<sup>3</sup></label><br>';
+			$onclick = "";
+			//autorizados true?
+			if(isset($_POST['aut']) && $_POST['aut']){
+				$qry_aut='SELECT * FROM tbl_lotes_autorizados INNER JOIN tbl_fincas ON tbl_fincas.fi_codigo = "'.$cod.'" AND tbl_lotes_autorizados.la_idlote = "'.$row_lotes['idlote'].'";';
+				$res_aut = mysql_query($qry_aut);
+				$cant_aut = mysql_num_rows($res_aut);
+				//echo "<br>".$qry_aut."<br> resultados: ".$cant_aut;
+				if($cant_aut>0){
+					$onclick = 'onclick="save_check(this)"';
+					$checked = "checked";
+				}else{
+					$onclick = 'onclick="save_check(this)"';
+					$checked = "";
+				}
+			}
+			$item.='<label class=""><input '.$onclick.' type="checkbox" name="lotes[]" value="'.$row_lotes['idlote'].'" '.$checked.'>'.$row_lotes['idlote'].' - '.$row_lotes['especie_ica'].' ('.$row_lotes['ano_plant'].') Volumen: '.$row_lotes['vol_ica_m3'].' m<sup>3</sup></label><br>';
 		}
 		$res=true;
 		$mes=$item;
@@ -170,14 +186,64 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 		$con->disconnect();
 
 	}
+  //Cambiar lotes
+	function cambiar_lote(){
+		$fun = new funciones();
+		$msg = new messages();
+		$response = new StdClass;
+
+		/*recibimos variables*/
+		$evento=$_POST["e"];
+		$lote=$_POST["l"];
+
+		$con = new con();
+		$con->connect();
+
+		if($evento=="save"){
+			$item = "salvar";
+		}else{
+			$item = "borrar";
+		}
+
+		$res=true;
+		$mes=$item;
+		$response->res = $res;
+		$response->mes = $mes;
+		echo json_encode($response);
+
+		$con->disconnect();
+	}
+	//Borrar finca
+	function remove_finca(){
+		$fun = new funciones();
+		$msg = new messages();
+		$response = new StdClass;
+
+		/*recibimos variables*/
+		$finca=$_POST["finca"];
+		$res=$fun->borrar("fincas","fi_id",$finca);
+		if ($res) {
+			$res=true;
+			$mes=$msg->get_msg("e004");
+		}else{
+			$res=false;
+			$mes=$msg->get_msg("e015");
+		}
+		
+		$response->res = $res;
+		$response->mes = $mes;
+		echo json_encode($response);
+	}
 
   //validamos si es una petición ajax
   if(isset($_POST['action']) && !empty($_POST['action'])) {
       $action = $_POST['action'];
       switch($action) {
           case 'save' : add_finca();break;
+          case 'del_finca' : remove_finca();break;
           case 'get_lotes' : get_lotes();break;
           case 'get_fxl' : get_fincas_lotes();break;
+          case 'change_lote_aut' : cambiar_lote();break;
       }
   }
 ?>

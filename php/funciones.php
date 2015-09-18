@@ -55,5 +55,21 @@ class funciones{
 		/*Termina Consulta*/
 		return $respuesta;
 	}
+	function borrar($tbl,$field,$var){
+		$campos="";
+		switch ($tbl) {
+			case 'usuarios': $campos= "us_estado=99"; break;
+			case 'fincas': $campos= "fi_estado=99"; break;
+		}
+		$con = new con();
+		$con->connect();
+		//preguntamos si existe la finca en la matriz entregada
+		$selectSQL ="UPDATE tbl_".$tbl." SET ".$campos." WHERE ".$field." = '".$var."';";
+		$res_cons = mysql_query($selectSQL);
+		if($res_cons){$respuesta=true;}else{$respuesta=false;}
+		
+		/*Termina Consulta*/
+		return $respuesta;
+	}
 }
 ?>

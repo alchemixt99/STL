@@ -16,7 +16,7 @@ $response = new StdClass;
 
 $usu = $_POST['user'];
 $pass = $_POST['pass'];
-//$pass = sha1(md5($pass));
+$pass = sha1(md5($pass));
 
 
 

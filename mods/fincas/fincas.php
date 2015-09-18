@@ -126,7 +126,7 @@ $rt->check_session();
     <nav id="topbar" class="toolbar toolbar-expanded mtr-light-blue-800">
       <div class="container-fluid header-title">
         <div class="row">
-          <div class="col-sm-12">STL SAS Logistic APP</div>
+          <div class="col-sm-12">STL SAS Logistik</div>
         </div>
       </div>
     </nav>
@@ -147,12 +147,18 @@ $rt->check_session();
     <div class="container-fluid">
 
       <div class="page-header" id="banner">
-        <div class="row">
-          <div class="col-sm-12 text-right">
-            <div id='add-button' class='btn btn-floating-mini btn-danger' title="Nuevo"><i class='md  md-add'></i></div>
-          </div>
           <div class="col-sm-12 text-center">
-            <p class="lead">Gestión de Fincas.<br><br></p>
+            <p class="lead">Gestión de Fincas.</p>
+            <div class="col-sm-12 text-right">
+            <div class="col-lg-5"></div>
+            <div class="col-lg-5">
+              <div id='edt-button' class="btn btn-floating-mini btn-success" title="Modificar Fincas"><i class="md md-edit"></i></div>
+              <div id='add-button' class='btn btn-floating-mini btn-danger' title="Nuevo"><i class='md md-add'></i></div>
+            </div>
+            <div class="col-lg-2">
+            </div>
+          </div>
+          <div class="row">
              <div class="col-sm-2 text-right"></div>
              <div class="col-sm-8 text-right">
                 <p><?php echo $fincas->get_fincas(); ?></p>
@@ -165,7 +171,7 @@ $rt->check_session();
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
             <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="md md-close"></i></button>
+              <button id="btn_exit" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="md md-close"></i></button>
               <h4 class="modal-title">Registrar Finca</h4>
             </div>
             <div class="modal-body">
@@ -177,8 +183,12 @@ $rt->check_session();
                 <fieldset>
                   <div class="form-group" id="gr_cod_finca">
                     <label class="col-lg-2 control-label"></label>
-                    <div class="col-lg-10" style="margin-top: 30px">
+                    <div class="col-lg-10" style="margin-top: 30px" id="combo_fincas_all">
                         <?php echo $fincas->get_options_fincas(); ?>
+                      <label for="cod" class="">Código Finca(*)</label>
+                    </div>
+                    <div class="col-lg-10" style="margin-top: 30px; display:none;" id="combo_fincas_aut">
+                        <?php echo $fincas->get_options_fincas_aut("cod_aut"); ?>
                       <label for="cod" class="">Código Finca(*)</label>
                     </div>
                   </div>
@@ -247,14 +257,66 @@ $rt->check_session();
     </script>
 
     <script type="text/javascript">
+    function borrar_finca(f, obj){
+      var c = confirm("Seguro desea borrar esta finca?");
+      if(c){
+        $.ajax({      
+          url: "../../php/ajax_fincas.php",     
+          dataType: "json",     
+          type: "POST",     
+          data: { 
+                  action: "del_finca",
+                  finca: f
+                },
+          success: function(data){    
+            if(data.res==true){       
+              alert(data.mes);
+              $(obj).closest('tr').fadeOut();
+            }
+            else{
+              alert(data.mes);
+            }
+          }
+        });
+      }
+    }
+    function save_check(obj){
+      //alert("accion: "+obj.checked+" id: "+obj.value);
+      if(obj.checked){evento = "save"; lote = obj.value;}
+        else{evento = "erase"; lote = obj.value;}
+      $.ajax({      
+          url: "../../php/ajax_fincas.php",     
+          dataType: "json",     
+          type: "POST",     
+          data: { 
+                  action: "change_lote_aut",
+                  e: evento,
+                  l: lote
+                },
+          success: function(data){    
+            if(data.res==true){
+              $("#lote_especie").fadeIn();
+              $("#lote_especie").html(data.mes);
+            }
+          }
+      });
+    }
     $(function() {
+      $("btn_exit").on("click", function(){$("#lote_especie").html("");}); 
       $("#add-button").click(function(){
-        // Clean ripple
-        /*$(this).parent().find('.mtr-ripple-wrapper').remove();
-        $(this).parent().find('.mtr-btn').removeClass('mtr-btn');
-        var html = $(this).parent().html();
-        html = cleanSource(html);
-        $("#source-modal pre").text(html);*/
+        $("#lote_especie").empty();
+        $(".modal-title").text("Autorizar Fincas");
+        $("#combo_fincas_all").fadeIn();
+        $("#btn_save").fadeIn();
+        $("#combo_fincas_aut").fadeOut();
+        $("#add-modal").modal();
+      });
+      $("#edt-button").click(function(){
+        $("#lote_especie").empty();
+        $(".modal-title").text("Modificar Fincas");
+        $("#combo_fincas_all").fadeOut();
+        $("#btn_save").fadeOut();
+        $("#combo_fincas_aut").fadeIn();
         $("#add-modal").modal();
       });
       
@@ -318,6 +380,25 @@ $rt->check_session();
           data: { 
                   action: "get_lotes",
                   cod: $("#cod").val()
+                },
+          success: function(data){    
+            if(data.res==true){
+              $("#lote_especie").fadeIn();
+              $("#lote_especie").html(data.mes);
+            }
+          }
+        });
+      });
+      //acción al cambiar el select id=cod_aut
+      $("#cod_aut").change(function(){
+        $.ajax({      
+          url: "../../php/ajax_fincas.php",     
+          dataType: "json",     
+          type: "POST",     
+          data: { 
+                  action: "get_lotes",
+                  cod: $("#cod_aut").val(),
+                  aut: true
                 },
           success: function(data){    
             if(data.res==true){

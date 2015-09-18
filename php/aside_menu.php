@@ -21,17 +21,39 @@ class aside_menu{
             AND PxM.pxm_pe_id = P.pe_id
             AND P.pe_id = PxU.pxu_pe_id
             AND PxU.pxu_us_id = U.us_id
-            AND U.us_id = '.$_SESSION["ses_id"];
+            AND U.us_id = '.$_SESSION["ses_id"].' LIMIT 1';
       $res = mysql_query($qry);
       $menuitem =" ";
       $script ="<script>$(document).ready(function(){";
       while($row_res = mysql_fetch_assoc($res)) {
-        $tipo_us = $row_res['pxu_pe_id'];
+        $cargo = $row_res['pe_descripcion'];
+        $nombre = $row_res['us_nombre'];
+        //si es superadmin, le habilitamos el menú de gestión de usuarios y permisos
+        switch ($row_res['pe_permiso']) {
+          case 1://superAdmin
+              $script.='$("#usuarios").on("click", function(){$(location).attr("href","../users/users.php"); });';
+              $menuitem.='<li><a href="#" id="usuarios" class=""><i class="md md-user"></i>Usuarios</a></li>';
+              $icon='<a href="#" class="btn btn-floating-mini btn-warning" title="'.$row_res['pe_descripcion'].'" data-ripple-centered=""><i class="md md-account-circle"></i></a>';
+            break;
+          case 2: //Jefeop
+              $icon='<a href="#" class="btn btn-floating-mini btn-primary" title="'.$row_res['pe_descripcion'].'" data-ripple-centered=""><i class="md md-account-circle"></i></a>';
+            break;
+          case 3: //Digit
+              $icon='<a href="#" class="btn btn-floating-mini btn-success" title="'.$row_res['pe_descripcion'].'" data-ripple-centered=""><i class="md md-account-circle"></i></a>';
+            break;
+          case 4: //Gerente
+              $icon='<a href="#" class="btn btn-floating-mini btn-warning" title="'.$row_res['pe_descripcion'].'" data-ripple-centered=""><i class="md md-account-circle"></i></a>';
+            break;
+          
+          default:
+            $menuitem="";
+            break;
+        }
+        /*$tipo_us = $row_res['pxu_pe_id'];
         //$menuitem.='<li><a href="'.$row_res['mo_ruta'].'" class="">'.$row_res['mo_nombre'].'</a></li>';
         $menuitem.='<li><a href="#" id="'.$row_res['mo_nombre'].'" class="">'.$row_res['mo_descripcion'].'</a></li>';
         $script.='$("#'.$row_res['mo_nombre'].'").on("click", function(){$(location).attr("href","'.$row_res['mo_ruta'].'"); });';
-        $cargo = $row_res['pe_descripcion'];
-        $nombre = $row_res['us_nombre'];
+        */
       }
       $script.='});</script>';
     }
@@ -42,22 +64,23 @@ class aside_menu{
 	      <div class="header container-fluid mtr-cyan-900">
 	        <div class="row">
 	          <div class="col-xs-12">
-	            <h4><b>'.$nombre.'</b></h4>
-	            <h1></h1>
-	            <h4>'.$cargo.'</h4>
+              <h1 style="text-align:center; padding-top:6px; margin-bottom: 6px;">'.$icon.'</h1>
+              <h4 style="margin-top: 1px;"><b>'.$nombre.'</b> <br> <span style="font-style:italic; font-size:13px;">'.$cargo.'<span></h4>
+              <h4></h4>
 	          </div>
 	        </div>
 	      </div>
 
 	      <div class="content mtr-grey-100">
 	        <ul class="nav">
+            '.$menuitem.'
 	          <li><a href="#" id="btn_logout">Salir</a></li>
 	        </ul>
 	      </div>
 	    </nav>
     ';
     $con->disconnect();
-    return $html;
+    return $script.$html;
   }
 }
 ?>
