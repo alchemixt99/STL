@@ -221,14 +221,25 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 
 		/*recibimos variables*/
 		$finca=$_POST["finca"];
-		$res=$fun->borrar("fincas","fi_id",$finca);
-		if ($res) {
-			$res=true;
-			$mes=$msg->get_msg("e004");
-		}else{
+		if ($fun->borrar("fincas","fi_id",$finca)) {
+			if($fun->borrar("inventario","in_fi_id",$finca)){
+				if($fun->borrar("control_inventarios","ci_fi_id",$finca)){
+					if($fun->borrar("lotes_autorizados","la_fi_id",$finca)){
+						$res=true;
+						$mes=$msg->get_msg("e004");
+					}else{
+					$res=false;
+					$mes=$msg->get_msg("e016");}
+				}else{
+				$res=false;
+				$mes=$msg->get_msg("e017");}
+			}else{
 			$res=false;
-			$mes=$msg->get_msg("e015");
-		}
+			$mes=$msg->get_msg("e018");}
+		}else{
+		$res=false;
+		$mes=$msg->get_msg("e015");}
+
 		
 		$response->res = $res;
 		$response->mes = $mes;

@@ -15,6 +15,7 @@ class inventarios{
       $qry='SELECT * FROM tbl_inventario AS I
             INNER JOIN tbl_fincas AS F ON I.in_fi_id = F.fi_id
             INNER JOIN tbl_supervisores AS S ON S.su_id = I.in_supervisor
+            WHERE I.in_estado<99
             ORDER BY F.fi_codigo ASC';
       $res = mysql_query($qry);
 

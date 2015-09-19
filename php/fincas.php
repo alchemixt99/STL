@@ -66,7 +66,7 @@ class fincas{
       $item =" ";
       $script ="<script>$(document).ready(function(){";
       while($row_res = mysql_fetch_assoc($res)) {
-        $qry_fin='SELECT * FROM tbl_fincas WHERE fi_codigo="'.$row_res['codfinca'].'";';
+        $qry_fin='SELECT * FROM tbl_fincas WHERE fi_codigo="'.$row_res['codfinca'].'" AND fi_estado<99;';
         $res_fin = mysql_query($qry_fin);
         $cant_fin = mysql_num_rows($res_fin);
         //echo "<br>".$qry_aut."<br> resultados: ".$cant_aut;
@@ -110,6 +110,7 @@ class fincas{
     if(isset($_SESSION["ses_id"])){
       $qry='SELECT DISTINCT codfinca, municipio, depto FROM tbl_matriz_ica 
       INNER JOIN tbl_fincas ON fi_codigo = codfinca
+      WHERE fi_estado<99
       ORDER BY codfinca ASC';
       $res = mysql_query($qry);
 

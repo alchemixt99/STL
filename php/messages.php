@@ -21,6 +21,9 @@ class messages{
 			"e013" => "Ocurrió un error al cambiar la contraseña, comuniquese con soporte, gracias.",
 			"e014" => "Este usuario no se puede eliminar, comuniquese con soporte, gracias.",
 			"e015" => "Esta finca no se puede eliminar, comuniquese con soporte, gracias.",
+			"e016" => "Problemas al borrar los lotes autorizados, comuniquese con soporte, gracias.",
+			"e017" => "Problemas al borrar el control de inventarios, comuniquese con soporte, gracias.",
+			"e018" => "Problemas al borrar inventarios asociados, comuniquese con soporte, gracias.",
 		];
 		/* ====================== */
 		return $msg[$e];

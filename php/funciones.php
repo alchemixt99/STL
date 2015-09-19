@@ -60,6 +60,28 @@ class funciones{
 		switch ($tbl) {
 			case 'usuarios': $campos= "us_estado=99"; break;
 			case 'fincas': $campos= "fi_estado=99"; break;
+			case 'inventario': $campos= "in_estado=99"; break;
+			case 'control_inventarios': $campos= "ci_estado=99"; break;
+			case 'lotes_autorizados': $campos= "la_estado=99"; break;
+		}
+		$con = new con();
+		$con->connect();
+		//preguntamos si existe la finca en la matriz entregada
+		$selectSQL ="UPDATE tbl_".$tbl." SET ".$campos." WHERE ".$field." = '".$var."';";
+		$res_cons = mysql_query($selectSQL);
+		if($res_cons){$respuesta=true;}else{$respuesta=false;}
+		
+		/*Termina Consulta*/
+		return $respuesta;
+	}
+	function crear($tbl,$fields,$vars){
+		$campos="";
+		switch ($tbl) {
+			case 'usuarios': $campos= "us_estado=99"; break;
+			case 'fincas': $campos= "fi_estado=99"; break;
+			case 'inventario': $campos= "in_estado=99"; break;
+			case 'control_inventarios': $campos= "ci_estado=99"; break;
+			case 'lotes_autorizados': $campos= "la_estado=99"; break;
 		}
 		$con = new con();
 		$con->connect();
