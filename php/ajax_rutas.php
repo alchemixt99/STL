@@ -31,7 +31,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 		$res_ci = mysql_query($qry_ci);
 		$row_ci = mysql_fetch_assoc($res_ci);
 
-	/**/$vol_inventario = $row_ci['ci_vol_ini'];
+	/**/$vol_inventario = $row_inv['in_mt_cubico'];
 		$vol_act = $vol_inventario;
 
 
@@ -51,7 +51,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 			$i=0;
 			while ($row_cond=mysql_fetch_assoc($res_cond)) {
 				if($row_inv['in_pe_id']==$row_cond['pe_id']){$start=111;}else{$start=0;}
-				$json.='{"id":'.$row_cond['pe_id'].', "nombre":"'.$row_cond['pe_nombre'].'", "capacidad":'.$row_cond['ve_capacidad_m3'].', "inicia": '.$start.'},';
+				$json.='{"id":'.$row_cond['pe_id'].', "nombre":"'.$row_cond['pe_nombre'].'", "capacidad":'.$row_cond['ve_capacidad_m3'].', "inicia": '.$start.', "finca":'.$finca.' },';
 			}
 
 			//crear json_array
@@ -62,15 +62,14 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 
 			//Generar lista
 			$clave = array_search(111, array_column($array['cond'], 'inicia'));
+			if($clave==""){$clave=0;}
 			$cantidad = count($array['cond']);
-				/*echo "clave: true , encontrado en: ".$clave;
-				echo "<br> cantidad de conductores: ".$cantidad;
-				echo "<br> inventario: ".$vol_inventario."m3";*/
 				$html="";
-				$turno=0;
+				$turno=10;
 				while ($vol_act > 0) {
 					$past=0;
 					for ($i=$clave; $i <= $cantidad; $i++) { 
+						$turno_hora = $fun->get_custom("SELECT tu_hora_ini FROM tbl_turnos WHERE tu_id=".$turno.";");
 						if($vol_act <= 0){break;}
 						if($i==$cantidad && $past==0){$i=0;$past=1;}
 						if($i==$cantidad && $past==1){$i=0;$past=2;}
@@ -78,37 +77,49 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 						if($past==2 && $i==$clave){break;}
 						$vol_act = $vol_act - $array['cond'][$i]["capacidad"];
 						if($vol_act<=0){$vol_act=0;}
-						$html.="<tr class='info'>";
-						$html.='<td>'.$turno.' / past: '.$past.'</td>';
+						$values=$turno.",".$array['cond'][$i]["id"].",".$cod_inv.",".$array['cond'][$i]["capacidad"];
+						//$res_turno=$fun->crear("despachos", "de_tu_id, de_pe_id, de_in_id, de_vol, de_created, de_estado", $values);
+
+						/*Traemos turnos*/
+						/*if($res_turno){
+							$qry_turnos = "SELECT * FROM tbl_turnos WHERE de_in_id=".$cod_inv.";";
+							$res_turnos = mysql_query($qry_turnos);
+							$can_turnos = mysql_num_rows($res_turnos);
+							while ($row_turnos=mysql) {
+								# code...
+							}
+						}*/
+
+						$html.="<tr class='info' id='".$turno."'>";
+						$html.='<td>'.$turno_hora.'</td>';
 						$html.='<td>'.$array['cond'][$i]["nombre"].'</td>';
-						$html.='<td>'.$array['cond'][$i]["capacidad"].'</td>';
-						$html.='<td>'.$vol_act.'</td>';
+						$html.='<td>'.$array['cond'][$i]["capacidad"].' m<sup>3</sup></td>';
+						$html.='<td>'.$vol_act.' m<sup>3</sup></td>';
 						$html.='
 						<td>
-							<a href="#" class="btn btn-floating-mini btn-success" data-ripple-centered=""><i class="md md-save"></i></a>
-							<a href="#" class="btn btn-floating-mini btn-info" data-ripple-centered=""><i class="md md-edit"></i></a>
+							<div onclick="guardar_turno('.$values.', this)" class="btn btn-floating-mini btn-success" data-ripple-centered=""><i class="md md-save"></i></div>
+							<div class="btn btn-floating-mini btn-info" data-ripple-centered=""><i class="md md-edit"></i></div>
+							<div class="btn btn-floating-mini btn-danger" data-ripple-centered=""><i class="md md-delete"></i></div>
 						</td>';
 						$html.="</tr>";
 						$turno++;
-						//echo "<br>[".$i."]: Past:[".$past."] => Nombre: ".$array['cond'][$i]["nombre"]. "volumen actual: ".$vol_act."m3";
 					}
 					if($past==2){break;}
 				}
 
 			$res=true;
 			$mes=$html;	
+			$input = $vol_act;
 		}else{
 			$res=false;
 			$mes=$msg->get_msg("e024");
+			$input=0;
 		}
-		
-		//evacuar inventario (sugerir)
 
-		
-				
 		$con->disconnect();
 		
 		$response->res = $res;
+		$response->vol = $input;
 		$response->mes = $mes;
 		echo json_encode($response);
 	}
@@ -175,12 +186,40 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 		echo json_encode($response);
 	}
 
+	function add_route(){
+		$fun = new funciones();
+		$msg = new messages();
+		$response = new StdClass;
+
+		/*recibimos variables*/
+		$turno = $_POST['turno'];
+     	$condu = $_POST['condu'];
+    	$inven = $_POST['inven'];
+    	$capac = $_POST['capac'];
+
+		$con = new con();
+		$con->connect();
+
+		$values=$turno.",".$condu.",".$inven.",".$capac.",".$_SESSION["ses_id"].",1";
+		$res=$fun->crear("despachos", "de_tu_id, de_pe_id, de_in_id, de_vol, de_created, de_estado", $values);
+
+		$mes=null;
+				
+		$con->disconnect();
+		
+		$response->res = $res;
+		$response->mes = $mes;
+		echo json_encode($response);
+
+	}
+
   //validamos si es una petición ajax
   if(isset($_POST['action']) && !empty($_POST['action'])) {
       $action = $_POST['action'];
       switch($action) {
           case 'save' : add_finca();break;
           case 'get_rutas' : get_modal_values();break;
+          case 'save_rutas' : add_route();break;
           case 'get_turnos' : get_turnos_generados();break;
       }
   }

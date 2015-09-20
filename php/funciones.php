@@ -139,6 +139,7 @@ class funciones{
 		$con->connect();
 		//preguntamos si existe la finca en la matriz entregada
 		$selectSQL ="INSERT INTO tbl_".$tbl." (".$fields.") VALUES (".$values.");";
+		//echo $selectSQL;
 		$res_cons = mysql_query($selectSQL);
 		if($res_cons){$respuesta=true;}else{$respuesta=false;}
 		

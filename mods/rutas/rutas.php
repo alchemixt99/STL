@@ -217,6 +217,31 @@ $rt->check_session();
 <?php echo $html_snippet->load_footer(); ?>
 
     <script>
+    function guardar_turno(t,idcond,codinv,capacidad,row){
+    	var c=confirm("¿Está seguro que desea guardar este turno?");
+    	if(c){
+	    	$.ajax({      
+		        url: "../../php/ajax_rutas.php",     
+		        dataType: "json",     
+		          type: "POST",     
+		          data: { 
+		                  action: "save_rutas",
+		                  turno: t,
+		                  condu: idcond,
+		                  inven: codinv,
+		                  capac: capacidad
+		                },
+		        success: function(data){    
+		          if(data.res==true){  
+		          	$(row).closest('tr').removeClass("info");
+		          	$(row).closest('tr').addClass("success");
+		          }
+		          else{
+		          }
+		        }
+		      });
+    	}
+        }
       (function(){
         $('.bs-component [data-toggle="popover"]').popover();
         $('.bs-component [data-toggle="tooltip"]').tooltip();
@@ -260,8 +285,9 @@ $rt->check_session();
         case 'off': $("#banner").fadeIn();$("#modalx").fadeOut(); break;
       }
     }
-    $("#btn_back").on("click", function(){$("#progress").fadeIn(); modalx("off"); $("#progress").fadeOut();});
+    $("#btn_back").on("click", function(){$("#turnos_box").empty(); $("#progress").fadeIn(); modalx("off"); $("#progress").fadeOut();});
     function load_modal(f,l){
+      $("#turnos_box").empty();
       $("#progress").fadeIn();
       $.ajax({      
         url: "../../php/ajax_rutas.php",     
@@ -275,7 +301,9 @@ $rt->check_session();
         success: function(data){    
           if(data.res==true){       
             $("#cod_finca").val(f);
+            $("#inv_box").html(" ");
             $("#inv_box").html(data.mes);
+            $("#vol_act").html(data.vol);
             modalx("on");
             $("#progress").fadeOut();
           }
