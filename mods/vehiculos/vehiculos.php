@@ -4,16 +4,15 @@ include('../../php/jslib.php');
 require("../../php/funciones.php");
 include('../../php/app_menu.php');
 include('../../php/aside_menu.php');
-include('../../php/personas.php');
 include('../../php/vehiculos.php');
+include('../../php/fincas.php');
 include('../../php/html_snippets.php');
 //menu aplicacion
 $app_menu = new app_menu();
 $aside_menu = new aside_menu();
 $html_snippet = new html_snippets();
-$personas = new personas();
 $vehiculos = new vehiculos();
-
+$fincas = new fincas();
 
 $rt = new route();
 $rt->check_session();
@@ -22,10 +21,11 @@ $rt->check_session();
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Personas - STL SAS</title>
+    <title>Vehiculos - STL SAS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Roboto:500,300,400' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" type="text/css">
 
@@ -46,6 +46,30 @@ $rt->check_session();
 
     <style>
     <?php echo $html_snippet->load_header_css(); ?>
+    .material-icons {
+      font-family: 'Material Icons';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 24px;  /* Preferred icon size */
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      line-height: 1;
+      text-transform: none;
+      letter-spacing: normal;
+      word-wrap: normal;
+
+      /* Support for all WebKit browsers. */
+      -webkit-font-smoothing: antialiased;
+      /* Support for Safari and Chrome. */
+      text-rendering: optimizeLegibility;
+
+      /* Support for Firefox. */
+      -moz-osx-font-smoothing: grayscale;
+
+      /* Support for IE. */
+      font-feature-settings: 'liga';
+    }
       html, body {
         height: 100%;
         width: 100%;
@@ -117,6 +141,7 @@ $rt->check_session();
         font-size: 25px;
         margin-bottom: 15px;
       }
+      .navbar{margin-bottom: 0px;}
 
       #headerToggle { color: rgba(255,255,255,.9);}
     </style>
@@ -124,12 +149,12 @@ $rt->check_session();
   <body class="mtr-grey-50">
     <!-- Off canvas menu for mobile -->
     <?php echo $aside_menu->build_menu_aside(); ?>
-
+    
     <!-- top navbar -->
     <nav id="topbar" class="toolbar toolbar-expanded mtr-light-blue-800">
       <div class="container-fluid header-title">
         <div class="row">
-          <div class="col-sm-12">STL SAS Logistic APP</div>
+          <div class="col-sm-12">STL SAS Logistik</div>
         </div>
       </div>
     </nav>
@@ -147,26 +172,14 @@ $rt->check_session();
     </nav>
     <div class="nav-placeholder"></div>
         <?php echo $app_menu->build_menu(); ?>
-    <div class="container-fluid">
-
-      <div class="page-header" id="banner">
-        <div class="row">
-          <div class="col-sm-12 text-right">
-            <div id='add-button' class='btn btn-floating-mini btn-danger' title="Nuevo"><i class='md  md-add'></i></div>
-          </div>
-          <div class="col-sm-12 text-center">
-            <p class="lead">Gestión de Vehiculos.<br><br></p>
-             <div class="col-sm-12 text-right">
-                <p><?php echo "Vehiculos_table" ?></p>
-             </div>
-          </div>
-        </div>
-      </div>
-      <div id="add-modal" class="modal fade">
+    <div id="progress" class="progress progress-striped active" style="margin-bottom: 20px; display:none;">
+      <div class="progress-bar" style="width: 100%"></div>
+    </div>
+    <div id="add_modal" class="modal fade">
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
             <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="md md-close"></i></button>
+              <button id="btn_exit" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="md md-close"></i></button>
               <h4 class="modal-title">Registrar Vehiculo</h4>
             </div>
             <div class="modal-body">
@@ -174,42 +187,26 @@ $rt->check_session();
               <div id="msg_box"></div>
 
               <!-- formulario -->
-              <form class="form-horizontal" action="/" method="GET" id="frm_general">
+              <form class="form-horizontal" action="/" method="GET" id="frm_users">
                 <fieldset>
-                  <div class="form-group">
-                    <label class="col-lg-1 control-label"></label>
-                    <div class="col-lg-4" style="margin-top: 30px">
-                      <input type="text" class="form-control" id="tipo">
-                      <label for="cod" class="">Tipo Vehículo</label>
-                    </div>
-                    <div class="col-lg-4" style="margin-top: 30px">
-                      <input type="text" class="form-control" id="marca">
-                      <label for="cod" class="">Marca</label>
-                    </div>
-                    <div class="col-lg-2" style="margin-top: 30px">
-                      <input type="text" class="form-control" id="modelo">
-                      <label for="cod" class="">Modelo</label>
-                    </div>
-                    <label class="col-lg-1 control-label"></label>
-                  </div>
-
-                  <div class="form-group">
-                    <label class="col-lg-1 control-label"></label>
-                    <div class="col-lg-4" style="margin-top: 30px">
-                      <input type="text" class="form-control" id="color">
-                      <label for="cod" class="">Color</label>
-                    </div>
-                    <div class="col-lg-4" style="margin-top: 30px">
-                      <input type="text" class="form-control" id="propietario">
-                      <label for="cod" class="">Propietario</label>
-                    </div>
-                    <div class="col-lg-2" style="margin-top: 30px">
+                  <div class="row" >
+                    <!-- -->
+                    <label class="col-lg-2 control-label"></label>
+                    <div class="col-lg-2" style="margin-top: 10px">
                       <input type="text" class="form-control" id="placa">
                       <label for="cod" class="">Placa</label>
                     </div>
-                    <label class="col-lg-1 control-label"></label>
+                    <div class="col-lg-2" style="margin-top: 10px">
+                      <input type="text" class="form-control" id="capacidad">
+                      <label for="cod" class="">Capacidad m<sup>3</sup></label>
+                    </div>
+                    <div class="col-lg-4" style="margin-top: 10px">
+                      <?php echo $vehiculos->get_options_propietarios(); ?>
+                      <label for="cod" class="">Propietario</label>
+                    </div>
+                    <label class="col-lg-2 control-label"></label>
+                    <!-- -->
                   </div>
-
                   <div class="form-group">
                     <div class="col-sm-12 text-right">
                       <a href="#" id="btn_save" class="btn btn-primary">Guardar</a>
@@ -222,21 +219,55 @@ $rt->check_session();
           </div>
         </div>
       </div>
+    <div class="container-fluid">
+      <div class="page-header" id="banner">
+        <div class="row">
+          <label class="col-lg-2 control-label"></label>
+          <div class="col-sm-8 text-center">
+            <p class="lead">Gestión de Vehiculos.</p>
+            <div class="col-lg-12">
+            <div class="col-lg-5"></div>
+            <div class="col-lg-6  "></div>
+            <div class="col-lg-1"><a href="#" id="btn_new" class="btn btn-floating-mini btn-danger" data-ripple-centered="" title="Agregar Usuario"><i class="md md-group-add"></i></a></div>
+            </div>
+            <p><?php echo $vehiculos->get_vehiculos(); ?></p>
+          </div>
+          <label class="col-lg-2 control-label"></label>
+        </div>
+      </div>
+
+      <div id="modalx" style="display:none;">
+        <div class="row">
+          <label class="col-lg-2 control-label"></label>
+          <div class="col-sm-8 text-center">
+            <p class="lead" style="margin-top:40px;">Gestión de Vehiculos.<br><br></p>
+            <div class="row">
+              <input type="hidden" id="cod_finca">
+              <div class="col-lg-10" id="inv_box"></div>
+              <div class="col-lg-2"><a href="#" id="btn_back" class="btn btn-floating-mini btn-danger" data-ripple-centered=""><i class="md md-close"></i></a></div>
+            </div>
+            <table class="table table-striped table-hover ">
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Finca</th>
+                <th>Fecha Registro</th>
+                <th>Opciones</th>
+              </tr>
+            </thead>
+            <tbody id="turnos_box">
+            </tbody>
+          </table> 
+          </div>
+          <label class="col-lg-2 control-label"></label>
+        </div>
+      </div>
     </div>
 <?php echo $html_snippet->load_footer(); ?>
 
     <script>
       (function(){
-        $("#add-button").click(function(){
-          // Clean ripple
-          /*$(this).parent().find('.mtr-ripple-wrapper').remove();
-          $(this).parent().find('.mtr-btn').removeClass('mtr-btn');
-          var html = $(this).parent().html();
-          html = cleanSource(html);
-          $("#source-modal pre").text(html);*/
-          $("#add-modal").modal();
-        });
-
         $('.bs-component [data-toggle="popover"]').popover();
         $('.bs-component [data-toggle="tooltip"]').tooltip();
 
@@ -273,6 +304,82 @@ $rt->check_session();
     </script>
 
     <script type="text/javascript">
+    function validar_clave(pfx){
+      if(pfx==2){pf="ch_";}else{pf="";}
+      var pass= $("#"+pf+"pass").val();
+      var pass_re= $("#"+pf+"pass_re").val();
+
+      if(pass.length>=6){
+        if(pass==pass_re){
+          return true;
+        }else{
+          alert("las claves no coinciden");
+          return false;
+        }
+      }else{
+        alert("La clave necesita tener más de 6 caracteres");
+        return false;
+      }
+    }
+    function borrar_usuario(u, obj){
+      var c = confirm("Seguro desea borrar el registro?");
+      if(c){
+        $.ajax({      
+          url: "../../php/ajax_vehiculos.php",     
+          dataType: "json",     
+          type: "POST",     
+          data: { 
+                  action: "del_user",
+                  user: u
+                },
+          success: function(data){    
+            if(data.res==true){       
+              alert(data.mes);
+              $(obj).closest('tr').fadeOut();
+            }
+            else{
+              alert(data.mes);
+            }
+          }
+        });
+      }
+    }
+    function modalx(x){
+      switch(x){
+        case 'on': $("#banner").fadeOut();$("#modalx").fadeIn(); break;
+        case 'off': $("#banner").fadeIn();$("#modalx").fadeOut(); break;
+      }
+    }
+    $("#btn_back").on("click", function(){$("#progress").fadeIn(); modalx("off"); $("#progress").fadeOut();});
+    $("#btn_new").on("click", function(){$("#add_modal").modal()});
+    function cambiar_clave(id){
+      $("#codi").val(id); 
+      $("#change_pass_modal").modal();
+    }
+    function load_modal(f,l){
+      $("#progress").fadeIn();
+      $.ajax({      
+        url: "../../php/ajax_usuarios.php",     
+        dataType: "json",     
+        type: "POST",     
+        data: { 
+                action: "get_rutas",
+                cod: f,
+                lot: l
+              },
+        success: function(data){    
+          if(data.res==true){       
+            $("#cod_finca").val(f);
+            $("#inv_box").html(data.mes);
+            modalx("on");
+            $("#progress").fadeOut();
+          }
+          else{
+            modalx("on");
+          }
+        }
+      });
+    }
     $(function() {
       
       $('.btn, .dropdown-menu a, .navbar a, .navbar-panel a, .toolbar a, .nav-pills a, .nav-tabs a, .pager a, .pagination a, .list-group a').mtrRipple({live: true}).on('click', function(e) {
@@ -306,11 +413,59 @@ $rt->check_session();
       });
 
       //==============Activar menuitem====================  
-      $("#Vehiculos").parents(1).addClass("active");
+      $("#usuarios").parents(1).addClass("active");
 
     });
   $(document).ready(function(){
       //==============AJAX===============
+      //cambiar clave
+      $('#btn_change_pass').on('click', function() {
+        var val = validar_clave(2);
+        if (val) {
+        $.ajax({      
+          url: "../../php/ajax_usuarios.php",     
+          dataType: "json",     
+          type: "POST",     
+          data: { 
+                  action: "change_pass",
+                  user: $("#codi").val(),
+                  ch_pass: $("#ch_pass").val()
+                },    
+          success: function(data){    
+          if(data.res==true){         
+            alert(data.mes);
+            $("input[type=text], textarea").val("");
+            $("input[type=password], textarea").val("");
+          }
+          else{
+            alert(data.mes);
+          }
+        }});
+        }
+      });
+      //Guardar usuarios
+      $('#btn_save').on('click', function() {
+
+        $.ajax({      
+          url: "../../php/ajax_vehiculos.php",     
+          dataType: "json",     
+          type: "POST",     
+          data: { 
+                  action: "save",
+                  placa: $("#placa").val(),
+                  capac: $("#capacidad").val(),
+                  propi: $("#cod_prop").val()
+                },    
+          success: function(data){    
+          if(data.res==true){         
+            alert(data.mes);
+          }
+          else{
+            alert(data.mes);
+          }
+        }});
+
+      });
       //logout
       $('#btn_logout').on('click', function() {
         $.ajax({      
@@ -326,51 +481,8 @@ $rt->check_session();
           }
         }});
       });
-      //acción al cambiar el select id=tipo
-      $("#tipo").change(function(){
-        var t = $("#tipo").val()
-        if(t==1){$("#lic-box").fadeOut();}
-        if(t==2){$("#lic-box").fadeIn();}
-      });
-      //guardar finca
-      $('#btn_save').on('click', function() {
+      
 
-        //ejecutamos ajax
-        $.ajax({      
-          url: "../../php/ajax_vehiculo.php",     
-          dataType: "json",     
-          type: "POST",     
-          data: { 
-                  action: "save",
-                  nombre: $("#nombre").val(),
-                  tipo: $("#tipo").val(),
-                  ced: $("#ced").val(),
-                  lic: $("#lic").val(),
-                  lic_v: $("#lic_v").val(),
-                  dir: $("#dir").val(),
-                  tel: $("#tel").val(),
-                  cel: $("#cel").val(),
-                  f1: $("#f1").val(),
-                  f2: $("#f2").val(),
-                  f3: $("#f3").val(),
-                },
-          success: function(data){    
-            if(data.res==true){
-              $("#msg_box").fadeIn();
-              $("#msg_box").text(data.mes);
-              $("#frm_finca").trigger("reset");
-            }else if(data.res==false){
-              $("#msg_box").fadeIn();
-              $("#gr_cod_finca").addClass("has-error");
-              setTimeout(function(){
-                $("#gr_cod_finca").removeClass("has-error");
-                $("#msg_box").fadeOut();
-              },5000);
-              $("#msg_box").text(data.mes);
-            }
-          }
-        });
-      });
   });
   </script>
   </body>

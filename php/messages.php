@@ -24,6 +24,12 @@ class messages{
 			"e016" => "Problemas al borrar los lotes autorizados, comuniquese con soporte, gracias.",
 			"e017" => "Problemas al borrar el control de inventarios, comuniquese con soporte, gracias.",
 			"e018" => "Problemas al borrar inventarios asociados, comuniquese con soporte, gracias.",
+			"e019" => "Problemas al borrar inventario, comuniquese con soporte, gracias.",
+			"e020" => "Este supervisor no se puede eliminar, comuniquese con soporte, gracias.",
+			"e021" => "Este supervisor ya está registrado en el sistema.",
+			"e022" => "Este vehiculo no se puede eliminar, comuniquese con soporte, gracias.",
+			"e023" => "Este Vehiculos ya está registrado en el sistema.",
+			"e024" => "Problemas al vincular conductores, comuniquese con soporte, gracias.",
 		];
 		/* ====================== */
 		return $msg[$e];

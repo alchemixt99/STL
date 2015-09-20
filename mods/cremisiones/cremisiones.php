@@ -162,7 +162,7 @@ $rt->check_session();
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="md md-close"></i></button>
-              <h4 class="modal-title">Registrar Finca</h4>
+              <h4 class="modal-title">Registrar Paquete</h4>
             </div>
             <div class="modal-body">
               <!-- caja para mensajes -->
@@ -176,35 +176,15 @@ $rt->check_session();
                 <fieldset>
                   <div class="form-group">
                     <label class="col-lg-2 control-label"></label>
-                    <div class="col-lg-10" style="margin-top: 30px">
-                      <input type="text" class="form-control " id="cod">
-                      <label for="cod" class="">Código Finca(*)</label>
+                    <div class="col-lg-4" style="margin-top: 30px">
+                      <input type="text" class="form-control " id="ini">
+                      <label for="ini" class="">Inicia</label>
+                    </div>
+                    <div class="col-lg-4" style="margin-top: 30px">
+                      <input type="text" class="form-control " id="fin">
+                      <label for="fin" class="">Termina</label>
                     </div>
                     <label class="col-lg-2 control-label"></label>
-                    <div class="col-lg-10" style="margin-top: 30px">
-                      <input type="text" class="form-control " id="nombre">
-                      <label for="nombre" class="">Nombre Finca(*)</label>
-                    </div>
-                    <label class="col-lg-2 control-label"></label>
-                    <div class="col-lg-10" style="margin-top: 30px">
-                      <input type="text" class="form-control " id="supervisor">
-                      <label for="supervisor" class="">Supervisor(*)</label>
-                    </div>
-                    <label class="col-lg-2 control-label"></label>
-                    <div class="col-lg-10" style="margin-top: 30px">
-                      <input type="text" class="form-control " id="ciudad">
-                      <label for="ciudad" class="">Ciudad(*)</label>
-                    </div>
-                    <label class="col-lg-2 control-label"></label>
-                    <div class="col-lg-10" style="margin-top: 30px">
-                      <input type="text" class="form-control " id="dir">
-                      <label for="dir" class="">Dirección(*)</label>
-                    </div>
-                    <label class="col-lg-2 control-label"></label>
-                    <div class="col-lg-10" style="margin-top: 30px">
-                      <input type="text" class="form-control " id="tel">
-                      <label for="tel" class="">Teléfono(*)</label>
-                    </div>
                   </div>
                   <div class="form-group">
                     <div class="col-sm-12 text-right">

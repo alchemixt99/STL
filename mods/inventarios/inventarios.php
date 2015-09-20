@@ -210,6 +210,29 @@ $rt->check_session();
 <?php echo $html_snippet->load_footer(); ?>
 
     <script>
+      function borrar_inv(i, obj){
+        var c = confirm("Seguro desea borrar el inventario seleccionado?");
+        if(c){
+          $.ajax({      
+            url: "../../php/ajax_inventarios.php",     
+            dataType: "json",     
+            type: "POST",     
+            data: { 
+                    action: "del_inventario",
+                    inv: i
+                  },
+            success: function(data){    
+              if(data.res==true){       
+                alert(data.mes);
+                $(obj).closest('tr').fadeOut();
+              }
+              else{
+                alert(data.mes);
+              }
+            }
+          });
+        }
+      }
       (function(){
         $("#add-button").click(function(){
           // Clean ripple

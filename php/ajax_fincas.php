@@ -53,11 +53,6 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 								foreach ($_POST['arr_lotes'] as $key => $value) {
 									$qry_lotes='INSERT INTO tbl_lotes_autorizados (la_fi_id, la_idlote, la_created, la_estado)
 													VALUES('.$row_fi['fi_id'].', "'.$value.'", '.$_SESSION["ses_id"].',1);';
-
-									//echo "<br> Insert lote: ".$qry_lotes."<br>";
-
-
-
 									$resp_lotes = mysql_query($qry_lotes);
 								}
 								if(!$resp_lotes){
@@ -112,20 +107,22 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 		$qry_lotes ='SELECT idlote, especie_ica, ano_plant, vol_ica_m3 FROM tbl_matriz_ica WHERE codfinca="'.$cod.'";';
 		$res_lotes = mysql_query($qry_lotes);
 		while($row_lotes = mysql_fetch_assoc($res_lotes)) {
-			$onclick = "";
 			//autorizados true?
 			if(isset($_POST['aut']) && $_POST['aut']){
-				$qry_aut='SELECT * FROM tbl_lotes_autorizados INNER JOIN tbl_fincas ON tbl_fincas.fi_codigo = "'.$cod.'" AND tbl_lotes_autorizados.la_idlote = "'.$row_lotes['idlote'].'";';
+				$js_fn = 'save_check("'.$cod.'", this)';
+				$onclick = "onclick='".$js_fn."'";
+				$qry_aut='SELECT * FROM tbl_lotes_autorizados INNER JOIN tbl_fincas ON tbl_fincas.fi_codigo = "'.$cod.'" AND tbl_lotes_autorizados.la_idlote = "'.$row_lotes['idlote'].'" AND tbl_lotes_autorizados.la_estado < 99;';
 				$res_aut = mysql_query($qry_aut);
+				$row_aut = mysql_fetch_assoc($res_aut);
 				$cant_aut = mysql_num_rows($res_aut);
 				//echo "<br>".$qry_aut."<br> resultados: ".$cant_aut;
 				if($cant_aut>0){
-					$onclick = 'onclick="save_check(this)"';
 					$checked = "checked";
 				}else{
-					$onclick = 'onclick="save_check(this)"';
 					$checked = "";
 				}
+			}else{
+				$onclick="";
 			}
 			$item.='<label class=""><input '.$onclick.' type="checkbox" name="lotes[]" value="'.$row_lotes['idlote'].'" '.$checked.'>'.$row_lotes['idlote'].' - '.$row_lotes['especie_ica'].' ('.$row_lotes['ano_plant'].') Volumen: '.$row_lotes['vol_ica_m3'].' m<sup>3</sup></label><br>';
 		}
@@ -195,18 +192,42 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 		/*recibimos variables*/
 		$evento=$_POST["e"];
 		$lote=$_POST["l"];
+		$finca=$_POST["f"];
 
 		$con = new con();
 		$con->connect();
 
+		//traemos id de la finca
+		$fi_id = $fun->get_id("fi_id","fincas","fi_codigo",$finca);
+		
 		if($evento=="save"){
-			$item = "salvar";
+			//creamos lote
+			$values=$fi_id.", '".$lote."', ".$_SESSION["ses_id"].',1';
+			if($fun->existe("lotes_autorizados", "la_fi_id", $fi_id, "AND la_idlote='".$lote."'")){
+				$res=$fun->activar("lotes_autorizados", "la_fi_id", $fi_id, "AND la_idlote='".$lote."'");
+				$mes=null;
+			}else{
+				$res=$fun->crear("lotes_autorizados", "la_fi_id, la_idlote, la_created, la_estado", $values);
+				$mes=null;
+			}
+			
 		}else{
-			$item = "borrar";
+			//preguntamos si existe el lote autorizado
+			if($fun->existe("lotes_autorizados", "la_fi_id", $fi_id, "AND la_idlote='".$lote."'")){
+				//Borramos el que existe (FULL)
+				if($fun->borrar("lotes_autorizados", "la_fi_id", $fi_id, "AND la_idlote='".$lote."'")){
+					$res=true;
+					$mes=null;
+				}else{
+					$res=false;
+					$mes=null;
+				}
+			}else{
+					$res=false;
+					$mes=null;
+				}
 		}
 
-		$res=true;
-		$mes=$item;
 		$response->res = $res;
 		$response->mes = $mes;
 		echo json_encode($response);

@@ -166,6 +166,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 					F.fi_id = L.la_fi_id AND 
 					F.fi_codigo = M.codfinca AND
 					M.idlote = L.la_idlote AND 
+					L.la_estado = 1 AND
 					L.la_fi_id = $cod
 					ORDER BY L.la_idlote ASC;";
 
@@ -215,8 +216,8 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 			$con = new con();
 			$con->connect();
 		
-			/* Consultamos los supervisoresx */
-			$qry ="SELECT * FROM tbl_supervisores WHERE su_fi_id=".$cod.";";
+			/* Consultamos los supervisores */
+			$qry ="SELECT * FROM tbl_supervisores WHERE su_fi_id=".$cod." AND su_estado=1;";
 
 			$resp = mysql_query($qry);
 			$cant=mysql_num_rows($resp);
@@ -248,7 +249,27 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 		$con->disconnect();
 
 	}
+	//Borrar inventario
+	function remove_inv(){
+		$fun = new funciones();
+		$msg = new messages();
+		$response = new StdClass;
 
+		/*recibimos variables*/
+		$inv=$_POST["inv"];
+		$res=$fun->borrar("inventario","in_id",$inv);
+		if ($res) {
+			$res=true;
+			$mes=$msg->get_msg("e004");
+		}else{
+			$res=false;
+			$mes=$msg->get_msg("e019");
+		}
+		
+		$response->res = $res;
+		$response->mes = $mes;
+		echo json_encode($response);
+	}
   //validamos si es una petición ajax
   if(isset($_POST['action']) && !empty($_POST['action'])) {
       $action = $_POST['action'];
@@ -256,6 +277,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
           case 'save' : add_inventario();break;
           case 'get_lotes' : lotes_au();break;
           case 'get_supervisores' : supervisores();break;
+          case 'del_inventario' : remove_inv();break;
       }
   }
 ?>

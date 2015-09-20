@@ -5,6 +5,7 @@ require("../../php/funciones.php");
 include('../../php/app_menu.php');
 include('../../php/aside_menu.php');
 include('../../php/personas.php');
+include('../../php/vehiculos.php');
 include('../../php/fincas.php');
 include('../../php/html_snippets.php');
 //menu aplicacion
@@ -12,6 +13,7 @@ $app_menu = new app_menu();
 $aside_menu = new aside_menu();
 $html_snippet = new html_snippets();
 $personas = new personas();
+$vehiculos = new vehiculos();
 $fincas = new fincas();
 
 $rt = new route();
@@ -237,20 +239,28 @@ $rt->check_session();
                     <label class="col-lg-2 control-label"></label>
                   </div>
 
-                  <div class="form-group" id="">
+                  <div class="form-group" id="placa_box">
+                    <label class="col-lg-2 control-label"></label>
+                    <div class="col-lg-8" style="margin-top: 30px">
+                      <?php echo $vehiculos->get_options_vehiculos(); ?>
+                      <label for="cod" class="">Placa</label>
+                    </div>
+                  </div>
+
+                  <div class="form-group" id="fincas_box">
                     <label class="col-lg-2 control-label"></label>
                     <div class="col-lg-2" style="margin-top: 30px">
-                      <?php echo $fincas->get_options_fincas("f1"); ?>
+                      <?php echo $fincas->get_options_fincas_aut("f1"); ?>
                       <label for="cod" class="">Finca 1</label>
                     </div>
                     <label class="col-lg-1 control-label"></label>
                     <div class="col-lg-2" style="margin-top: 30px">
-                      <?php echo $fincas->get_options_fincas("f2"); ?>
+                      <?php echo $fincas->get_options_fincas_aut("f2"); ?>
                       <label for="cod" class="">Finca 2</label>
                     </div>
                     <label class="col-lg-1 control-label"></label>
                     <div class="col-lg-2" style="margin-top: 30px">
-                      <?php echo $fincas->get_options_fincas("f3"); ?>
+                      <?php echo $fincas->get_options_fincas_aut("f3"); ?>
                       <label for="cod" class="">Finca 3</label>
                     </div>
                     <label class="col-lg-2 control-label"></label>
@@ -274,12 +284,6 @@ $rt->check_session();
     <script>
       (function(){
         $("#add-button").click(function(){
-          // Clean ripple
-          /*$(this).parent().find('.mtr-ripple-wrapper').remove();
-          $(this).parent().find('.mtr-btn').removeClass('mtr-btn');
-          var html = $(this).parent().html();
-          html = cleanSource(html);
-          $("#source-modal pre").text(html);*/
           $("#add-modal").modal();
         });
 
@@ -372,11 +376,12 @@ $rt->check_session();
           }
         }});
       });
-      //acción al cambiar el select id=tipo
+      //acción al cambiar el select id=tipo placa_box
       $("#tipo").change(function(){
         var t = $("#tipo").val()
-        if(t==1){$("#lic-box").fadeOut();}
-        if(t==2){$("#lic-box").fadeIn();}
+        if(t==1){$("#lic-box").fadeOut(); $("#fincas_box").fadeOut(); $("#placa_box").fadeOut();}
+        if(t==2){$("#lic-box").fadeIn(); $("#fincas_box").fadeIn(); $("#placa_box").fadeIn();}
+        if(t==3){$("#lic-box").fadeIn(); $("#fincas_box").fadeIn(); $("#placa_box").fadeIn();}
       });
       //guardar finca
       $('#btn_save').on('click', function() {
@@ -399,6 +404,7 @@ $rt->check_session();
                   f1: $("#f1").val(),
                   f2: $("#f2").val(),
                   f3: $("#f3").val(),
+                  placa: $("#cod_prop").val(),
                 },
           success: function(data){    
             if(data.res==true){

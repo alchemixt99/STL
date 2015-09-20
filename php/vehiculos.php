@@ -3,47 +3,35 @@ require_once("funciones.php");
 require_once("messages.php");
 class vehiculos{
 
-  function get_personas(){
+  function get_vehiculos(){
     $con = new con();
     $msg = new messages();
     $rt = new route();
 
     $con->connect();
 
-
-    //consultamos Inventarios
+    //consultamos usuarios
     if(isset($_SESSION["ses_id"])){
-      $qry='SELECT * FROM tbl_personas 
-            WHERE pe_estado BETWEEN 1 AND 2 ORDER BY pe_nombre ASC';
+      $qry='SELECT * FROM tbl_vehiculos AS V
+            INNER JOIN tbl_personas AS P ON P.pe_id = V.ve_pe_id
+            WHERE V.ve_estado=1;';
       $res = mysql_query($qry);
 
       $item =" ";
       $script ="<script>$(document).ready(function(){";
       while($row_res = mysql_fetch_assoc($res)) {
         $item.='
-              <tr id="'.$row_res["pe_cedula"].'">
-                <td>'.$row_res["pe_cedula"].'</td>
+              <tr>
+                <td>'.$row_res["ve_id"].'</td>
+                <td>'.$row_res["ve_placa"].'</td>
                 <td>'.$row_res["pe_nombre"].'</td>
-                <td>'.$row_res["pe_tel"].' - '.$row_res["pe_cel"].'</td>
-                <td>'.$row_res["pe_dir"].'</td>
-                <td>'.$row_res["pe_licencia"].' - ('.$row_res["pe_licencia_vigencia"].')</td>
+                <td>'.$row_res["ve_timestamp"].'</td>
                 <td>
-                  <div id="edt-button" onclick="" class="btn btn-floating-mini btn-success" title="Modificar"><i class="md  md-edit"></i></div>
-                  <div id="del-button" onclick="" class="btn btn-floating-mini btn-danger" title="Borrar"><i class="md  md-delete"></i></div>
+                  <div id="del-button" onClick="borrar_usuario('.$row_res["ve_id"].', this)" class="btn btn-floating-mini btn-danger" title="Borrar"><i class="md md-delete"></i> </div>
                 </td>
               </tr>
-
         ';
-        switch ($row_res["pe_estado"]) {
-          case 2:
-            $script.='$("#'.$row_res["pe_cedula"].'").addClass("danger");';
-            break;
-          
-          default:
-            # code...
-            break;
-        }
-        $script.='$("#'.$row_res["pe_cedula"].'").addClass();';
+        $script.='';
       }
       $script.='});</script>';
     }
@@ -53,18 +41,83 @@ class vehiculos{
           <table class="table table-striped table-hover ">
             <thead>
               <tr>
-                <th>Cédula</th>
-                <th>Nombre</th>
-                <th>Tel - Cel</th>
-                <th>Domicilio</th>
-                <th>Licencia</th>
-                <th>Acciones</th>
+                <th>Id</th>
+                <th>Placa</th>
+                <th>Propietario</th>
+                <th>Fecha Registro</th>
+                <th>Opciones</th>
               </tr>
             </thead>
             <tbody>
               '.$item.'
             </tbody>
           </table> 
+    ';
+    $con->disconnect();
+    return $script.$html;
+  }
+  function get_options_propietarios(){
+    $con = new con();
+    $msg = new messages();
+    $rt = new route();
+
+    $con->connect();
+
+
+    //consultamos fincas desde la matriz ica
+    if(isset($_SESSION["ses_id"])){
+      $qry='SELECT DISTINCT pe_id, pe_nombre, pe_cedula FROM tbl_personas WHERE pe_tipo=1 OR pe_tipo=3 ORDER BY pe_nombre ASC';
+      $res = mysql_query($qry);
+
+      $item =" ";
+      $script ="<script>$(document).ready(function(){";
+      while($row_res = mysql_fetch_assoc($res)) {
+        $item.='
+              <option value="'.$row_res["pe_id"].'">'.$row_res["pe_nombre"].' ('.$row_res["pe_cedula"].')</option>
+        ';
+        $script.='';
+      }
+      $script.='});</script>';
+    }
+    else{$rt->routing($rt->path("login"));}
+
+    $html='
+        <select class="form-control valued" id="cod_prop">
+          '.$item.'
+        </select>
+    ';
+    $con->disconnect();
+    return $script.$html;
+  }
+  function get_options_vehiculos(){
+    $con = new con();
+    $msg = new messages();
+    $rt = new route();
+
+    $con->connect();
+
+
+    //consultamos fincas desde la matriz ica
+    if(isset($_SESSION["ses_id"])){
+      $qry='SELECT DISTINCT ve_id, ve_placa, ve_capacidad_m3 FROM tbl_vehiculos WHERE ve_estado=1 ORDER BY ve_placa ASC';
+      $res = mysql_query($qry);
+
+      $item =" ";
+      $script ="<script>$(document).ready(function(){";
+      while($row_res = mysql_fetch_assoc($res)) {
+        $item.='
+              <option value="'.$row_res["ve_id"].'">'.$row_res["ve_placa"].' - '.$row_res["ve_capacidad_m3"].')</option>
+        ';
+        $script.='';
+      }
+      $script.='});</script>';
+    }
+    else{$rt->routing($rt->path("login"));}
+
+    $html='
+        <select class="form-control valued" id="cod_prop">
+          '.$item.'
+        </select>
     ';
     $con->disconnect();
     return $script.$html;

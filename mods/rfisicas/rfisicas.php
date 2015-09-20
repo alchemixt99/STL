@@ -166,50 +166,27 @@ $rt->check_session();
             </div>
             <div class="modal-body">
               <!-- caja para mensajes -->
-              <div class="alert alert-dismissible alert-info">
+              <div class="alert alert-dismissible alert-info" style="display:none" id="caja_mensaje">
                 <button type="button" class="close" data-dismiss="alert"><i class="md md-clear"></i></button>
                 <strong>Aviso: </strong> <div id="texto-mensaje"></div>
               </div>
-
               <!-- formulario -->
               <form class="form-horizontal" action="/" method="GET">
                 <fieldset>
                   <div class="form-group">
                     <label class="col-lg-2 control-label"></label>
-                    <div class="col-lg-10" style="margin-top: 30px">
-                      <input type="text" class="form-control " id="cod">
-                      <label for="cod" class="">Código Finca(*)</label>
+                    <div class="col-lg-4" style="margin-top: 30px">
+                      <input type="text" class="form-control " id="ini">
+                      <label for="ini" class="">Inicia</label>
+                    </div>
+                    <div class="col-lg-4" style="margin-top: 30px">
+                      <input type="text" class="form-control " id="fin">
+                      <label for="fin" class="">Termina</label>
                     </div>
                     <label class="col-lg-2 control-label"></label>
-                    <div class="col-lg-10" style="margin-top: 30px">
-                      <input type="text" class="form-control " id="nombre">
-                      <label for="nombre" class="">Nombre Finca(*)</label>
-                    </div>
-                    <label class="col-lg-2 control-label"></label>
-                    <div class="col-lg-10" style="margin-top: 30px">
-                      <input type="text" class="form-control " id="supervisor">
-                      <label for="supervisor" class="">Supervisor(*)</label>
-                    </div>
-                    <label class="col-lg-2 control-label"></label>
-                    <div class="col-lg-10" style="margin-top: 30px">
-                      <input type="text" class="form-control " id="ciudad">
-                      <label for="ciudad" class="">Ciudad(*)</label>
-                    </div>
-                    <label class="col-lg-2 control-label"></label>
-                    <div class="col-lg-10" style="margin-top: 30px">
-                      <input type="text" class="form-control " id="dir">
-                      <label for="dir" class="">Dirección(*)</label>
-                    </div>
-                    <label class="col-lg-2 control-label"></label>
-                    <div class="col-lg-10" style="margin-top: 30px">
-                      <input type="text" class="form-control " id="tel">
-                      <label for="tel" class="">Teléfono(*)</label>
-                    </div>
                   </div>
                   <div class="form-group">
                     <div class="col-sm-12 text-right">
-                      <button type="button" class="btn btn-flat btn-primary" data-dismiss="modal">Cerrar</button>
-                      <button type="reset" class="btn btn-flat btn-primary">Limpiar</button>
                       <a href="#" id="btn_save" class="btn btn-primary">Guardar</a>
                     </div>
                   </div>
@@ -224,6 +201,27 @@ $rt->check_session();
 <?php echo $html_snippet->load_footer(); ?>
 
     <script>
+    function change(a, id){
+      $.ajax({      
+        url: "../../php/ajax_rfisicas.php",     
+        dataType: "json",     
+        type: "POST",     
+        data: { 
+                action: "change",
+                a: a,
+                id: id
+              },
+        success: function(data){    
+          if(data.res==true){
+            alert(data.mes);
+          }else if(data.res==false){
+            alert(data.mes);
+          }
+          location.reload();
+        }
+      });
+    }
+    
       (function(){
         $("#add-button").click(function(){
           // Clean ripple
@@ -326,27 +324,39 @@ $rt->check_session();
       });
       //guardar finca
       $('#btn_save').on('click', function() {
-        $.ajax({      
-          url: "../../php/ajax_fincas.php",     
-          dataType: "json",     
-          type: "POST",     
-          data: { 
-                  action: "save",
-                  cod: $("#cod").val(),
-                  nombre: $("#nombre").val(),
-                  supervisor: $("#supervisor").val(),
-                  ciudad: $("#ciudad").val(),
-                  dir: $("#dir").val(),
-                  tel: $("#tel").val()
-                },
-          success: function(data){    
-            if(data.res==true){
-              $("#texto-mensaje").text(data.mes);
-            }else if(data.res==false){
-              $("#texto-mensaje").text(data.mes);
+        var ini = $("#ini").val();
+        var fin = $("#fin").val();
+
+        if(ini<fin){
+          $.ajax({      
+            url: "../../php/ajax_rfisicas.php",     
+            dataType: "json",     
+            type: "POST",     
+            data: { 
+                    action: "save",
+                    ini: ini,
+                    fin: fin
+                  },
+            success: function(data){    
+              if(data.res==true){
+                $("#caja_mensaje").removeClass("alert-info");
+                $("#caja_mensaje").addClass("alert-success");
+                $("#texto-mensaje").text(data.mes);
+                $("#caja_mensaje").fadeIn();
+              }else if(data.res==false){
+                $("#caja_mensaje").removeClass("alert-info");
+                $("#caja_mensaje").addClass("alert-danger");
+                $("#texto-mensaje").text(data.mes);
+                $("#caja_mensaje").fadeIn();
+              }
             }
-          }
-        });
+          });
+        }else{
+          $("#caja_mensaje").removeClass("alert-info");
+          $("#caja_mensaje").addClass("alert-danger");
+          $("#texto-mensaje").text("verifique los valores e intentelo de nuevo");
+          $("#caja_mensaje").fadeIn();
+        }
       });
   });
   </script>

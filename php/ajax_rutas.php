@@ -7,93 +7,6 @@ $fun = new funciones();
 if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 
   //=============Definimos funciones===================
-	//agregar fincas
-	function add_finca(){	
-		$fun = new funciones();
-		$msg = new messages();
-		$response = new StdClass;
-
-		/*recibimos variables*/
-		$cod=$_POST["cod"];
-		$nombre=$_POST["nombre"];
-
-		if($nombre==""){
-			$res=false;
-			$mes=$msg->get_msg("e005");
-		}else
-		{
-			$con = new con();
-			$con->connect();
-
-			/* verificamos que exista la finca en la matriz importada desde excel*/
-			$res_finca = $fun->existe("matriz_ica","codfinca",$cod);
-
-			/* verificamos que no esté registrada en la tabla de fincas*/
-			$res_existe = $fun->existe("fincas","fi_codigo",$cod);
-			if($res_finca){
-				if(!$res_existe){
-					/* ingresamos datos de la finca */
-					$qry ="INSERT INTO tbl_fincas (fi_codigo, fi_nombre, fi_created, fi_estado)
-							VALUES ('".$cod."','".$nombre."',".$_SESSION["ses_id"].",1);";
-
-					$resp = mysql_query($qry);
-					if(!$resp){
-						$res=false;
-						$mes=$msg->get_msg("e003");
-					}else{
-						//Si la insercción fué correcta, traemos el id de la finca y lo asociaremos a cada lote que se autorizó
-						$qry_fi="SELECT fi_id, fi_codigo FROM tbl_fincas WHERE fi_codigo='".$cod."' ORDER BY fi_id DESC LIMIT 1;";
-						$res_fi=mysql_query($qry_fi);
-						if($row_fi=mysql_fetch_assoc($res_fi)){
-							//echo "<br> ultima finca: ".$row_fi['fi_id']."<br>";
-							//echo "<br> query finca: ".$qry_fi."<br>";
-							//validamos integridad de los lotes
-							if(isset($_POST['arr_lotes'])){
-								//hacemos insercción por cada lote con el codfinca								
-								foreach ($_POST['arr_lotes'] as $key => $value) {
-									$qry_lotes='INSERT INTO tbl_lotes_autorizados (la_fi_id, la_idlote, la_created, la_estado)
-													VALUES('.$row_fi['fi_id'].', "'.$value.'", '.$_SESSION["ses_id"].',1);';
-
-									//echo "<br> Insert lote: ".$qry_lotes."<br>";
-
-
-
-									$resp_lotes = mysql_query($qry_lotes);
-								}
-								if(!$resp_lotes){
-									$res=false;
-									$mes=$msg->get_msg("e003");
-								}else{
-									$res=true;
-									$mes=$msg->get_msg("e004");
-								}
-							}else{
-								$res=true;
-								$mes=$msg->get_msg("e004");
-							}
-						}else{
-							$res=false;
-							$mes=$msg->get_msg("e003");
-						}
-					}	
-				}else{
-					$res=false;
-					$mes=$msg->get_msg("e007");
-				}
-			}else{
-				$res=false;
-				$mes=$msg->get_msg("e006");
-			}
-
-			
-		}
-		$response->res = $res;
-		$response->mes = $mes;
-		echo json_encode($response);
-
-		$con->disconnect();
-
-	}
 	//construimos los turnos según sea el inventario y los conductores
 	function get_turnos_generados(){	
 		$fun = new funciones();
@@ -107,65 +20,91 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 		$con = new con();
 		$con->connect();
 
-		/* PILA DE TURNOS */
-		$turnos = array();
-
-		//Generamos turnos según inventario seleccionado
-		//buscamos inventario
-		$qry_inv = 'SELECT * FROM tbl_inventario WHERE in_estado = 1 AND in_id = '.$cod_inv.';';
+		//traer inventario
+		$qry_inv = 'SELECT * FROM tbl_inventario WHERE in_id='.$cod_inv.';';
 		$res_inv = mysql_query($qry_inv);
-		$html ="";
 		$row_inv = mysql_fetch_assoc($res_inv);
-		$vol_inv = $row_inv['in_mt_cubico'];
 
-		//listamos conductores (aplicando restricciones)
-		$qry_cond = 'SELECT pe_nombre, pe_cedula, ve_placa, ve_capacidad_m3 FROM tbl_personas 
-					INNER JOIN tbl_vehiculos ON ve_id = pe_ve_id
-					WHERE pe_estado = 1
-					AND pe_f1 = '.$finca.'
-					OR pe_f2 = '.$finca.'
-					OR pe_f3 = '.$finca.' ORDER BY pe_timestamp ASC;';
+
+		//traer control de inventario
+		$qry_ci = 'SELECT * FROM tbl_control_inventarios WHERE ci_fi_id='.$row_inv['in_fi_id'].' AND ci_in_lote = '.$row_inv['in_lote'].';';
+		$res_ci = mysql_query($qry_ci);
+		$row_ci = mysql_fetch_assoc($res_ci);
+
+	/**/$vol_inventario = $row_ci['ci_vol_ini'];
+		$vol_act = $vol_inventario;
+
+
+		//traer conductores
+		$fi_id = $fun->get_custom("SELECT fi_codigo FROM tbl_fincas WHERE fi_id=".$finca.";");
+		$qry_cond = 'SELECT pe_id, pe_nombre, pe_cedula, ve_placa, ve_capacidad_m3 FROM tbl_personas 
+			INNER JOIN tbl_vehiculos ON ve_id = pe_ve_id
+			WHERE pe_estado = 1 AND
+			pe_tipo<>1 AND 
+			pe_f1 = "'.$fi_id.'"
+			OR pe_f2 = "'.$fi_id.'"
+			OR pe_f3 = "'.$fi_id.'" ORDER BY pe_timestamp ASC;';
 		$res_cond = mysql_query($qry_cond);
-		$i=0;
-		while($row_cond = mysql_fetch_assoc($res_cond)){
-			$cond_lista[$i]=$row_cond;
-			$i++;
-		}
-		//terminamos de listar conductores
-
-		//asignamos turnos mientras se evacua el inventario
-		$turno=1;
-		$positivo=true;
-		while($vol_inv>0){
-			$cond_cant = count($cond_lista);
-			for ($i=0; $i < $cond_cant; $i++) { 
-				if($positivo==true){
-					$vol_restante = $vol_inv-$cond_lista[$i]['ve_capacidad_m3'];
-					$html.="<tr class='info'>";
-					$html.='<td>'.$turno.'</td>';
-					$html.='<td>'.$cond_lista[$i]['pe_nombre'].'</td>';
-					$html.='<td>'.$cond_lista[$i]['ve_capacidad_m3'].'</td>';
-					$html.='<td>'.$vol_restante.'</td>';
-					$html.='
-					<td>
-						<a href="#" class="btn btn-floating-mini btn-success" data-ripple-centered=""><i class="md md-save"></i></a>
-						<a href="#" class="btn btn-floating-mini btn-info" data-ripple-centered=""><i class="md md-edit"></i></a>
-					</td>';
-					$html.="</tr>";
-					if($vol_restante<=0) {
-						$vol_inv=0;
-						$positivo=false;
-						$i=$cond_cant;
-					}else if($vol_restante>0){
-						$vol_inv = $vol_restante;
-					}
-					$turno++;
-				}
+		$cant_cond = mysql_num_rows($res_cond);
+		if($cant_cond>0){
+			$json ="";
+			$i=0;
+			while ($row_cond=mysql_fetch_assoc($res_cond)) {
+				if($row_inv['in_pe_id']==$row_cond['pe_id']){$start=111;}else{$start=0;}
+				$json.='{"id":'.$row_cond['pe_id'].', "nombre":"'.$row_cond['pe_nombre'].'", "capacidad":'.$row_cond['ve_capacidad_m3'].', "inicia": '.$start.'},';
 			}
-		}
 
-		$res=true;
-		$mes=$html;
+			//crear json_array
+			//limpiar array 
+			$json = trim($json, ",");
+			$array['cond'] = json_decode('['.$json.']', true);
+			//print_r($array["cond"]);
+
+			//Generar lista
+			$clave = array_search(111, array_column($array['cond'], 'inicia'));
+			$cantidad = count($array['cond']);
+				/*echo "clave: true , encontrado en: ".$clave;
+				echo "<br> cantidad de conductores: ".$cantidad;
+				echo "<br> inventario: ".$vol_inventario."m3";*/
+				$html="";
+				$turno=0;
+				while ($vol_act > 0) {
+					$past=0;
+					for ($i=$clave; $i <= $cantidad; $i++) { 
+						if($vol_act <= 0){break;}
+						if($i==$cantidad && $past==0){$i=0;$past=1;}
+						if($i==$cantidad && $past==1){$i=0;$past=2;}
+						//if($past==1 && $i==$clave){break;}
+						if($past==2 && $i==$clave){break;}
+						$vol_act = $vol_act - $array['cond'][$i]["capacidad"];
+						if($vol_act<=0){$vol_act=0;}
+						$html.="<tr class='info'>";
+						$html.='<td>'.$turno.' / past: '.$past.'</td>';
+						$html.='<td>'.$array['cond'][$i]["nombre"].'</td>';
+						$html.='<td>'.$array['cond'][$i]["capacidad"].'</td>';
+						$html.='<td>'.$vol_act.'</td>';
+						$html.='
+						<td>
+							<a href="#" class="btn btn-floating-mini btn-success" data-ripple-centered=""><i class="md md-save"></i></a>
+							<a href="#" class="btn btn-floating-mini btn-info" data-ripple-centered=""><i class="md md-edit"></i></a>
+						</td>';
+						$html.="</tr>";
+						$turno++;
+						//echo "<br>[".$i."]: Past:[".$past."] => Nombre: ".$array['cond'][$i]["nombre"]. "volumen actual: ".$vol_act."m3";
+					}
+					if($past==2){break;}
+				}
+
+			$res=true;
+			$mes=$html;	
+		}else{
+			$res=false;
+			$mes=$msg->get_msg("e024");
+		}
+		
+		//evacuar inventario (sugerir)
+
+		
 				
 		$con->disconnect();
 		

@@ -31,8 +31,7 @@ class inventarios{
                 <td>'.$row_res["in_lote"].'</td>
                 <td>'.$tipo_materia.'</td>
                 <td>
-                  <div id="edt-button" onclick="" class="btn btn-floating-mini btn-success" title="Modificar"><i class="md  md-edit"></i></div>
-                  <div id="del-button" onclick="" class="btn btn-floating-mini btn-danger" title="Borrar"><i class="md  md-delete"></i></div>
+                  <div id="del-button" onclick="borrar_inv('.$row_res["in_id"].', this)" class="btn btn-floating-mini btn-danger" title="Borrar"><i class="md  md-delete"></i></div>
                 </td>
               </tr>
 

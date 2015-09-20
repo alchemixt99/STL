@@ -51,7 +51,7 @@ class fincas{
     $con->disconnect();
     return $script.$html;
   }
-  function get_options_fincas($select_id=null){
+  function get_options_fincas($select_id=null, $get_id=null){
     $con = new con();
     $msg = new messages();
     $rt = new route();
@@ -98,7 +98,7 @@ class fincas{
     $con->disconnect();
     return $script.$html;
   }
-  function get_options_fincas_aut($select_id=null){
+  function get_options_fincas_aut($select_id=null, $get_id=false){
     $con = new con();
     $msg = new messages();
     $rt = new route();
@@ -108,7 +108,7 @@ class fincas{
 
     //consultamos fincas desde la matriz ica
     if(isset($_SESSION["ses_id"])){
-      $qry='SELECT DISTINCT codfinca, municipio, depto FROM tbl_matriz_ica 
+      $qry='SELECT DISTINCT fi_id, codfinca, municipio, depto FROM tbl_matriz_ica 
       INNER JOIN tbl_fincas ON fi_codigo = codfinca
       WHERE fi_estado<99
       ORDER BY codfinca ASC';
@@ -117,9 +117,15 @@ class fincas{
       $item =" ";
       $script ="<script>$(document).ready(function(){";
       while($row_res = mysql_fetch_assoc($res)) {
-        $item.='
-              <option value="'.$row_res["codfinca"].'">'.$row_res["codfinca"].' ('.$row_res["municipio"].' - '.$row_res["depto"].')</option>
-        ';
+        if($get_id){
+          $item.='
+                <option value="'.$row_res["fi_id"].'">'.$row_res["codfinca"].' ('.$row_res["municipio"].' - '.$row_res["depto"].')</option>
+          ';
+        }else{
+          $item.='
+                <option value="'.$row_res["codfinca"].'">'.$row_res["codfinca"].' ('.$row_res["municipio"].' - '.$row_res["depto"].')</option>
+          ';          
+        }
         $script.='';
       }
       $script.='});</script>';

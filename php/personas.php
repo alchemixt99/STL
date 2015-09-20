@@ -28,7 +28,7 @@ class personas{
                 <td>'.$row_res["pe_dir"].'</td>
                 <td>'.$row_res["pe_licencia"].' - ('.$row_res["pe_licencia_vigencia"].')</td>
                 <td>
-                  <div id="edt-button" onclick="" class="btn btn-floating-mini btn-success" title="Modificar"><i class="md  md-edit"></i></div>
+                  <div id="edt-button" style="display:none;" onclick="" class="btn btn-floating-mini btn-success" title="Modificar"><i class="md  md-edit"></i></div>
                   <div id="del-button" onclick="" class="btn btn-floating-mini btn-danger" title="Borrar"><i class="md  md-delete"></i></div>
                 </td>
               </tr>

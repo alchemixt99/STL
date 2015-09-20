@@ -280,7 +280,7 @@ $rt->check_session();
         });
       }
     }
-    function save_check(obj){
+    function save_check(f, obj){
       //alert("accion: "+obj.checked+" id: "+obj.value);
       if(obj.checked){evento = "save"; lote = obj.value;}
         else{evento = "erase"; lote = obj.value;}
@@ -291,15 +291,11 @@ $rt->check_session();
           data: { 
                   action: "change_lote_aut",
                   e: evento,
-                  l: lote
+                  l: lote,
+                  f: f
                 },
-          success: function(data){    
-            if(data.res==true){
-              $("#lote_especie").fadeIn();
-              $("#lote_especie").html(data.mes);
-            }
-          }
-      });
+          success: function(data){}
+        });
     }
     $(function() {
       $("btn_exit").on("click", function(){$("#lote_especie").html("");}); 

@@ -13,7 +13,7 @@ class rfisicas{
 
     //consultamos fincas
     if(isset($_SESSION["ses_id"])){
-      $qry='SELECT * FROM tbl_remisiones_fisicas WHERE rf_estado=1 ORDER BY rf_timestamp DESC ';
+      $qry='SELECT * FROM tbl_remisiones_fisicas ORDER BY rf_timestamp DESC ';
       $res = mysql_query($qry);
 
       $item =" ";
@@ -21,11 +21,19 @@ class rfisicas{
       while($row_res = mysql_fetch_assoc($res)) {
         //calculamos porcentaje de uso
           $porcentaje=(($row_res["rf_cant_usados"]*100)/($row_res["rf_dig_fin"]-$row_res["rf_dig_ini"]));
+        //boton de activacion/desactivación
+          if ($row_res["rf_estado"]==1) {
+            $btn = '<div id="act-button" style="display:" onclick="change(1, '.$row_res['rf_id'].')" class="btn btn-floating-mini btn-success" title="Activar Paquete"><i class="md  md-done"></i></div>
+                  <div id="des-button" style="display:none" onclick="change(2, '.$row_res['rf_id'].')" class="btn btn-floating-mini btn-warning" title="Desactivar Paquete"><i class="md  md-close"></i></div>';
+          }else{
+            $btn = '<div id="act-button" style="display:none" onclick="change(1, '.$row_res['rf_id'].')" class="btn btn-floating-mini btn-success" title="Activar Paquete"><i class="md  md-done"></i></div>
+                  <div id="des-button" style="display:" onclick="change(2, '.$row_res['rf_id'].')" class="btn btn-floating-mini btn-warning" title="Desactivar Paquete"><i class="md  md-close"></i></div>';
+          }
         //--
+
         $item.='
               <tr>
                 <td>'.$row_res["rf_timestamp"].'</td>
-                <td>'.$row_res["rf_tipo_doc"].'</td>
                 <td>'.$row_res["rf_dig_ini"].'</td>
                 <td>'.$row_res["rf_dig_fin"].'</td>
                 <td><div class="progress progress-striped active">
@@ -33,11 +41,9 @@ class rfisicas{
                     </div>
                 </td>
                 <td>
-                  <div id="edt-button" onclick="" class="btn btn-floating-mini btn-success" title="Modificar"><i class="md  md-edit"></i></div>
-                  <div id="del-button" onclick="" class="btn btn-floating-mini btn-danger" title="Borrar"><i class="md  md-delete"></i></div>
+                '.$btn.'
                 </td>
               </tr>
-
         ';
         $script.='';
       }
@@ -50,7 +56,6 @@ class rfisicas{
             <thead>
               <tr>
                 <th>Fecha Registro</th>
-                <th>Documento</th>
                 <th>Inicia</th>
                 <th>Termina</th>
                 <th>Usados</th>

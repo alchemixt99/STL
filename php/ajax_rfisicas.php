@@ -8,30 +8,24 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 
   //=============Definimos funciones===================
 	//agregar fincas
-	function add_finca(){	
+	function add_pack(){	
 		$msg = new messages();
 		$response = new StdClass;
 
 		/*recibimos variables*/
-		$cod=$_POST["cod"];
-		$nombre=$_POST["nombre"];
-		$supervisor=$_POST["supervisor"];
-		$ciudad=$_POST["ciudad"];
-		$dir=$_POST["dir"];
-		$tel=$_POST["tel"];
+		$ini=$_POST["ini"];
+		$fin=$_POST["fin"];
 
-		if($nombre==""){
+		if($ini=="" || $fin == ""){
 			$res=false;
 			$mes=$msg->get_msg("e005");
 		}else{
 			$con = new con();
 			$con->connect();
 
-			
-
 			/* ingresamos datos de la finca */
-			$qry ="INSERT INTO tbl_fincas (fi_codigo, fi_nombre, fi_supervisor, fi_ciudad, fi_dir, fi_tel, fi_created, fi_estado)
-					VALUES ('".$cod."','".$nombre."','".$supervisor."','".$ciudad."','".$dir."','".$tel."',".$_SESSION["ses_id"].",1);";
+			$qry ="INSERT INTO tbl_remisiones_fisicas (rf_dig_ini, rf_dig_fin, rf_created, rf_estado)
+					VALUES (".$ini.",".$fin.",".$_SESSION["ses_id"].",1);";
 
 			$resp = mysql_query($qry);
 			if(!$resp){
@@ -50,11 +44,56 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 
 	}
 
+	function change_pack(){
+		$fun = new funciones();
+		$msg = new messages();
+		$response = new StdClass;
+
+		/*recibimos variables*/
+		$act=$_POST["a"];
+		$id=$_POST["id"];
+
+		if($act=="" || $id == ""){
+			$res=false;
+			$mes=$msg->get_msg("e005");
+		}else{
+			$con = new con();
+			$con->connect();
+
+			if ($act==1) {
+				//activar, cambiar a 99
+				if($fun->borrar("remisiones_fisicas", "rf_id", $id)){
+					$res=true;
+					$mes=$msg->get_msg("e004");
+				}else{
+					$res=false;
+					$mes=$msg->get_msg("e003-1", "Activando remision.");
+				}
+			}else{
+				//desactivar, cambiar a 1
+				if($fun->activar("remisiones_fisicas", "rf_id", $id)){
+					$res=true;
+					$mes=$msg->get_msg("e004");
+				}else{
+					$res=false;
+					$mes=$msg->get_msg("e003-1", "Desactivando remision.");
+				}
+			}
+
+		}
+		$response->res = $res;
+		$response->mes = $mes;
+		echo json_encode($response);
+
+		$con->disconnect();
+	}
+
   //validamos si es una petición ajax
   if(isset($_POST['action']) && !empty($_POST['action'])) {
       $action = $_POST['action'];
       switch($action) {
-          case 'save' : add_finca();break;
+          case 'save' : add_pack();break;
+          case 'change' : change_pack();break;
       }
   }
 ?>

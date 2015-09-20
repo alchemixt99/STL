@@ -25,7 +25,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 		$f1 = $_POST['f1'];
 		$f2 = $_POST['f2'];
 		$f3 = $_POST['f3'];
-		
+		$placa = $_POST['placa'];
 
 		if($nombre==""){
 			$res=false;
@@ -40,10 +40,10 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 			if(!$res_existe){
 				/* ingresamos datos de la persona */
 				$qry ="INSERT INTO tbl_personas 
-				(pe_nombre, pe_tel, pe_cedula, pe_licencia, pe_licencia_vigencia, pe_dir, pe_cel, pe_tipo, pe_created, pe_estado, pe_f1, pe_f2, pe_f3) 
+				(pe_nombre, pe_tel, pe_cedula, pe_licencia, pe_licencia_vigencia, pe_dir, pe_cel, pe_tipo, pe_created, pe_estado, pe_f1, pe_f2, pe_f3, pe_ve_id) 
 				VALUES 
-				('".$nombre."', '".$tel."', '".$ced."', '".$lic."', '".$lic_v."', '".$dir."', '".$cel."', '".$tipo."', ".$_SESSION["ses_id"].", 1 , ".$f1.", ".$f2.", ".$f3.", );";
-
+				('".$nombre."', '".$tel."', '".$ced."', '".$lic."', '".$lic_v."', '".$dir."', '".$cel."', '".$tipo."', ".$_SESSION["ses_id"].", 1 , '".$f1."', '".$f2."', '".$f3."', ".$placa.");";
+				//echo "QUERY: ".$qry;
 				$resp = mysql_query($qry);
 				if(!$resp){
 					$res=false;
