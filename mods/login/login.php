@@ -1,10 +1,24 @@
 <?php
 include('../../php/jslib.php');
+
+$libs = new jslib();
+$css = $libs->get_css();
+$js = $libs->get_js();
 ?>
 <!DOCTYPE html>
 <html>
 <head>
 	<title>STL SAS - Inicio</title>
+	<script src="js/jquery.min.js"></script>
+    <script src="js/jquery.easing.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.mtr-ripple.js"></script>
+    <script src="js/jquery.mtr-panel.js"></script>
+    <script src="js/jquery.mtr-header.js"></script>
+    <?php 
+      echo $js;
+      echo $css;
+    ?>
 	<style type="text/css">
 		* { box-sizing:border-box; }
 

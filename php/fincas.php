@@ -13,7 +13,9 @@ class fincas{
 
     //consultamos fincas
     if(isset($_SESSION["ses_id"])){
-      $qry='SELECT * FROM tbl_fincas WHERE fi_estado=1 ORDER BY fi_codigo ASC ';
+      $qry='SELECT * FROM tbl_fincas 
+            INNER JOIN tbl_subnucleos ON sn_id = fi_sn_id
+            WHERE fi_estado=1 ORDER BY fi_codigo ASC ';
       $res = mysql_query($qry);
 
       $item =" ";
@@ -22,6 +24,7 @@ class fincas{
         $item.='
               <tr>
                 <td>'.$row_res["fi_codigo"].'</td>
+                <td>'.$row_res["sn_subnucleo"].'</td>
                 <td>'.$row_res["fi_timestamp"].'</td>
                 <td>
                   <div id="del-button" onclick="borrar_finca('.$row_res["fi_id"].', this)" class="btn btn-floating-mini btn-danger" title="Borrar"><i class="md  md-delete"></i></div>
@@ -39,6 +42,7 @@ class fincas{
             <thead>
               <tr>
                 <th>Código</th>
+                <th>Subnucleo</th>
                 <th>Fecha Autorización</th>
                 <th>Acciones</th>
               </tr>

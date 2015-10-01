@@ -11,6 +11,9 @@ $html_snippet = new html_snippets();
 
 $rt = new route();
 $rt->check_session();
+$libs = new jslib();
+$css = $libs->get_css();
+$js = $libs->get_js();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,12 +22,6 @@ $rt->check_session();
     <title>Inicio - STL SAS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    
-    <link href='http://fonts.googleapis.com/css?family=Roboto:500,300,400' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" type="text/css">
-
-
-    <link rel="stylesheet" href="materia.css" type="text/css">
       
     <script src="js/jquery.min.js"></script>
     <script src="js/jquery.easing.js"></script>
@@ -32,6 +29,10 @@ $rt->check_session();
     <script src="js/jquery.mtr-ripple.js"></script>
     <script src="js/jquery.mtr-panel.js"></script>
     <script src="js/jquery.mtr-header.js"></script>
+    <?php 
+      echo $js;
+      echo $css;
+    ?>
 
     <!--
     <link rel="stylesheet" href="dist/materia.css" type="text/css">

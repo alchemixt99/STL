@@ -51,7 +51,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 			$i=0;
 			while ($row_cond=mysql_fetch_assoc($res_cond)) {
 				if($row_inv['in_pe_id']==$row_cond['pe_id']){$start=111;}else{$start=0;}
-				$json.='{"id":'.$row_cond['pe_id'].', "nombre":"'.$row_cond['pe_nombre'].'", "capacidad":'.$row_cond['ve_capacidad_m3'].', "inicia": '.$start.', "finca":'.$finca.' },';
+				$json.='{"id":'.$row_cond['pe_id'].', "nombre":"'.$row_cond['pe_nombre'].'", "capacidad":'.$row_cond['ve_capacidad_m3'].', "inicia": '.$start.', "finca":'.$finca.', "placa": "'.$row_cond['ve_placa'].'"},';
 			}
 
 			//crear json_array
@@ -93,6 +93,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 						$html.="<tr class='info' id='".$turno."'>";
 						$html.='<td>'.$turno_hora.'</td>';
 						$html.='<td>'.$array['cond'][$i]["nombre"].'</td>';
+						$html.='<td>'.$array['cond'][$i]["placa"].'</td>';
 						$html.='<td>'.$array['cond'][$i]["capacidad"].' m<sup>3</sup></td>';
 						$html.='<td>'.$vol_act.' m<sup>3</sup></td>';
 						$html.='

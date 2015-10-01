@@ -14,6 +14,9 @@ $fincas = new fincas();
 
 $rt = new route();
 $rt->check_session();
+$libs = new jslib();
+$css = $libs->get_css();
+$js = $libs->get_js();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,12 +25,6 @@ $rt->check_session();
     <title>Fincas - STL SAS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    
-    <link href='http://fonts.googleapis.com/css?family=Roboto:500,300,400' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" type="text/css">
-
-
-    <link rel="stylesheet" href="materia.css" type="text/css">
       
     <script src="js/jquery.min.js"></script>
     <script src="js/jquery.easing.js"></script>
@@ -35,6 +32,10 @@ $rt->check_session();
     <script src="js/jquery.mtr-ripple.js"></script>
     <script src="js/jquery.mtr-panel.js"></script>
     <script src="js/jquery.mtr-header.js"></script>
+    <?php 
+      echo $js;
+      echo $css;
+    ?>
 
     <!--
     <link rel="stylesheet" href="dist/materia.css" type="text/css">
@@ -185,7 +186,7 @@ $rt->check_session();
                     <label class="col-lg-2 control-label"></label>
                     <div class="col-lg-10" style="margin-top: 30px" id="combo_fincas_all">
                         <?php echo $fincas->get_options_fincas(); ?>
-                      <label for="cod" class="">Código Finca(*)</label>
+                      <label for="cod" class="">Seleccione Subnúcleo(*)</label>
                     </div>
                     <div class="col-lg-10" style="margin-top: 30px; display:none;" id="combo_fincas_aut">
                         <?php echo $fincas->get_options_fincas_aut("cod_aut"); ?>

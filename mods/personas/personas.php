@@ -18,6 +18,11 @@ $fincas = new fincas();
 
 $rt = new route();
 $rt->check_session();
+$libs = new jslib();
+$css = $libs->get_css();
+$js = $libs->get_js();
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -26,12 +31,6 @@ $rt->check_session();
     <title>Personas - STL SAS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    
-    <link href='http://fonts.googleapis.com/css?family=Roboto:500,300,400' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" type="text/css">
-
-
-    <link rel="stylesheet" href="materia.css" type="text/css">
       
     <script src="js/jquery.min.js"></script>
     <script src="js/jquery.easing.js"></script>
@@ -39,6 +38,10 @@ $rt->check_session();
     <script src="js/jquery.mtr-ripple.js"></script>
     <script src="js/jquery.mtr-panel.js"></script>
     <script src="js/jquery.mtr-header.js"></script>
+    <?php 
+      echo $js;
+      echo $css;
+    ?>
 
     <!--
     <link rel="stylesheet" href="dist/materia.css" type="text/css">
@@ -249,21 +252,16 @@ $rt->check_session();
 
                   <div class="form-group" id="fincas_box">
                     <label class="col-lg-2 control-label"></label>
-                    <div class="col-lg-2" style="margin-top: 30px">
+                    <div class="col-lg-4" style="margin-top: 30px">
                       <?php echo $fincas->get_options_fincas_aut("f1"); ?>
-                      <label for="cod" class="">Finca 1</label>
+                      <label for="cod" class="">Subnucleo 1</label>
                     </div>
-                    <label class="col-lg-1 control-label"></label>
-                    <div class="col-lg-2" style="margin-top: 30px">
+                    <div class="col-lg-4" style="margin-top: 30px">
                       <?php echo $fincas->get_options_fincas_aut("f2"); ?>
-                      <label for="cod" class="">Finca 2</label>
-                    </div>
-                    <label class="col-lg-1 control-label"></label>
-                    <div class="col-lg-2" style="margin-top: 30px">
-                      <?php echo $fincas->get_options_fincas_aut("f3"); ?>
-                      <label for="cod" class="">Finca 3</label>
+                      <label for="cod" class="">Subnucleo 2</label>
                     </div>
                     <label class="col-lg-2 control-label"></label>
+
                   </div>
 
                   <div class="form-group">

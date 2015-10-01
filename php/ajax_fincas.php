@@ -30,11 +30,20 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 
 			/* verificamos que no esté registrada en la tabla de fincas*/
 			$res_existe = $fun->existe("fincas","fi_codigo",$cod);
+
 			if($res_finca){
 				if(!$res_existe){
+
+					/* subnucleos */
+					$qry_sn = 'SELECT DISTINCT sn_id, subnucleo FROM `tbl_matriz_ica` 
+							INNER JOIN tbl_subnucleos ON sn_subnucleo = subnucleo 
+							WHERE codfinca = "'.$cod.'"';
+					$sn_id = $fun->get_custom($qry_sn);
+
+
 					/* ingresamos datos de la finca */
-					$qry ="INSERT INTO tbl_fincas (fi_codigo, fi_created, fi_estado)
-							VALUES ('".$cod."',".$_SESSION["ses_id"].",1);";
+					$qry ="INSERT INTO tbl_fincas (fi_codigo, fi_sn_id, fi_created, fi_estado)
+							VALUES ('".$cod."',".$sn_id.",".$_SESSION["ses_id"].",1);";
 
 					$resp = mysql_query($qry);
 					if(!$resp){

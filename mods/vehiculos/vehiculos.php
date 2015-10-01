@@ -16,6 +16,9 @@ $fincas = new fincas();
 
 $rt = new route();
 $rt->check_session();
+$libs = new jslib();
+$css = $libs->get_css();
+$js = $libs->get_js();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,13 +27,6 @@ $rt->check_session();
     <title>Vehiculos - STL SAS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=Roboto:500,300,400' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" type="text/css">
-
-
-    <link rel="stylesheet" href="materia.css" type="text/css">
       
     <script src="js/jquery.min.js"></script>
     <script src="js/jquery.easing.js"></script>
@@ -38,6 +34,10 @@ $rt->check_session();
     <script src="js/jquery.mtr-ripple.js"></script>
     <script src="js/jquery.mtr-panel.js"></script>
     <script src="js/jquery.mtr-header.js"></script>
+    <?php 
+      echo $js;
+      echo $css;
+    ?>
 
     <!--
     <link rel="stylesheet" href="dist/materia.css" type="text/css">
@@ -189,24 +189,117 @@ $rt->check_session();
               <!-- formulario -->
               <form class="form-horizontal" action="/" method="GET" id="frm_users">
                 <fieldset>
-                  <div class="row" >
-                    <!-- -->
-                    <label class="col-lg-2 control-label"></label>
-                    <div class="col-lg-2" style="margin-top: 10px">
-                      <input type="text" class="form-control" id="placa">
-                      <label for="cod" class="">Placa</label>
-                    </div>
-                    <div class="col-lg-2" style="margin-top: 10px">
-                      <input type="text" class="form-control" id="capacidad">
-                      <label for="cod" class="">Capacidad m<sup>3</sup></label>
-                    </div>
-                    <div class="col-lg-4" style="margin-top: 10px">
-                      <?php echo $vehiculos->get_options_propietarios(); ?>
-                      <label for="cod" class="">Propietario</label>
-                    </div>
-                    <label class="col-lg-2 control-label"></label>
-                    <!-- -->
+                <div class="panel panel-primary">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">Información General</h3>
                   </div>
+                  <div class="panel-body">
+                      <div class="col-lg-2" style="margin-top: 10px">
+                        <input type="text" class="form-control" id="tipo">
+                        <label for="cod" class="">Tipo</label>
+                      </div>
+                      <div class="col-lg-2" style="margin-top: 10px">
+                        <input type="text" class="form-control" id="marca">
+                        <label for="cod" class="">Marca</label>
+                      </div>
+                      <div class="col-lg-2" style="margin-top: 10px">
+                        <input type="text" class="form-control" id="modelo">
+                        <label for="cod" class="">Modelo</label>
+                      </div>
+                      <div class="col-lg-2" style="margin-top: 10px">
+                        <input type="text" class="form-control" id="color">
+                        <label for="cod" class="">Color</label>
+                      </div>
+                      <div class="col-lg-2" style="margin-top: 10px">
+                        <input type="text" class="form-control" id="linea">
+                        <label for="cod" class="">Linea</label>
+                      </div>
+                      <div class="col-lg-2" style="margin-top: 10px">
+                        <input type="text" class="form-control" id="placa">
+                        <label for="cod" class="">Placa</label>
+                      </div>
+                      <div class="col-lg-2" style="margin-top: 10px">
+                        <input type="text" class="form-control" id="nro_motor">
+                        <label for="cod" class="">Numero Motor</label>
+                      </div>
+                      <div class="col-lg-2" style="margin-top: 10px">
+                        <input type="text" class="form-control" id="nro_chasis">
+                        <label for="cod" class="">Numero Chasis</label>
+                      </div>
+                      <div class="col-lg-4" style="margin-top: 10px">
+                        <?php echo $vehiculos->get_options_propietarios(); ?>
+                        <label for="cod" class="">Propietario</label>
+                      </div>
+                  </div>
+                </div>
+                <div class="panel panel-primary">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">SOAT y Revisión Tecnomecánica</h3>
+                  </div>
+                  <div class="panel-body">
+                    <div class="row">
+                      <label class="col-lg-2 control-label">SOAT</label>
+                      <div class="col-lg-2" style="margin-top: 10px">
+                        <input type="text" class="form-control" id="emp_soat">
+                        <label for="cod" class="">Empresa</label>
+                      </div>
+                      <div class="col-lg-2" style="margin-top: 10px">
+                        <input type="text" class="form-control" id="num_soat">
+                        <label for="cod" class="">Numero</label>
+                      </div>
+                      <div class="col-lg-2" style="margin-top: 10px">
+                        <input type="text" class="form-control" id="ven_soat">
+                        <label for="cod" class="">Vence</label>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <label class="col-lg-2 control-label">Revisión Tecnomecánica</label>
+                      <div class="col-lg-2" style="margin-top: 10px">
+                        <input type="text" class="form-control" id="emp_rt">
+                        <label for="cod" class="">Empresa</label>
+                      </div>
+                      <div class="col-lg-2" style="margin-top: 10px">
+                        <input type="text" class="form-control" id="num_rt">
+                        <label for="cod" class="">Numero</label>
+                      </div>
+                      <div class="col-lg-2" style="margin-top: 10px">
+                        <input type="text" class="form-control" id="ven_rt">
+                        <label for="cod" class="">Vence</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel panel-primary">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">Información de Remolque</h3>
+                  </div>
+                  <div class="panel-body">
+                      <div class="col-lg-2" style="margin-top: 10px">
+                        <input type="text" class="form-control" id="tipo_rem">
+                        <label for="cod" class="">Tipo</label>
+                      </div>
+                      <div class="col-lg-2" style="margin-top: 10px">
+                        <input type="text" class="form-control" id="color_rem">
+                        <label for="cod" class="">Color</label>
+                      </div>
+                      <div class="col-lg-2" style="margin-top: 10px">
+                        <input type="text" class="form-control" id="marca_rem">
+                        <label for="cod" class="">Marca</label>
+                      </div>
+                      <div class="col-lg-2" style="margin-top: 10px">
+                        <input type="text" class="form-control" id="capacidad">
+                        <label for="cod" class="">Capacidad (m<sup>3</sup>)</label>
+                      </div>
+                      <div class="col-lg-2" style="margin-top: 10px">
+                        <input type="text" class="form-control" id="tipo_llanta_dir">
+                        <label for="cod" class="">Llanta Direccional</label>
+                      </div>
+                      <div class="col-lg-2" style="margin-top: 10px">
+                        <input type="text" class="form-control" id="tipo_llanta_tra">
+                        <label for="cod" class="">Llanta Tracción</label>
+                      </div>
+                  </div>
+                </div>
                   <div class="form-group">
                     <div class="col-sm-12 text-right">
                       <a href="#" id="btn_save" class="btn btn-primary">Guardar</a>
