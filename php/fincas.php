@@ -25,8 +25,8 @@ class fincas{
               <tr>
                 <td>'.$row_res["fi_codigo"].'</td>
                 <td>'.$row_res["sn_subnucleo"].'</td>
-                <td>'.$row_res["fi_timestamp"].'</td>
-                <td>
+                <td style="text-align:center;">'.$row_res["fi_timestamp"].'</td>
+                <td style="text-align:center;">
                   <div id="del-button" onclick="borrar_finca('.$row_res["fi_id"].', this)" class="btn btn-floating-mini btn-danger" title="Borrar"><i class="md  md-delete"></i></div>
                 </td>
               </tr>
@@ -41,10 +41,10 @@ class fincas{
           <table class="table table-striped table-hover ">
             <thead>
               <tr>
-                <th>Código</th>
-                <th>Subnucleo</th>
-                <th>Fecha Autorización</th>
-                <th>Acciones</th>
+                <th style="text-align:center;">Código</th>
+                <th style="text-align:center;">Subnucleo</th>
+                <th style="text-align:center;">Fecha Autorización</th>
+                <th style="text-align:center;">Acciones</th>
               </tr>
             </thead>
             <tbody>

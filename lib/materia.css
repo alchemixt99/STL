@@ -21,7 +21,8 @@ Run
       var c = 'color-white';
       if ($(this).hasClass('color-black-strong')) c = 'color-black-strong';
       else if ($(this).hasClass('color-white-strong')) c = 'color-white-strong';
-      colors[color][shade] = hex + " " + c;
+      colors[color
+      ][shade] = hex + " " + c;
     });
     main[color] = color + "-" + $(this).find(".main-color .shade").text().trim();
   });
