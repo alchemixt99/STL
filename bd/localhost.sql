@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 05-10-2015 a las 19:55:06
+-- Tiempo de generación: 06-10-2015 a las 01:48:54
 -- Versión del servidor: 5.6.25
 -- Versión de PHP: 5.6.11
 
@@ -116,6 +116,7 @@ CREATE TABLE IF NOT EXISTS `tbl_inventario` (
   `in_fi_id` int(11) NOT NULL,
   `in_supervisor` varchar(60) NOT NULL,
   `in_mt_cubico` float NOT NULL,
+  `in_mt_restante` int(11) NOT NULL,
   `in_lote` varchar(20) NOT NULL,
   `in_tipo_materia` int(11) NOT NULL COMMENT 'tipo de materia prima: 1=troza , 2=pulpa',
   `in_pe_id` int(11) NOT NULL COMMENT 'Ultimo conductor de la lista',
@@ -128,10 +129,10 @@ CREATE TABLE IF NOT EXISTS `tbl_inventario` (
 -- Volcado de datos para la tabla `tbl_inventario`
 --
 
-INSERT INTO `tbl_inventario` (`in_id`, `in_fi_id`, `in_supervisor`, `in_mt_cubico`, `in_lote`, `in_tipo_materia`, `in_pe_id`, `in_timestamp`, `in_created`, `in_estado`) VALUES
-(113, 39, '23', 85, '83', 1, 0, '2015-10-05 17:11:52', 14, 1),
-(114, 39, '23', 70, '83', 2, 0, '2015-10-05 17:13:08', 14, 1),
-(115, 42, '25', 75, '93', 1, 0, '2015-10-05 17:46:20', 14, 1);
+INSERT INTO `tbl_inventario` (`in_id`, `in_fi_id`, `in_supervisor`, `in_mt_cubico`, `in_mt_restante`, `in_lote`, `in_tipo_materia`, `in_pe_id`, `in_timestamp`, `in_created`, `in_estado`) VALUES
+(113, 39, '23', 85, 85, '83', 1, 0, '2015-10-05 23:23:00', 14, 1),
+(114, 39, '23', 70, 70, '83', 2, 0, '2015-10-05 23:23:00', 14, 1),
+(115, 42, '25', 75, 75, '93', 1, 0, '2015-10-05 23:23:00', 14, 1);
 
 -- --------------------------------------------------------
 

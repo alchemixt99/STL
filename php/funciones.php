@@ -111,6 +111,18 @@ class funciones{
 		/*Termina Consulta*/
 		return $respuesta;
 	}
+	function actualizar($tbl,$cambios,$where="1"){
+		$con = new con();
+		$con->connect();
+		//preguntamos si existe la finca en la matriz entregada
+		$selectSQL ="UPDATE tbl_".$tbl." SET ".$cambios." WHERE ".$where.";";
+		//echo $selectSQL;
+		$res_upd = mysql_query($selectSQL);
+		if($res_upd){$respuesta=true;}else{$respuesta=false;}
+		
+		/*Termina Consulta*/
+		return $respuesta;
+	}
 	function borrar($tbl,$field,$var,$and=""){
 		$campos="";
 		switch ($tbl) {

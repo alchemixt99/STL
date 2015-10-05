@@ -27,8 +27,8 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 			$con->connect();
 		
 			/* ingresamos datos del inventario */
-			$qry ="INSERT INTO tbl_inventario (in_fi_id, in_supervisor, in_lote, in_mt_cubico, in_tipo_materia, in_created, in_estado)
-					VALUES (".$cod.",'".$sup."','".$lote."',".$inv.",".$tipom.",".$_SESSION["ses_id"].",1);";
+			$qry ="INSERT INTO tbl_inventario (in_fi_id, in_supervisor, in_lote, in_mt_cubico, in_mt_restante, in_tipo_materia, in_created, in_estado)
+					VALUES (".$cod.",'".$sup."','".$lote."',".$inv.",".$inv.",".$tipom.",".$_SESSION["ses_id"].",1);";
 			$resp = mysql_query($qry);
 			if(upd_matriz()){
 				//cargamos variable de sesion con nuevo porcentaje
