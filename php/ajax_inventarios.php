@@ -82,7 +82,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 		$row_inv = mysql_fetch_assoc($res_inv);
 
 		//traemos datos asociados a la finca y al lote desde la matriz ica
-		$qry_fxm = "SELECT I.in_fi_id, M.codfinca, F.fi_nombre, L.la_idlote, I.in_lote , M.vol_ica_m3 FROM tbl_inventario AS I
+		$qry_fxm = "SELECT I.in_fi_id, M.codfinca, L.la_idlote, I.in_lote , M.vol_ica_m3 FROM tbl_inventario AS I
 					INNER JOIN tbl_fincas AS F ON F.fi_id = I.in_fi_id
 					INNER JOIN tbl_lotes_autorizados AS L ON L.la_fi_id = F.fi_id
 					INNER JOIN tbl_matriz_ica AS M ON M.idlote = L.la_idlote
@@ -90,6 +90,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 					F.fi_codigo = M.codfinca AND
 					F.fi_id = ".$row_inv['in_fi_id']." AND 
 					L.la_id = ".$row_inv['in_lote'].";";
+		//echo $qry_fxm;
 		$res_fxm = mysql_query($qry_fxm);
 		$can_fxm = mysql_num_rows($res_fxm);
 		$row_fxm = mysql_fetch_assoc($res_fxm);
@@ -159,7 +160,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 			$con->connect();
 		
 			/* Consultamos los lotes de la finca autorizados por gerencia con anterioridad */
-			$qry ="SELECT DISTINCT L.la_id, F.fi_nombre, L.la_idlote, F.fi_codigo, M.especie_ica, M.ano_plant FROM tbl_lotes_autorizados AS L 
+			$qry ="SELECT DISTINCT L.la_id, L.la_idlote, F.fi_codigo, M.especie_ica, M.ano_plant FROM tbl_lotes_autorizados AS L 
 					INNER JOIN tbl_fincas AS F 
 					INNER JOIN tbl_matriz_ica AS M 
 					WHERE 
@@ -169,7 +170,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 					L.la_estado = 1 AND
 					L.la_fi_id = $cod
 					ORDER BY L.la_idlote ASC;";
-
+			//echo "QUERY: ".$qry;
 			$resp = mysql_query($qry);
 			$cant=mysql_num_rows($resp);
 			if($cant>0){

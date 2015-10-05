@@ -177,7 +177,10 @@ $js = $libs->get_js();
             </div>
             <div class="modal-body">
               <!-- caja para mensajes -->
-              <div id="msg_box"></div>
+              <div id="msg_box" style="display:none" class="alert alert-dismissible alert-success">
+                <button type="button" class="close" data-dismiss="alert"><i class="md md-clear"></i></button>
+                <div id="msg_body"></div>
+              </div>
 
               <!-- formulario -->
               <form class="form-horizontal" action="/" method="GET" id="frm_finca">
@@ -186,7 +189,7 @@ $js = $libs->get_js();
                     <label class="col-lg-2 control-label"></label>
                     <div class="col-lg-10" style="margin-top: 30px" id="combo_fincas_all">
                         <?php echo $fincas->get_options_fincas(); ?>
-                      <label for="cod" class="">Seleccione Subnúcleo(*)</label>
+                      <label for="cod" class="">Seleccione Finca(*)</label>
                     </div>
                     <div class="col-lg-10" style="margin-top: 30px; display:none;" id="combo_fincas_aut">
                         <?php echo $fincas->get_options_fincas_aut("cod_aut"); ?>
@@ -427,16 +430,19 @@ $js = $libs->get_js();
           success: function(data){    
             if(data.res==true){
               $("#msg_box").fadeIn();
-              $("#msg_box").text(data.mes);
+              $("#msg_box").addClass("alert-success");
+              $("#msg_body").text(data.mes);
               $("#frm_finca").trigger("reset");
+              setTimeout(function(){location.reload();}, 3000);
             }else if(data.res==false){
               $("#msg_box").fadeIn();
+              $("#msg_box").addClass("alert-danger");
               $("#gr_cod_finca").addClass("has-error");
               setTimeout(function(){
                 $("#gr_cod_finca").removeClass("has-error");
                 $("#msg_box").fadeOut();
               },2000);
-              $("#msg_box").text(data.mes);
+              $("#msg_body").text(data.mes);
               setTimeout(function(){location.reload();}, 3000);
             }
           }

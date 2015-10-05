@@ -55,6 +55,48 @@ class fincas{
     $con->disconnect();
     return $script.$html;
   }
+  function get_options_subnucleos($select_id=null, $get_id=null){
+    $con = new con();
+    $msg = new messages();
+    $rt = new route();
+
+    $con->connect();
+
+
+    //consultamos subnucleos habilitados desde la Gerencia
+    if(isset($_SESSION["ses_id"])){
+      $qry='SELECT DISTINCT sn_id ,subnucleo, municipio, depto FROM tbl_subnucleos 
+            INNER JOIN tbl_matriz_ica ON subnucleo = sn_subnucleo
+            INNER JOIN tbl_fincas ON fi_sn_id = sn_id
+            WHERE fi_estado = 1';
+
+      $res = mysql_query($qry);
+      $item =" ";
+      $script ="<script>$(document).ready(function(){";
+      while($row_res = mysql_fetch_assoc($res)) {
+        $item.='
+              <option value="'.$row_res["sn_id"].'">'.$row_res["subnucleo"].' ('.$row_res["municipio"].'-'.$row_res["depto"].')</option>
+        ';
+        $script.='';
+      }
+      $script.='});</script>';
+    }
+    else{$rt->routing($rt->path("login"));}
+
+    if($select_id!=null){
+      $id = 'id="'.$select_id.'"';
+    }else{
+      $id = 'id="cod"';
+    }
+
+    $html='
+        <select class="form-control valued" '.$id.'>
+          '.$item.'
+        </select>
+    ';
+    $con->disconnect();
+    return $script.$html;
+  }
   function get_options_fincas($select_id=null, $get_id=null){
     $con = new con();
     $msg = new messages();
@@ -96,6 +138,7 @@ class fincas{
 
     $html='
         <select class="form-control valued" '.$id.'>
+          <option>Seleccione</option>
           '.$item.'
         </select>
     ';
@@ -144,6 +187,7 @@ class fincas{
 
     $html='
         <select class="form-control valued" '.$id.'>
+          <option>Seleccione</option>
           '.$item.'
         </select>
     ';

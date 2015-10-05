@@ -344,6 +344,7 @@ $js = $libs->get_js();
                 $("#caja_mensaje").addClass("alert-success");
                 $("#texto-mensaje").text(data.mes);
                 $("#caja_mensaje").fadeIn();
+                setTimeout(function(){location.reload();}, 3000);
               }else if(data.res==false){
                 $("#caja_mensaje").removeClass("alert-info");
                 $("#caja_mensaje").addClass("alert-danger");

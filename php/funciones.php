@@ -91,6 +91,26 @@ class funciones{
 		/*Termina Consulta*/
 		return $respuesta;
 	}
+	function get_array($qry, $and=""){
+		$con = new con();
+		$con->connect();
+		$respuesta = array();
+		//traemos consulta
+		$selectSQL =$qry;
+		//echo $selectSQL;
+		$res_cons = mysql_query($selectSQL);
+		if($res_cons){
+			while($row_cons = mysql_fetch_assoc($res_cons)){
+				array_push($respuesta, $row_cons);
+			}
+		}else{
+			$respuesta=false;
+		}
+		
+		
+		/*Termina Consulta*/
+		return $respuesta;
+	}
 	function borrar($tbl,$field,$var,$and=""){
 		$campos="";
 		switch ($tbl) {

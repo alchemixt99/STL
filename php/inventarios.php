@@ -74,7 +74,7 @@ class inventarios{
 
     //consultamos fincas desde la tabla de fincas
     if(isset($_SESSION["ses_id"])){
-      $qry='SELECT * FROM tbl_fincas WHERE fi_estado=1 ORDER BY fi_nombre ASC';
+      $qry='SELECT * FROM tbl_fincas WHERE fi_estado=1 ORDER BY fi_id ASC';
       $res = mysql_query($qry);
 
       $item =" ";

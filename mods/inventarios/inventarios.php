@@ -388,11 +388,11 @@ $js = $libs->get_js();
       //guardar inventario
       $('#btn_save').on('click', function() {
         var body = "Está seguro que desea registrar la siguiente información:"+"\n"+
-                    "Código: "+$("#cod").val()+"\n"+
-                    "Supervisor: "+$("#sup").val()+"\n"+
-                    "Lote: "+$("#lote").val()+"\n"+
-                    "Inventario: "+$("#inventario").val()+"\n"+
-                    "Tipo Madera: "+$("#tipo_madera").val()+"\n";
+                    "Código: "+$("#cod option:selected").text()+"\n"+
+                    "Supervisor: "+$("#sup option:selected").text()+"\n"+
+                    "Lote: "+$("#lote option:selected").text()+"\n"+
+                    "Inventario: "+$("#inventario").val()+" m3 \n"+
+                    "Tipo Madera: "+$("#tipo_madera option:selected").text()+"\n";
         var c = confirm(body);
         if(c == true){
           $.ajax({      

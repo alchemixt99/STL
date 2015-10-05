@@ -21,7 +21,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 		$pass=$_POST['pass'];
 
 		/* Encriptamos clave */
-		//$pass = sha1(md5($pass));
+		$pass = sha1(md5($pass));
 
 
 		if($nomb=="" || $tipo=="" || $pass==""){

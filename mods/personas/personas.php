@@ -175,7 +175,10 @@ $js = $libs->get_js();
             </div>
             <div class="modal-body">
               <!-- caja para mensajes -->
-              <div id="msg_box"></div>
+              <div id="msg_box" style="display:none" class="alert alert-dismissible alert-success">
+                <button type="button" class="close" data-dismiss="alert"><i class="md md-clear"></i></button>
+                <div id="msg_body"></div>
+              </div>
 
               <!-- formulario -->
               <form class="form-horizontal" action="/" method="GET" id="frm_general">
@@ -253,11 +256,11 @@ $js = $libs->get_js();
                   <div class="form-group" id="fincas_box">
                     <label class="col-lg-2 control-label"></label>
                     <div class="col-lg-4" style="margin-top: 30px">
-                      <?php echo $fincas->get_options_fincas_aut("f1"); ?>
+                      <?php echo $fincas->get_options_subnucleos("sn1"); ?>
                       <label for="cod" class="">Subnucleo 1</label>
                     </div>
                     <div class="col-lg-4" style="margin-top: 30px">
-                      <?php echo $fincas->get_options_fincas_aut("f2"); ?>
+                      <?php echo $fincas->get_options_subnucleos("sn2"); ?>
                       <label for="cod" class="">Subnucleo 2</label>
                     </div>
                     <label class="col-lg-2 control-label"></label>
@@ -399,18 +402,20 @@ $js = $libs->get_js();
                   dir: $("#dir").val(),
                   tel: $("#tel").val(),
                   cel: $("#cel").val(),
-                  f1: $("#f1").val(),
-                  f2: $("#f2").val(),
-                  f3: $("#f3").val(),
+                  f1: $("#sn1").val(),
+                  f2: $("#sn2").val(),
                   placa: $("#cod_prop").val(),
                 },
           success: function(data){    
             if(data.res==true){
               $("#msg_box").fadeIn();
-              $("#msg_box").text(data.mes);
+              $("#msg_box").addClass("alert-success");
+              $("#msg_body").text(data.mes);
               $("#frm_finca").trigger("reset");
+              setTimeout(function(){location.reload();}, 3000);
             }else if(data.res==false){
               $("#msg_box").fadeIn();
+              $("#msg_box").addClass("alert-danger");
               $("#gr_cod_finca").addClass("has-error");
               setTimeout(function(){
                 $("#gr_cod_finca").removeClass("has-error");

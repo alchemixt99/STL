@@ -30,6 +30,7 @@ class messages{
 			"e022" => "Este vehiculo no se puede eliminar, comuniquese con soporte, gracias.",
 			"e023" => "Este Vehiculos ya está registrado en el sistema.",
 			"e024" => "Problemas al vincular conductores, comuniquese con soporte, gracias.",
+			"e025" => "Error al intentar obtener subnucleos.",
 		];
 		/* ====================== */
 		return $msg[$e];

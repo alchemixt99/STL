@@ -173,47 +173,46 @@ $js = $libs->get_js();
     <div id="progress" class="progress progress-striped active" style="margin-bottom: 20px; display:none;">
       <div class="progress-bar" style="width: 100%"></div>
     </div>
-    <div class="container-fluid">
-    
+    <div class="container-fluid" style="margin-top:20px;">
+    <div class="col-lg-4">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Consultar Conductor</h3>
 
-      <div class="page-header" id="banner">
-        <div class="row">
-          <label class="col-lg-2 control-label"></label>
-          <div class="col-sm-8 text-center">
-            <p class="lead">Gestión de Rutas.<br><br></p>
-            <p><?php echo $rutas->get_fincas(); ?></p>
-          </div>
-          <label class="col-lg-2 control-label"></label>
+        </div>
+        <div class="panel-body">
+          <!-- formulario -->
+              <form class="form-horizontal" action="/" method="GET" id="frm_general">
+                <fieldset>
+                  <div class="form-group">
+                    <label class="col-lg-1 control-label"></label>
+                    <div class="col-lg-5" style="margin-top: 30px">
+                      <input type="text" class="form-control" id="fecha">
+                      <label for="fecha" class="">Fecha (aaaa-mm-dd)</label>
+                    </div>
+                    <div class="col-lg-4" style="margin-top: 30px">
+                      <input type="text" class="form-control" id="placa">
+                      <label for="placa" class="">Placa</label>
+                    </div>
+                    <label class="col-lg-2 control-label">
+                    </label>
+                  </div>
+                </fieldset>
+              </form>
+              <!-- -->
+        </div>
+      </div>      
+    </div>
+    <div class="col-lg-8">
+      <div class="panel panel-success">
+        <div class="panel-heading">
+          <h3 class="panel-title">Detalles Consulta</h3>
+        </div>
+        <div class="panel-body">
+          Panel content
         </div>
       </div>
-      <div id="modalx" style="display:none;">
-        <div class="row">
-          <label class="col-lg-2 control-label"></label>
-          <div class="col-sm-8 text-center">
-            <p class="lead" style="margin-top:40px;">Gestión de Rutas.<br><br></p>
-            <div class="row">
-              <input type="hidden" id="cod_finca">
-              <div class="col-lg-10" id="inv_box"></div>
-              <div class="col-lg-2"><a href="#" id="btn_back" class="btn btn-floating-mini btn-danger" data-ripple-centered=""><i class="md md-close"></i></a></div>
-            </div>
-            <table class="table table-striped table-hover ">
-            <thead>
-              <tr>
-                <th>Turno</th>
-                <th>Conductor</th>
-                <th>Placa</th>
-                <th>Capacidad</th>
-                <th>Inv. Restante</th>
-                <th>Opciones</th>
-              </tr>
-            </thead>
-            <tbody id="turnos_box">
-            </tbody>
-          </table> 
-          </div>
-          <label class="col-lg-2 control-label"></label>
-        </div>
-      </div>
+    </div>
     </div>
 <?php echo $html_snippet->load_footer(); ?>
 
@@ -314,7 +313,39 @@ $js = $libs->get_js();
         }
       });
     }
+    /* Información de conductores */
+    function get_info_cond(f,p){
+      $("#progress").fadeIn();
+      $.ajax({      
+        url: "../../php/ajax_rutas.php",     
+        dataType: "json",     
+          type: "POST",     
+          data: { 
+                  action: "get_info_cond",
+                  f: f,
+                  p: p
+                },
+        success: function(data){    
+          if(data.res==true){ 
+            $("#progress").fadeOut();
+          }
+          else{
+          }
+        }
+      });
+    }
+
     $(function() {
+      var f = new Date();
+      var dt = f.getFullYear()+ "-" + (f.getMonth() +1) + "-"+ f.getDate();
+      $("#fecha").val(dt);
+
+      $("#placa").keypress(function(e) {
+          if(e.which == 13) {
+             get_info_cond($("#fecha").val(),$("#placa").val());
+          }
+      });
+
       
       $('.btn, .dropdown-menu a, .navbar a, .navbar-panel a, .toolbar a, .nav-pills a, .nav-tabs a, .pager a, .pagination a, .list-group a').mtrRipple({live: true}).on('click', function(e) {
         e.preventDefault();

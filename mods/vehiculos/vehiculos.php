@@ -511,31 +511,6 @@ $js = $libs->get_js();
     });
   $(document).ready(function(){
       //==============AJAX===============
-      //cambiar clave
-      $('#btn_change_pass').on('click', function() {
-        var val = validar_clave(2);
-        if (val) {
-        $.ajax({      
-          url: "../../php/ajax_usuarios.php",     
-          dataType: "json",     
-          type: "POST",     
-          data: { 
-                  action: "change_pass",
-                  user: $("#codi").val(),
-                  ch_pass: $("#ch_pass").val()
-                },    
-          success: function(data){    
-          if(data.res==true){         
-            alert(data.mes);
-            $("input[type=text], textarea").val("");
-            $("input[type=password], textarea").val("");
-          }
-          else{
-            alert(data.mes);
-          }
-        }});
-        }
-      });
       //Guardar usuarios
       $('#btn_save').on('click', function() {
 
@@ -545,9 +520,27 @@ $js = $libs->get_js();
           type: "POST",     
           data: { 
                   action: "save",
+                  tipo: $("#tipo").val(),
+                  marca: $("#marca").val(),
+                  modelo: $("#modelo").val(),
+                  color: $("#color").val(),
+                  linea: $("#linea").val(),
                   placa: $("#placa").val(),
-                  capac: $("#capacidad").val(),
-                  propi: $("#cod_prop").val()
+                  nro_motor: $("#nro_motor").val(),
+                  nro_chasis: $("#nro_chasis").val(),
+                  cod_prop: $("#cod_prop").val(),
+                  emp_soat: $("#emp_soat").val(),
+                  num_soat: $("#num_soat").val(),
+                  ven_soat: $("#ven_soat").val(),
+                  emp_rt: $("#emp_rt").val(),
+                  num_rt: $("#num_rt").val(),
+                  ven_rt: $("#ven_rt").val(),
+                  tipo_rem: $("#tipo_rem").val(),
+                  color_rem: $("#color_rem").val(),
+                  marca_rem: $("#marca_rem").val(),
+                  capacidad: $("#capacidad").val(),
+                  tipo_llanta_dir: $("#tipo_llanta_dir").val(),
+                  tipo_llanta_tra: $("#tipo_llanta_tra").val()
                 },    
           success: function(data){    
           if(data.res==true){         

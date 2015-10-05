@@ -224,7 +224,10 @@ $js = $libs->get_js();
             </div>
             <div class="modal-body">
               <!-- caja para mensajes -->
-              <div id="msg_box"></div>
+              <div id="msg_box" style="display:none" class="alert alert-dismissible alert-success">
+                <button type="button" class="close" data-dismiss="alert"><i class="md md-clear"></i></button>
+                <div id="msg_body"></div>
+              </div>
 
               <!-- formulario -->
               <form class="form-horizontal" action="/" method="GET" id="frm_users">
@@ -454,32 +457,7 @@ $js = $libs->get_js();
 
     });
   $(document).ready(function(){
-      //==============AJAX===============
-      //cambiar clave
-      $('#btn_change_pass').on('click', function() {
-        var val = validar_clave(2);
-        if (val) {
-        $.ajax({      
-          url: "../../php/ajax_usuarios.php",     
-          dataType: "json",     
-          type: "POST",     
-          data: { 
-                  action: "change_pass",
-                  user: $("#codi").val(),
-                  ch_pass: $("#ch_pass").val()
-                },    
-          success: function(data){    
-          if(data.res==true){         
-            alert(data.mes);
-            $("input[type=text], textarea").val("");
-            $("input[type=password], textarea").val("");
-          }
-          else{
-            alert(data.mes);
-          }
-        }});
-        }
-      });
+      //==============AJAX==============
       //Guardar usuarios
       $('#btn_save').on('click', function() {
 
@@ -493,11 +471,16 @@ $js = $libs->get_js();
                   finc: $("#cbx_finca").val()
                 },    
           success: function(data){    
-          if(data.res==true){         
-            alert(data.mes);
+          if(data.res==true){
+            $("#msg_box").fadeIn();
+            $("#msg_box").addClass("alert-success");
+            $("#msg_body").text(data.mes);         
+            setTimeout(function(){location.reload();}, 3000);
           }
           else{
-            alert(data.mes);
+            $("#msg_box").fadeIn();
+            $("#msg_box").addClass("alert-danger");
+            $("#msg_body").text(data.mes);
           }
         }});
 

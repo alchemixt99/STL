@@ -13,7 +13,7 @@ class vehiculos{
     //consultamos usuarios
     if(isset($_SESSION["ses_id"])){
       $qry='SELECT * FROM tbl_vehiculos AS V
-            INNER JOIN tbl_personas AS P ON P.pe_id = V.ve_pe_id
+            INNER JOIN tbl_personas AS P ON P.pe_ve_id = V.ve_id
             WHERE V.ve_estado=1;';
       $res = mysql_query($qry);
 
@@ -106,7 +106,7 @@ class vehiculos{
       $script ="<script>$(document).ready(function(){";
       while($row_res = mysql_fetch_assoc($res)) {
         $item.='
-              <option value="'.$row_res["ve_id"].'">'.$row_res["ve_placa"].' - '.$row_res["ve_capacidad_m3"].')</option>
+              <option value="'.$row_res["ve_id"].'">'.$row_res["ve_placa"].' (Capacidad: '.$row_res["ve_capacidad_m3"].' m<sup>3</sup>)</option>
         ';
         $script.='';
       }

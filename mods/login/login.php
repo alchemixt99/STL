@@ -333,7 +333,7 @@ $js = $libs->get_js();
 				}});
 			}
 		  	//=====================================//
-		 	 $("#pass").keypress(function(e) {
+		 	$("#pass").keypress(function(e) {
 			    if(e.which == 13) {
 			       ajax_login();
 			    }
