@@ -191,8 +191,8 @@ $js = $libs->get_js();
                       <label for="fecha" class="">Fecha (aaaa-mm-dd)</label>
                     </div>
                     <div class="col-lg-4" style="margin-top: 30px">
-                      <input type="text" class="form-control" id="placa">
-                      <label for="placa" class="">Placa</label>
+                      <input type="text" class="form-control" id="cedula" title="Enter para Consultar">
+                      <label for="cedula" class="">cedula</label>
                     </div>
                     <label class="col-lg-2 control-label">
                     </label>
@@ -203,45 +203,37 @@ $js = $libs->get_js();
         </div>
       </div>      
     </div>
-    <div class="col-lg-8">
-      <div class="panel panel-success">
-        <div class="panel-heading">
-          <h3 class="panel-title">Detalles Consulta</h3>
-        </div>
-        <div class="panel-body">
-          Panel content
-        </div>
-      </div>
+    <div class="col-lg-8" id="resultados">
+      
     </div>
-    </div>
+  </div>
 <?php echo $html_snippet->load_footer(); ?>
-
-    <script>
-    function guardar_turno(t,idcond,codinv,capacidad,row){
-    	var c=confirm("¿Está seguro que desea guardar este turno?");
-    	if(c){
-	    	$.ajax({      
-		        url: "../../php/ajax_rutas.php",     
-		        dataType: "json",     
-		          type: "POST",     
-		          data: { 
-		                  action: "save_rutas",
-		                  turno: t,
-		                  condu: idcond,
-		                  inven: codinv,
-		                  capac: capacidad
-		                },
-		        success: function(data){    
-		          if(data.res==true){  
-		          	$(row).closest('tr').removeClass("info");
-		          	$(row).closest('tr').addClass("success");
-		          }
-		          else{
-		          }
-		        }
-		      });
-    	}
-        }
+    <script type="text/javascript">
+      function change(o,id){
+        $("#progress").fadeIn();
+        $.ajax({      
+          url: "../../php/ajax_rutas.php",     
+          dataType: "json",     
+            type: "POST",     
+            data: { 
+                    action: "update_delivery",
+                    id: id,
+                    op: o
+                  },
+          success: function(data){    
+            if(data.res==true){ 
+              alert(data.mes);
+              $("#progress").fadeOut();
+              get_info_cond($("#fecha").val(),$("#cedula").val());
+            }
+            else{
+              alert(data.mes);
+              location.reload();
+            }
+          }
+        });
+      }
+    
       (function(){
         $('.bs-component [data-toggle="popover"]').popover();
         $('.bs-component [data-toggle="tooltip"]').tooltip();
@@ -276,45 +268,9 @@ $js = $libs->get_js();
         }
 
       })();
-    </script>
 
-    <script type="text/javascript">
-    function modalx(x){
-      switch(x){
-        case 'on': $("#banner").fadeOut();$("#modalx").fadeIn(); break;
-        case 'off': $("#banner").fadeIn();$("#modalx").fadeOut(); break;
-      }
-    }
-    $("#btn_back").on("click", function(){$("#turnos_box").empty(); $("#progress").fadeIn(); modalx("off"); $("#progress").fadeOut();});
-    function load_modal(f,l){
-      $("#turnos_box").empty();
-      $("#progress").fadeIn();
-      $.ajax({      
-        url: "../../php/ajax_rutas.php",     
-        dataType: "json",     
-          type: "POST",     
-          data: { 
-                  action: "get_rutas",
-                  cod: f,
-                  lot: l
-                },
-        success: function(data){    
-          if(data.res==true){       
-            $("#cod_finca").val(f);
-            $("#inv_box").html(" ");
-            $("#inv_box").html(data.mes);
-            $("#vol_act").html(data.vol);
-            modalx("on");
-            $("#progress").fadeOut();
-          }
-          else{
-            modalx("on");
-          }
-        }
-      });
-    }
     /* Información de conductores */
-    function get_info_cond(f,p){
+    function get_info_cond(f,c){
       $("#progress").fadeIn();
       $.ajax({      
         url: "../../php/ajax_rutas.php",     
@@ -323,13 +279,18 @@ $js = $libs->get_js();
           data: { 
                   action: "get_info_cond",
                   f: f,
-                  p: p
+                  c: c
                 },
         success: function(data){    
           if(data.res==true){ 
+            $("#resultados").empty();
+            $("#resultados").html(data.mes);
+            $(".panel-success").fadeIn("slow");
             $("#progress").fadeOut();
           }
           else{
+            $("#resultados").empty();
+            $("#resultados").html(data.mes);
           }
         }
       });
@@ -340,9 +301,9 @@ $js = $libs->get_js();
       var dt = f.getFullYear()+ "-" + (f.getMonth() +1) + "-"+ f.getDate();
       $("#fecha").val(dt);
 
-      $("#placa").keypress(function(e) {
+      $("#cedula").keypress(function(e) {
           if(e.which == 13) {
-             get_info_cond($("#fecha").val(),$("#placa").val());
+             get_info_cond($("#fecha").val(),$("#cedula").val());
           }
       });
 
@@ -379,9 +340,11 @@ $js = $libs->get_js();
 
       //==============Activar menuitem====================  
       $("#Rutas").parents(1).addClass("active");
+      $("#cedula").focus();
 
     });
   $(document).ready(function(){
+
       //==============AJAX===============
       //logout
       $('#btn_logout').on('click', function() {

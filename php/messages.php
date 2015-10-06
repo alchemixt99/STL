@@ -31,6 +31,10 @@ class messages{
 			"e023" => "Este Vehiculos ya está registrado en el sistema.",
 			"e024" => "Problemas al vincular conductores, comuniquese con soporte, gracias.",
 			"e025" => "Error al intentar obtener subnucleos.",
+			"e026" => "Error al intentar realizar la consulta.",
+			"e027" => "Error al intentar autorizar el despacho, comuniquese con soporte, gracias.",
+			"e028" => "No existe el despacho que está buscando, comuniquese con soporte, gracias.",
+
 		];
 		/* ====================== */
 		return $msg[$e];

@@ -1,8 +1,9 @@
 <?php
+session_start();
 require_once("funciones.php");
 require_once("messages.php");
 
-
+if(isset($_SESSION["ses_id"])){
 //if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 
   function programar_rutas(){
@@ -34,8 +35,9 @@ require_once("messages.php");
         $qry_con = 'SELECT * FROM tbl_personas 
         			INNER JOIN tbl_vehiculos ON ve_id = pe_ve_id
         			WHERE 
-                    pe_f1 = '.$res_sn[$i]["sn_id"].' OR 
-                    pe_f2 = '.$res_sn[$i]["sn_id"].';';
+                pe_f1 = '.$res_sn[$i]["sn_id"].' OR 
+                pe_f2 = '.$res_sn[$i]["sn_id"].'
+              ;';
         //echo $qry_con;
         /*HACE FALTA LA DOBLE VALIDACIÓN DE QUE ESTE NO ESTÉ ASIGNADO O SUGERIDO A OTRA FINCA*/
 
@@ -55,31 +57,18 @@ require_once("messages.php");
         $c=0;
         for ($j=0; $j < $cant_fin; $j++) { 
           $qry_inv = 'SELECT * FROM tbl_inventario WHERE in_fi_id = '.$res_fin[$j]["fi_id"].' AND in_mt_restante > 0;';
-          //$qry_inv = 'SELECT * FROM tbl_inventario WHERE in_fi_id = '.$res_fin[$j]["fi_id"].' OR in_timestamp BETWEEN "'.$hoy.' 00:00:00" AND "'.$hoy.' 23:59:59";';
-          //echo "<br>Q(".$j."):[".$qry_inv."]<br>";  
           $res_inv = $fun->get_array($qry_inv);
-
           $c = count($res_inv);
-          //echo "<br>items resp: ".$c;
           if($c>1){
           	$pos = $pos + $c;
-          	//echo "<br><strong> posiciones: ".$pos."</strong>";
-          	//echo "<br>Con iteración";
           	for ($k=0; $k < $pos; $k++) { 
-          		//echo "<br>en la posicion: ".$k;
           		$arr_inv[$k]=$res_inv[$k];
           	}
           }
-
-          //$arr_inv[$j]=$res_inv;
           if($c==1){
-          	//echo "<br><strong> Posiciones: ".$pos."</strong>";
-          	//echo "<br>sin iteración";
           	$arr_inv[$pos]=$res_inv[0];
           	$pos++;
           }
-          //$j=$j+$c;
-          //print_r($res_inv);
         }
         $cant_inv = count($arr_inv);
 
@@ -91,6 +80,16 @@ require_once("messages.php");
         //traemos turnos
         $qry_tur = 'SELECT * FROM tbl_turnos ORDER BY tu_id ASC';
         $res_tur = $fun->get_array($qry_tur);
+
+        //variables de sesión para cada inventario
+        for ($ci=0; $ci < $cant_inv; $ci++) { 
+          $id_inv = $arr_inv[$ci]["in_id"];
+          $_SESSION[$id_inv]["inv_rest"] = $arr_inv[$ci]["in_mt_restante"];
+
+          //echo "<br>prueba variable sesion".$_SESSION[$id_inv]["inv_rest"];
+        }
+
+
         //recorremos arreglo y vamos asignando conductores 
         if ($cant_inv>0) {
 		    $turno = 0;
@@ -101,16 +100,26 @@ require_once("messages.php");
 		        	for ($m=0; $m < $cant_inv; $m++) { 
 		        		if($l==$cant_con){$end=true; break;}
 		        		//traemos inventario restante
-		        		$inv_rest = $fun->get_custom("SELECT in_mt_restante FROM tbl_inventario WHERE in_id=".$arr_inv[$m]["in_id"]);
+                //$inv_rest = $fun->get_custom("SELECT in_mt_restante FROM tbl_inventario WHERE in_id=".$arr_inv[$m]["in_id"]);
+		        		$inv_rest = $_SESSION[$arr_inv[$m]["in_id"]]["inv_rest"];
 		        		if($inv_rest>0){
-		        			$inv_nuevo = $inv_rest-$res_con[$m]["ve_capacidad_m3"];
-		        			if($inv_nuevo>0){
-			        			echo "<pre>";
+		        			$inv_nuevo = $inv_rest-$res_con[$l]["ve_capacidad_m3"];
+		        			if($inv_nuevo>=0){
+			        			/*echo "<pre>";
 				        		echo "<br> ----> [".$l."] asignando cond ".$res_con[$l]["pe_id"]." (cap. ".$res_con[$l]["ve_capacidad_m3"]."m<sup>3</sup>) a inventario ".$arr_inv[$m]["in_id"]." en el turno (".$turno."): ".$res_tur[$turno]["tu_hora_ini"]."
 				        			inventario restante: ".$inv_nuevo;
 				        		echo "<br><strong>Actualización de inventario tbl_inventario, in_mt_restante =".$inv_nuevo."</strong> => resultado: ";
-			        			$upd_vol = $fun->actualizar("inventario", "in_mt_restante =".$inv_nuevo, "in_id = ".$arr_inv[$m]["in_id"]);
-			        			if($upd_vol){echo "(correcto)";}else{echo "(error)";}
+                    *///$upd_vol = $fun->actualizar("inventario", "in_mt_restante =".$inv_nuevo, "in_id = ".$arr_inv[$m]["in_id"]);
+                    $_SESSION[$arr_inv[$m]["in_id"]]["inv_rest"] = $inv_nuevo;
+                    
+                    //cargamos en despachos como sugerencia [estado=1]
+                    $tbl_des = 'despachos';
+                    $fld_des = 'de_pe_id, de_ve_capacidad_m3, de_in_id, de_tu_id, de_inv_rest, de_created, de_estado';
+                    $val_des = $res_con[$l]["pe_id"].','.$res_con[$l]["ve_capacidad_m3"].','.$arr_inv[$m]["in_id"].','.$res_tur[$turno]["tu_id"].','.$inv_nuevo.','.$_SESSION["ses_id"].',1';
+                    $res_des = $fun->crear($tbl_des, $fld_des, $val_des);
+                    //echo "<br>Probando SESSION VAR: inventario restante del inventario (".$arr_inv[$m]["in_id"].") :".$_SESSION[$arr_inv[$m]["in_id"]]["inv_rest"]."<br>";
+			        			$res_des = true;
+			        			if($res_des){echo "(correcto)";}else{echo "(error)";}
 			        		}
 			        	}else{
 			        		$m++;
@@ -137,4 +146,8 @@ require_once("messages.php");
     $con->disconnect();
   }
 programar_rutas();
+}else
+{
+  header ("Location: ../mods/panel/panel.php");
+}
 ?>

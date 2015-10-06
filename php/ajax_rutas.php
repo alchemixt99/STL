@@ -8,85 +8,87 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 
   //=============Definimos funciones===================
 	//construimos los turnos según sea el inventario y los conductores
-	function get_turno_cond(){	
+	function get_turnos_cond(){	
 		$fun = new funciones();
 		$msg = new messages();
 		$response = new StdClass;
 
 		/*recibimos variables*/
 		$fecha=$_POST["f"];
-		$placa = $_POST["p"];
+		$cc = $_POST["c"];
 
 		$con = new con();
 		$con->connect();
 
 		//traer información del conductor segun sea la fecha
-		
-		$res=true;
-		$mes=$msg->get_msg("e003");
+		$qry_des ='SELECT * FROM `tbl_despachos`
+					INNER JOIN tbl_personas ON pe_id = de_pe_id
+					INNER JOIN tbl_vehiculos ON ve_id = pe_ve_id
+					INNER JOIN tbl_turnos ON tu_id = de_tu_id
+					INNER JOIN tbl_inventario ON in_id = de_in_id
+					INNER JOIN tbl_fincas ON fi_id=in_fi_id
+					WHERE 
+					pe_cedula = "'.$cc.'" AND
+					de_timestamp BETWEEN "'.$fecha.' 00:00:00" AND "'.$fecha.' 23:59:59"
+					;';
+		//echo $qry_des;
+		$res_des = mysql_query($qry_des);
+		$can_des = mysql_num_rows($res_des);
+		$iter = 0;
+		$script = '<script>$(document).on("ready", function(){';
+		$css = "<style>";
+		$item="";
+		$html="";
+		while($row_des = mysql_fetch_assoc($res_des)) {
+			//botones
+			$b1 = '<div class="btn btn-floating-mini btn-primary" title="Confirmar" onclick="change(1,'.$row_des['de_id'].')" ><i class="md md-check"></i></div>';
+			$b2 = '<div class="btn btn-floating-mini btn-warning" title="Cancelar" onclick="change(2,'.$row_des['de_id'].')" ><i class="md md-warning"></i></div>';
+			$b3 = '<div class="btn btn-floating-mini btn-danger" title="Borrar" onclick="change(3,'.$row_des['de_id'].')" ><i class="md md-delete"></i></div>';
+			$t1 = '<div class="btn btn-flat btn-warning">Cancelado</div>';
+			$t2 = '<div class="btn btn-flat btn-danger">Borrado</div>';
 
-		$con->disconnect();
-		
-		$response->res = $res;
-		$response->mes = $mes;
-		echo json_encode($response);
-	}
+			switch ($row_des["de_estado"]) {
+				case 1: $btnset=$b1.$b3; break;//sugerido
+				case 2: $btnset=$b2.$b3; break;//autorizado
+				case 3: $btnset=$t1; break;//cancelado
+				case 99: $btnset=$t2; break;//borrado
+			}
 
-	//construimos los valores a cargar en el modal
-	function get_modal_values(){	
-		$fun = new funciones();
-		$msg = new messages();
-		$response = new StdClass;
+			//titulo
+			if($iter==0){$title='Turno';}else{$title='Doblete';}
+			//md-well
+			$item.='<div class="panel panel-success" style="display:none;">
+			        <div class="panel-heading">
+			          <h3 class="panel-title">'.$title.'</h3>
+			        </div>
+			        <div class="panel-body list-group-item">';
+						$item.='<table class="table table-striped table-hover "><tbody><tr>';
+						$item.='<td><i class="md md-person"></i> '.$row_des['pe_nombre'].'</td>';
+						$item.='<td><i class="md md-drive-eta"></i> '.$row_des['ve_placa'].'</td>';
+						$item.='<td><i class="md md-access-alarm"></i> '.$row_des['tu_hora_ini'].'</td>';
+						$item.='<td><i class="md md-place"></i> '.$row_des['fi_codigo'].'</td>';
+						$item.='<td>'.$btnset.'</td>';
+						$item.='</tr></tbody></table>';
+			$iter++; 
+			$item.='</div>
+			      </div>';
 
-		/*recibimos variables*/
-		$cod=$_POST["cod"];
-		$lot=$_POST["lot"];
-
-		$con = new con();
-		$con->connect();
-
-		/* ingresamos datos de la finca */
-		$item="<option>Seleccione Inventario</option>";
-		$qry_lotes ='SELECT * FROM tbl_inventario AS I
-					INNER JOIN tbl_fincas AS F ON F.fi_id=I.in_fi_id
-					INNER JOIN tbl_lotes_autorizados AS L ON L.la_id=I.in_lote
-					WHERE in_fi_id ='.$cod.' AND in_lote = '.$lot.';';
-		//echo $qry_lotes;
-		$res_lotes = mysql_query($qry_lotes);
-		while($row_lotes = mysql_fetch_assoc($res_lotes)) {
-			$item.='<option value="'.$row_lotes['in_id'].'">Finca: '.$row_lotes['fi_codigo'].' - Lote: '.$row_lotes['la_idlote'].' ('.$row_lotes['in_mt_cubico'].' m<sup>3</sup>) </option>';
+			$css.='';
+			$script.='';
 		}
-		$scr='
-		<script>
-		  //acción al cambiar el select id=inv
-	      $("#combo_inv").on("change", function(){
-      		$("#progress").fadeIn();
-	        $.ajax({      
-	          url: "../../php/ajax_rutas.php",     
-	          dataType: "json",     
-	          type: "POST",     
-	          data: { 
-	                  action: "get_turnos",
-	                  cod_inv: $("#combo_inv").val(),
-	                  fin: $("#cod_finca").val()
-	                },
-	          success: function(data){    
-	            if(data.res==true){
-	              $("#turnos_box").fadeIn();
-	              $("#turnos_box").html(data.mes);
-      			  $("#progress").fadeOut();
-	            }
-	          }
-	        });
-	      });
+		$css.='</style>';
+		$script.='});</script>';
+		
+		$html = $css.$script.$item;
 
-		</script>';
-		$html = '<select class="form-control" id="combo_inv">
-	            '.$item.'
-	             </select>';
-		$res=true;
-		$mes=$scr.$html;
-				
+		if ($res_des) {
+			$res=true;
+			$mes=$html;
+		} else {
+			$res=false;
+			$mes=$msg->get_msg("e026");
+		}
+		
 		$con->disconnect();
 		
 		$response->res = $res;
@@ -94,25 +96,40 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 		echo json_encode($response);
 	}
 
-	function add_route(){
+	function upd_despacho(){
 		$fun = new funciones();
 		$msg = new messages();
 		$response = new StdClass;
 
 		/*recibimos variables*/
-		$turno = $_POST['turno'];
-     	$condu = $_POST['condu'];
-    	$inven = $_POST['inven'];
-    	$capac = $_POST['capac'];
+		$de_id = $_POST['id'];
+		$opt = $_POST['op'];
+
+		switch ($opt) {
+			case 1:	$estado=2; break;
+			case 2:	$estado=3; break;
+			case 3:	$estado=99; break;
+		}
 
 		$con = new con();
 		$con->connect();
 
-		$values=$turno.",".$condu.",".$inven.",".$capac.",".$_SESSION["ses_id"].",1";
-		$res=$fun->crear("despachos", "de_tu_id, de_pe_id, de_in_id, de_vol, de_created, de_estado", $values);
+		//preguntamos si existe el despacho y si está sugerido
+		$existe = $fun->existe("despachos","de_id",$de_id, "");
+		if($existe){
+			$res_upd = $fun->actualizar("despachos", "de_estado=".$estado, "de_id=".$de_id);
+			if ($res_upd) {
+				$res = true;
+				$mes = $msg->get_msg('e004');
+			} else {
+				$res = false;
+				$mes = $msg->get_msg('e027');
+			}
+		}else{
+			$res = false;
+			$mes = $msg->get_msg('e028');
+		}
 
-		$mes=null;
-				
 		$con->disconnect();
 		
 		$response->res = $res;
@@ -125,10 +142,8 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
   if(isset($_POST['action']) && !empty($_POST['action'])) {
       $action = $_POST['action'];
       switch($action) {
-          case 'save' : add_finca();break;
-          case 'get_rutas' : get_modal_values();break;
-          case 'save_rutas' : add_route();break;
-          case 'get_info_cond' : get_turno_cond();break;
+          case 'get_info_cond' : get_turnos_cond();break;
+          case 'update_delivery' : upd_despacho();break;
       }
   }
 ?>

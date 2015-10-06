@@ -49,6 +49,7 @@ class funciones{
 		$con->connect();
 		//preguntamos si existe la finca en la matriz entregada
 		$selectSQL ="SELECT * FROM tbl_".$tbl." WHERE `$field` = '$var' ".$and.";";		
+		//echo $selectSQL;
 		$row_cons = mysql_query($selectSQL);
 		if(mysql_num_rows($row_cons)>0){$respuesta=true;}else{$respuesta=false;}
 		

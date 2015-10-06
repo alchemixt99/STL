@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 06-10-2015 a las 01:48:54
+-- Tiempo de generación: 06-10-2015 a las 09:19:49
 -- Versión del servidor: 5.6.25
 -- Versión de PHP: 5.6.11
 
@@ -71,14 +71,15 @@ INSERT INTO `tbl_control_inventarios` (`ci_id`, `ci_fi_id`, `ci_in_lote`, `ci_vo
 
 CREATE TABLE IF NOT EXISTS `tbl_despachos` (
   `de_id` int(11) NOT NULL,
-  `de_tu_id` int(11) NOT NULL,
-  `de_pe_id` int(11) NOT NULL,
-  `de_in_id` int(11) NOT NULL,
-  `de_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `de_vol` float NOT NULL,
+  `de_pe_id` int(11) NOT NULL COMMENT 'conductor',
+  `de_ve_capacidad_m3` float NOT NULL COMMENT 'capacidad_vehiculo',
+  `de_in_id` int(11) NOT NULL COMMENT 'id_inventario',
+  `de_tu_id` int(11) NOT NULL COMMENT 'id_turno',
+  `de_inv_rest` int(11) NOT NULL COMMENT 'inventario restante en ese momento del registro',
+  `de_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `de_created` int(11) NOT NULL,
   `de_estado` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -130,9 +131,9 @@ CREATE TABLE IF NOT EXISTS `tbl_inventario` (
 --
 
 INSERT INTO `tbl_inventario` (`in_id`, `in_fi_id`, `in_supervisor`, `in_mt_cubico`, `in_mt_restante`, `in_lote`, `in_tipo_materia`, `in_pe_id`, `in_timestamp`, `in_created`, `in_estado`) VALUES
-(113, 39, '23', 85, 85, '83', 1, 0, '2015-10-05 23:23:00', 14, 1),
-(114, 39, '23', 70, 70, '83', 2, 0, '2015-10-05 23:23:00', 14, 1),
-(115, 42, '25', 75, 75, '93', 1, 0, '2015-10-05 23:23:00', 14, 1);
+(113, 39, '23', 85, 85, '83', 1, 0, '2015-10-06 01:00:47', 14, 1),
+(114, 39, '23', 70, 70, '83', 2, 0, '2015-10-06 01:00:47', 14, 1),
+(115, 42, '25', 75, 75, '93', 1, 0, '2015-10-06 01:00:47', 14, 1);
 
 -- --------------------------------------------------------
 
@@ -4242,7 +4243,7 @@ ALTER TABLE `tbl_control_inventarios`
 -- AUTO_INCREMENT de la tabla `tbl_despachos`
 --
 ALTER TABLE `tbl_despachos`
-  MODIFY `de_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `de_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=22;
 --
 -- AUTO_INCREMENT de la tabla `tbl_fincas`
 --
