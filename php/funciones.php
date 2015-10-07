@@ -179,5 +179,10 @@ class funciones{
 		/*Termina Consulta*/
 		return $respuesta;
 	}
+	function print_array($a){
+		echo "<pre>";
+		print_r($a);
+		echo "<pre>";
+	}
 }
 ?>

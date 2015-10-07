@@ -133,7 +133,7 @@ $js = $libs->get_js();
     <nav id="topbar" class="toolbar toolbar-expanded mtr-light-blue-800">
       <div class="container-fluid header-title">
         <div class="row">
-          <div class="col-sm-12">STL SAS Logistic APP</div>
+          <div class="col-sm-12">STL SAS Logistik</div>
         </div>
       </div>
     </nav>

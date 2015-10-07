@@ -8,14 +8,14 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 
   //=============Definimos funciones===================
 	//construimos los turnos según sea el inventario y los conductores
-	function get_turnos_cond(){	
+	function get_des(){	
 		$fun = new funciones();
 		$msg = new messages();
 		$response = new StdClass;
 
 		/*recibimos variables*/
-		$fecha=$_POST["f"];
-		$cc = $_POST["c"];
+		$f1 = $_POST["f1"];
+		$f2 = $_POST["f2"];
 
 		$con = new con();
 		$con->connect();
@@ -28,15 +28,12 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 					INNER JOIN tbl_inventario ON in_id = de_in_id
 					INNER JOIN tbl_fincas ON fi_id=in_fi_id
 					WHERE 
-					pe_cedula = "'.$cc.'" AND
-					de_timestamp BETWEEN "'.$fecha.' 00:00:00" AND "'.$fecha.' 23:59:59"
+					de_timestamp BETWEEN "'.$f1.' 00:00:00" AND "'.$f2.' 23:59:59"
+					AND de_estado = 2
 					;';
 		//echo $qry_des;
 		$res_des = mysql_query($qry_des);
 		$can_des = mysql_num_rows($res_des);
-		$iter = 0;
-		$script = '<script>$(document).on("ready", function(){';
-		$css = "<style>";
 		$item="";
 		$html="";
 		while($row_des = mysql_fetch_assoc($res_des)) {
@@ -54,32 +51,27 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 				case 99: $btnset=$t2; break;//borrado
 			}
 
-			//titulo
-			if($iter==0){$title='Turno';}else{$title='Doblete';}
-			//md-well
-			$item.='<div class="panel panel-success" style="display:none;">
-			        <div class="panel-heading">
-			          <h3 class="panel-title">'.$title.'</h3>
-			        </div>
-			        <div class="panel-body list-group-item">';
-						$item.='<table class="table table-striped table-hover "><tbody><tr>';
-						$item.='<td><i class="md md-person"></i> '.$row_des['pe_nombre'].'</td>';
-						$item.='<td><i class="md md-drive-eta"></i> '.$row_des['ve_placa'].'</td>';
-						$item.='<td><i class="md md-access-alarm"></i> '.$row_des['tu_hora_ini'].'</td>';
-						$item.='<td><i class="md md-place"></i> '.$row_des['fi_codigo'].'</td>';
-						$item.='<td>'.$btnset.'</td>';
-						$item.='</tr></tbody></table>';
-			$iter++; 
-			$item.='</div>
-			      </div>';
-
-			$css.='';
-			$script.='';
+			//list-group
+			$item.='
+					<div class="list-group">
+					  <a class="list-group-item" >
+					    <h4 class="list-group-item-heading">'.$row_des['pe_nombre'].'</h4>
+					    <p class="list-group-item-text">';
+			$item.='	<table class="table table-striped table-hover "><tbody><tr>';
+			$item.='	<td><i class="md md-drive-eta"></i> '.$row_des['ve_placa'].'</td>';
+			$item.='	<td><i class="md md-access-alarm"></i> '.$row_des['tu_hora_ini'].'</td>';
+			$item.='	<td><i class="md md-place"></i> '.$row_des['fi_codigo'].'</td>';
+			$item.='	<td><i class="md md-person"></i> <input type="text"></td>';
+			$item.='	<td>'.$btnset.'</td>';
+			$item.='	</tr></tbody></table>';
+			$item.='
+					    </p>
+					  </a>
+					</div>';
 		}
-		$css.='</style>';
-		$script.='});</script>';
+
 		
-		$html = $css.$script.$item;
+		$html = $item;
 
 		if ($res_des) {
 			$res=true;
@@ -165,7 +157,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
   if(isset($_POST['action']) && !empty($_POST['action'])) {
       $action = $_POST['action'];
       switch($action) {
-          case 'get_info_cond' : get_turnos_cond();break;
+          case 'get_info_des' : get_des();break;
           case 'update_delivery' : upd_despacho();break;
       }
   }

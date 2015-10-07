@@ -22,7 +22,7 @@ $js = $libs->get_js();
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Rutas - STL SAS</title>
+    <title>ICA - STL SAS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
       
@@ -177,8 +177,7 @@ $js = $libs->get_js();
     <div class="col-lg-4">
       <div class="panel panel-primary">
         <div class="panel-heading">
-          <h3 class="panel-title">Consultar Conductor</h3>
-
+          <h3 class="panel-title">Consulta por Fecha</h3>
         </div>
         <div class="panel-body">
           <!-- formulario -->
@@ -187,12 +186,12 @@ $js = $libs->get_js();
                   <div class="form-group">
                     <label class="col-lg-1 control-label"></label>
                     <div class="col-lg-5" style="margin-top: 30px">
-                      <input type="text" class="form-control" id="fecha">
-                      <label for="fecha" class="">Fecha (aaaa-mm-dd)</label>
+                      <input type="text" class="form-control" id="f1" placeholder="aaaa-mm-dd">
+                      <label for="f1" class="">Fecha inicial</label>
                     </div>
                     <div class="col-lg-4" style="margin-top: 30px">
-                      <input type="text" class="form-control" id="cedula" title="Enter para Consultar">
-                      <label for="cedula" class="">cedula</label>
+                      <input type="text" class="form-control" id="f2" placeholder="aaaa-mm-dd" title="Enter para Consultar">
+                      <label for="f2" class="">Fecha final</label>
                     </div>
                     <label class="col-lg-2 control-label">
                     </label>
@@ -203,38 +202,19 @@ $js = $libs->get_js();
         </div>
       </div>      
     </div>
-    <div class="col-lg-8" id="resultados">
-      
+    <div class="col-lg-8">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Despachos</h3>
+        </div>
+        <div class="panel-body" id="resultados">
+
+        </div>
+      </div>   
     </div>
   </div>
 <?php echo $html_snippet->load_footer(); ?>
     <script type="text/javascript">
-    function change(o,id){
-      var c = confirm("¿Confirma que desea ejecutar la siguiente operación?");
-      if (c) {
-        $("#progress").fadeIn();
-        $.ajax({      
-          url: "../../php/ajax_rutas.php",     
-          dataType: "json",     
-            type: "POST",     
-            data: { 
-                    action: "update_delivery",
-                    id: id,
-                    op: o
-                  },
-          success: function(data){    
-            if(data.res==true){ 
-                alert(data.mes);
-                $("#progress").fadeOut();
-                get_info_cond($("#fecha").val(),$("#cedula").val());
-              }
-            else{
-              alert(data.mes);
-            }
-          }
-        });
-      };
-    }
     
       (function(){
         $('.bs-component [data-toggle="popover"]').popover();
@@ -272,22 +252,21 @@ $js = $libs->get_js();
       })();
 
     /* Información de conductores */
-    function get_info_cond(f,c){
+    function get_info_des(f1,f2){
       $("#progress").fadeIn();
       $.ajax({      
-        url: "../../php/ajax_rutas.php",     
+        url: "../../php/ajax_ica.php",     
         dataType: "json",     
           type: "POST",     
           data: { 
-                  action: "get_info_cond",
-                  f: f,
-                  c: c
+                  action: "get_info_des",
+                  f1: f1,
+                  f2: f2
                 },
         success: function(data){    
           if(data.res==true){ 
             $("#resultados").empty();
             $("#resultados").html(data.mes);
-            $(".panel-success").fadeIn("slow");
             $("#progress").fadeOut();
           }
           else{
@@ -301,11 +280,12 @@ $js = $libs->get_js();
     $(function() {
       var f = new Date();
       var dt = f.getFullYear()+ "-" + (f.getMonth() +1) + "-"+ f.getDate();
-      $("#fecha").val(dt);
+      $("#f1").val(dt);
+      $("#f2").val(dt);
 
-      $("#cedula").keypress(function(e) {
+      $("#f2").keypress(function(e) {
           if(e.which == 13) {
-             get_info_cond($("#fecha").val(),$("#cedula").val());
+             get_info_des($("#f1").val(),$("#f2").val());
           }
       });
 
@@ -341,8 +321,8 @@ $js = $libs->get_js();
       });
 
       //==============Activar menuitem====================  
-      $("#Rutas").parents(1).addClass("active");
-      $("#cedula").focus();
+      $("#Ica").parents(1).addClass("active");
+      $("#f2").focus();
 
     });
   $(document).ready(function(){

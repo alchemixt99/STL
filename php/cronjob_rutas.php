@@ -56,7 +56,7 @@ if(isset($_SESSION["ses_id"])){
         $pos = 0;
         $c=0;
         for ($j=0; $j < $cant_fin; $j++) { 
-          $qry_inv = 'SELECT * FROM tbl_inventario WHERE in_fi_id = '.$res_fin[$j]["fi_id"].' AND in_mt_restante > 0;';
+          $qry_inv = 'SELECT * FROM tbl_inventario WHERE in_fi_id = '.$res_fin[$j]["fi_id"].' AND in_mt_restante > 0 AND in_estado=1;';
           $res_inv = $fun->get_array($qry_inv);
           $c = count($res_inv);
           if($c>1){
@@ -93,6 +93,7 @@ if(isset($_SESSION["ses_id"])){
         //recorremos arreglo y vamos asignando conductores 
         if ($cant_inv>0) {
 		    $turno = 0;
+		    $tg=0;
         	for ($doblete=0; $doblete < 2; $doblete++) { 
 		        $end=false;
 		        $l=0;
@@ -119,7 +120,7 @@ if(isset($_SESSION["ses_id"])){
                     $res_des = $fun->crear($tbl_des, $fld_des, $val_des);
                     //echo "<br>Probando SESSION VAR: inventario restante del inventario (".$arr_inv[$m]["in_id"].") :".$_SESSION[$arr_inv[$m]["in_id"]]["inv_rest"]."<br>";
 			        			$res_des = true;
-			        			if($res_des){echo "(correcto)";}else{echo "(error)";}
+			        			if($res_des){$tg++; }else{echo "(error)";}
 			        		}
 			        	}else{
 			        		$m++;
@@ -129,8 +130,8 @@ if(isset($_SESSION["ses_id"])){
 		        	$turno++;
 		        }
         	}
+        echo "<h3>Total turnos generados: ".$tg."</h3>";
         }
-
 
         
 

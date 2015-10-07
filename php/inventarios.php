@@ -23,13 +23,19 @@ class inventarios{
       $script ="<script>$(document).ready(function(){";
       while($row_res = mysql_fetch_assoc($res)) {
         if($row_res["in_tipo_materia"]==1){$tipo_materia="Troza";}else{$tipo_materia="Pulpa";}
+        $porcentaje=(($row_res["in_mt_restante"]*100)/($row_res["in_mt_cubico"]));
+        $porcentaje = round($porcentaje, 2);
         $item.='
               <tr>
                 <td>'.$row_res["fi_codigo"].'</td>
                 <td>'.$row_res["su_nombre"].'</td>
-                <td>'.$row_res["in_mt_cubico"].' m<sup>3</sup></td>
                 <td>'.$row_res["in_lote"].'</td>
                 <td>'.$tipo_materia.'</td>
+                <td>
+                  <div class="progress progress-striped active">
+                    <div class="progress-bar" title="'.$row_res["in_mt_cubico"].'m3  ('.$porcentaje.'%)" style="width: '.$porcentaje.'%; height:10px;"></div>
+                  </div>
+                </td>
                 <td>
                   <div id="del-button" onclick="borrar_inv('.$row_res["in_id"].', this)" class="btn btn-floating-mini btn-danger" title="Borrar"><i class="md  md-delete"></i></div>
                 </td>
@@ -48,9 +54,9 @@ class inventarios{
               <tr>
                 <th>Código Finca</th>
                 <th>Supervisor</th>
-                <th>Inventario</th>
                 <th>Lote</th>
                 <th>Tipo Madera</th>
+                <th>Estado</th>
                 <th>Acciones</th>
               </tr>
             </thead>
