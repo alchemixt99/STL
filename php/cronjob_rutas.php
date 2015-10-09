@@ -16,6 +16,7 @@ if(isset($_SESSION["ses_id"])){
     date_default_timezone_set("America/Bogota"); 
     $fecha = date('Y-m-d G:i:s');
     $hoy = date('Y-m-d');
+    echo "<h1>Informe, generacion de rutas</h1>";
     echo "<br>Fecha ".$fecha."<br>";
 
     //traemos subnucleos
@@ -106,11 +107,11 @@ if(isset($_SESSION["ses_id"])){
 		        		if($inv_rest>0){
 		        			$inv_nuevo = $inv_rest-$res_con[$l]["ve_capacidad_m3"];
 		        			if($inv_nuevo>=0){
-			        			/*echo "<pre>";
+			        			echo "<pre>";
 				        		echo "<br> ----> [".$l."] asignando cond ".$res_con[$l]["pe_id"]." (cap. ".$res_con[$l]["ve_capacidad_m3"]."m<sup>3</sup>) a inventario ".$arr_inv[$m]["in_id"]." en el turno (".$turno."): ".$res_tur[$turno]["tu_hora_ini"]."
 				        			inventario restante: ".$inv_nuevo;
 				        		echo "<br><strong>Actualización de inventario tbl_inventario, in_mt_restante =".$inv_nuevo."</strong> => resultado: ";
-                    *///$upd_vol = $fun->actualizar("inventario", "in_mt_restante =".$inv_nuevo, "in_id = ".$arr_inv[$m]["in_id"]);
+                    //$upd_vol = $fun->actualizar("inventario", "in_mt_restante =".$inv_nuevo, "in_id = ".$arr_inv[$m]["in_id"]);
                     $_SESSION[$arr_inv[$m]["in_id"]]["inv_rest"] = $inv_nuevo;
                     
                     //cargamos en despachos como sugerencia [estado=1]

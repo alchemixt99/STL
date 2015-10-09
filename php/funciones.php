@@ -184,5 +184,12 @@ class funciones{
 		print_r($a);
 		echo "<pre>";
 	}
+
+	function create_file($content, $filename){
+		$ruta = "../informes/";
+		$file=fopen($ruta.$filename,"a") or die("Problemas");
+		fputs($file,$content);
+		fclose($file);
+	}
 }
 ?>

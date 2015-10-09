@@ -61,7 +61,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 			$item.='	<td><i class="md md-drive-eta"></i> '.$row_des['ve_placa'].'</td>';
 			$item.='	<td><i class="md md-access-alarm"></i> '.$row_des['tu_hora_ini'].'</td>';
 			$item.='	<td><i class="md md-place"></i> '.$row_des['fi_codigo'].'</td>';
-			$item.='	<td><i class="md md-person"></i> <input type="text"></td>';
+			$item.='	<td><i class="md md-description"></i> <input type="text"></td>';
 			$item.='	<td>'.$btnset.'</td>';
 			$item.='	</tr></tbody></table>';
 			$item.='
