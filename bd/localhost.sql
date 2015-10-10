@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 09-10-2015 a las 17:50:16
+-- Tiempo de generación: 10-10-2015 a las 08:35:40
 -- Versión del servidor: 5.6.25
 -- Versión de PHP: 5.6.11
 
@@ -86,12 +86,12 @@ CREATE TABLE IF NOT EXISTS `tbl_despachos` (
 --
 
 INSERT INTO `tbl_despachos` (`de_id`, `de_pe_id`, `de_ve_capacidad_m3`, `de_in_id`, `de_tu_id`, `de_inv_rest`, `de_ica`, `de_timestamp`, `de_created`, `de_estado`) VALUES
-(162, 18, 15, 117, 10, 105, '', '2015-10-08 21:35:37', 21, 2),
-(163, 19, 10, 117, 11, 95, '', '2015-10-08 21:35:37', 21, 1),
+(162, 18, 15, 117, 10, 105, '200588749', '2015-10-08 21:35:37', 21, 2),
+(163, 19, 10, 117, 11, 95, '200588750', '2015-10-08 21:35:37', 21, 2),
 (164, 20, 10, 117, 12, 85, '', '2015-10-08 21:35:37', 21, 1),
 (165, 21, 10, 117, 13, 75, '', '2015-10-08 21:35:37', 21, 1),
 (166, 22, 10, 117, 14, 65, '', '2015-10-08 21:35:37', 21, 1),
-(167, 23, 10, 117, 15, 55, '', '2015-10-08 21:35:37', 21, 1),
+(167, 23, 10, 117, 15, 55, '200588751', '2015-10-08 21:35:37', 21, 2),
 (168, 24, 10, 117, 16, 45, '', '2015-10-08 21:35:37', 21, 1),
 (169, 25, 10, 117, 17, 35, '', '2015-10-08 21:35:37', 21, 1),
 (170, 26, 10, 117, 18, 25, '', '2015-10-08 21:35:37', 21, 1),
@@ -145,7 +145,7 @@ CREATE TABLE IF NOT EXISTS `tbl_inventario` (
 --
 
 INSERT INTO `tbl_inventario` (`in_id`, `in_fi_id`, `in_supervisor`, `in_mt_cubico`, `in_mt_restante`, `in_lote`, `in_tipo_materia`, `in_pe_id`, `in_timestamp`, `in_created`, `in_estado`) VALUES
-(117, 46, '28', 120, 105, '106', 2, 0, '2015-10-08 21:36:08', 20, 1);
+(117, 46, '28', 120, 85, '106', 2, 0, '2015-10-09 17:10:22', 20, 1);
 
 -- --------------------------------------------------------
 
@@ -3700,7 +3700,7 @@ INSERT INTO `tbl_modulos` (`mo_id`, `mo_nombre`, `mo_ruta`, `mo_descripcion`, `m
 (6, 'Personas', '../personas/personas.php', 'Personas', '2015-09-06 07:04:40', 1, 1),
 (7, 'Vehiculos', '../vehiculos/vehiculos.php', 'Vehiculos', '2015-09-06 07:04:26', 1, 1),
 (8, 'Supervisores', '../supervisores/supervisores.php', 'Supervisores', '2015-09-19 16:36:16', 1, 1),
-(9, 'Ica', '../ica/ica.php', 'Gesti&oacute;n de ICA', '2015-10-06 21:20:30', 1, 1);
+(9, 'Ica', '../ica/ica.php', 'Informe ICA', '2015-10-10 00:00:37', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -3855,14 +3855,14 @@ CREATE TABLE IF NOT EXISTS `tbl_remisiones_fisicas` (
   `rf_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `rf_created` int(11) NOT NULL,
   `rf_estado` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `tbl_remisiones_fisicas`
 --
 
 INSERT INTO `tbl_remisiones_fisicas` (`rf_id`, `rf_tipo_doc`, `rf_dig_ini`, `rf_dig_fin`, `rf_cant_usados`, `rf_timestamp`, `rf_created`, `rf_estado`) VALUES
-(8, '', 1, 5000, 4000, '2015-10-09 04:37:42', 20, 99);
+(9, '', 200588749, 200598749, 3, '2015-10-10 05:24:22', 20, 99);
 
 -- --------------------------------------------------------
 
@@ -4289,7 +4289,7 @@ ALTER TABLE `tbl_personas`
 -- AUTO_INCREMENT de la tabla `tbl_remisiones_fisicas`
 --
 ALTER TABLE `tbl_remisiones_fisicas`
-  MODIFY `rf_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
+  MODIFY `rf_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT de la tabla `tbl_subnucleos`
 --

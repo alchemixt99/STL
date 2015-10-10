@@ -215,6 +215,25 @@ $js = $libs->get_js();
   </div>
 <?php echo $html_snippet->load_footer(); ?>
     <script type="text/javascript">
+    /* descarga de reporte */
+    function download(){
+      $("#progress").fadeIn();
+      var cont = $("#resultados").html();
+      $.ajax({      
+        url: "../../php/ajax_ica.php",     
+        dataType: "json",     
+          type: "POST",     
+          data: { 
+                  action: "send_report",
+                  o: "ica",
+                  c: cont,
+                  t: "pdf"
+                },
+        success: function(data){    
+          $("#progress").fadeOut();
+        }
+      });
+    }
     
       (function(){
         $('.bs-component [data-toggle="popover"]').popover();

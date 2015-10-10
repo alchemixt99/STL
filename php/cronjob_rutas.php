@@ -15,22 +15,26 @@ if(isset($_SESSION["ses_id"])){
     //Fecha
     date_default_timezone_set("America/Bogota"); 
     $fecha = date('Y-m-d G:i:s');
+    $filename = "R_".date('YmdGis');
+    $filename.= ".html";
+    $content = "";
+
     $hoy = date('Y-m-d');
-    echo "<h1>Informe, generacion de rutas</h1>";
-    echo "<br>Fecha ".$fecha."<br>";
+    $content.= "<h1>Informe, generacion de rutas</h1>";
+    $content.= "<br>Fecha ".$fecha."<br>";
 
     //traemos subnucleos
     $qry_sn ="SELECT * FROM tbl_subnucleos ORDER BY sn_id ASC";
     $res_sn=$fun->get_array($qry_sn);
-    if(!$res_sn){echo $msg->get_msg("e025");}
+    if(!$res_sn){$content.= $msg->get_msg("e025");}
     else{
       //($res_sn);
       //cantidad de sn:
       $cant_sn = count($res_sn);
-      echo "Total Subnucleos: ".$cant_sn."<br>";
+      $content.= "Total Subnucleos: ".$cant_sn."<br>";
       for ($i=0; $i < $cant_sn; $i++) { 
-        echo "<h1>Subnucleo nro: ".$res_sn[$i]["sn_id"]."";
-        echo "=> ".$res_sn[$i]["sn_subnucleo"]."</h1><br>";
+        $content.= "<h1>Subnucleo nro: ".$res_sn[$i]["sn_id"]."";
+        $content.= "=> ".$res_sn[$i]["sn_subnucleo"]."</h1><br>";
         
         //traemos conductores asociados
         $qry_con = 'SELECT * FROM tbl_personas 
@@ -39,12 +43,12 @@ if(isset($_SESSION["ses_id"])){
                 pe_f1 = '.$res_sn[$i]["sn_id"].' OR 
                 pe_f2 = '.$res_sn[$i]["sn_id"].'
               ;';
-        //echo $qry_con;
+        //$content.= $qry_con;
         /*HACE FALTA LA DOBLE VALIDACIÓN DE QUE ESTE NO ESTÉ ASIGNADO O SUGERIDO A OTRA FINCA*/
 
         $res_con = $fun->get_array($qry_con);
         $cant_con = count($res_con);
-        echo "<br> cantidad de conductores: ".$cant_con;
+        $content.= "<br> cantidad de conductores: ".$cant_con;
     
         //para cada subnucleo, listamos sus respectivas fincas
         $qry_fin = 'SELECT * FROM tbl_fincas WHERE fi_sn_id = '.$res_sn[$i]["sn_id"].';';
@@ -52,7 +56,7 @@ if(isset($_SESSION["ses_id"])){
 
         //traemos inventarios por cada finca
         $cant_fin = count($res_fin);
-        echo "<br> cantidad de fincas: ".$cant_fin."<br>";
+        $content.= "<br> cantidad de fincas: ".$cant_fin."<br>";
         $arr_inv = array();
         $pos = 0;
         $c=0;
@@ -73,10 +77,10 @@ if(isset($_SESSION["ses_id"])){
         }
         $cant_inv = count($arr_inv);
 
-        echo "<br> <h4>cantidad de inventarios de este subnucleo: ".$cant_inv."</h4>";
-        /*echo "<pre>";
+        $content.= "<br> <h4>cantidad de inventarios de este subnucleo: ".$cant_inv."</h4>";
+        /*$content.= "<pre>";
         print_r($arr_inv);
-        echo "</pre>";*/
+        $content.= "</pre>";*/
         
         //traemos turnos
         $qry_tur = 'SELECT * FROM tbl_turnos ORDER BY tu_id ASC';
@@ -87,7 +91,7 @@ if(isset($_SESSION["ses_id"])){
           $id_inv = $arr_inv[$ci]["in_id"];
           $_SESSION[$id_inv]["inv_rest"] = $arr_inv[$ci]["in_mt_restante"];
 
-          //echo "<br>prueba variable sesion".$_SESSION[$id_inv]["inv_rest"];
+          //$content.= "<br>prueba variable sesion".$_SESSION[$id_inv]["inv_rest"];
         }
 
 
@@ -107,10 +111,10 @@ if(isset($_SESSION["ses_id"])){
 		        		if($inv_rest>0){
 		        			$inv_nuevo = $inv_rest-$res_con[$l]["ve_capacidad_m3"];
 		        			if($inv_nuevo>=0){
-			        			echo "<pre>";
-				        		echo "<br> ----> [".$l."] asignando cond ".$res_con[$l]["pe_id"]." (cap. ".$res_con[$l]["ve_capacidad_m3"]."m<sup>3</sup>) a inventario ".$arr_inv[$m]["in_id"]." en el turno (".$turno."): ".$res_tur[$turno]["tu_hora_ini"]."
+			        			$content.= "<pre>";
+				        		$content.= "<br> ----> [".$l."] asignando cond ".$res_con[$l]["pe_id"]." (cap. ".$res_con[$l]["ve_capacidad_m3"]."m<sup>3</sup>) a inventario ".$arr_inv[$m]["in_id"]." en el turno (".$turno."): ".$res_tur[$turno]["tu_hora_ini"]."
 				        			inventario restante: ".$inv_nuevo;
-				        		echo "<br><strong>Actualización de inventario tbl_inventario, in_mt_restante =".$inv_nuevo."</strong> => resultado: ";
+				        		$content.= "<br><strong>Actualización de inventario tbl_inventario, in_mt_restante =".$inv_nuevo."</strong> => resultado: ";
                     //$upd_vol = $fun->actualizar("inventario", "in_mt_restante =".$inv_nuevo, "in_id = ".$arr_inv[$m]["in_id"]);
                     $_SESSION[$arr_inv[$m]["in_id"]]["inv_rest"] = $inv_nuevo;
                     
@@ -119,9 +123,9 @@ if(isset($_SESSION["ses_id"])){
                     $fld_des = 'de_pe_id, de_ve_capacidad_m3, de_in_id, de_tu_id, de_inv_rest, de_created, de_estado';
                     $val_des = $res_con[$l]["pe_id"].','.$res_con[$l]["ve_capacidad_m3"].','.$arr_inv[$m]["in_id"].','.$res_tur[$turno]["tu_id"].','.$inv_nuevo.','.$_SESSION["ses_id"].',1';
                     $res_des = $fun->crear($tbl_des, $fld_des, $val_des);
-                    //echo "<br>Probando SESSION VAR: inventario restante del inventario (".$arr_inv[$m]["in_id"].") :".$_SESSION[$arr_inv[$m]["in_id"]]["inv_rest"]."<br>";
+                    //$content.= "<br>Probando SESSION VAR: inventario restante del inventario (".$arr_inv[$m]["in_id"].") :".$_SESSION[$arr_inv[$m]["in_id"]]["inv_rest"]."<br>";
 			        			$res_des = true;
-			        			if($res_des){$tg++; }else{echo "(error)";}
+			        			if($res_des){$tg++; }else{$content.= "(error)";}
 			        		}
 			        	}else{
 			        		$m++;
@@ -131,14 +135,16 @@ if(isset($_SESSION["ses_id"])){
 		        	$turno++;
 		        }
         	}
-        echo "<h3>Total turnos generados: ".$tg."</h3>";
+        $content.= "<h3>Total turnos generados: ".$tg."</h3>";
         }
 
         
 
 
         unset($arr_inv);
-        echo "<br>+++++++++++++++++++++++++++++++++++++++++++++++++++++++<br>";
+        $content.= "<br>+++++++++++++++++++++++++++++++++++++++++++++++++++++++<br>";
+        // generamos informe
+        //$fun->create_file($content, $filename);
 
         
       }

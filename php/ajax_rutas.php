@@ -47,6 +47,11 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 			$t1 = '<div class="btn btn-flat btn-warning">Cancelado</div>';
 			$t2 = '<div class="btn btn-flat btn-danger">Borrado</div>';
 
+			//fecha de salida
+			$fecha = split(" ", $row_des['de_timestamp']);
+			list($año, $mes, $dia) = split('[/.-]', $fecha[0]);
+
+
 			switch ($row_des["de_estado"]) {
 				case 1: $btnset=$b1.$b3; break;//sugerido
 				case 2: $btnset=$b2.$b3; break;//autorizado
@@ -64,8 +69,9 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 			        <div class="panel-body list-group-item">';
 						$item.='<table class="table table-striped table-hover "><tbody><tr>';
 						$item.='<td><i class="md md-person"></i> '.$row_des['pe_nombre'].'</td>';
-						$item.='<td><i class="md md-drive-eta"></i> '.$row_des['ve_placa'].'</td>';
+						$item.='<td><a href="#" class="btn btn-flat btn-info"><i class="md md-drive-eta"></i>'.$row_des['ve_placa'].'</a></td>';
 						$item.='<td><i class="md md-access-alarm"></i> '.$row_des['tu_hora_ini'].'</td>';
+						$item.='<td title="Fecha Salida"><i class="md md-today"></i> '.$año."-".$mes."-".($dia+1).'</td>';						
 						$item.='<td><i class="md md-place"></i> '.$row_des['fi_codigo'].'</td>';
 						$item.='<td>'.$btnset.'</td>';
 						$item.='</tr></tbody></table>';

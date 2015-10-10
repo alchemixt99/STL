@@ -36,40 +36,36 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 		$can_des = mysql_num_rows($res_des);
 		$item="";
 		$html="";
+		
+		$item.='<div class="list-group">';
+		$item.='	<table class="table table-striped table-hover "><thead>';
+		$item.='	<tr>
+						<th>Resultados Generados</th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th style="text-align:right"><div class="btn btn-floating-mini btn-primary" title="Descargar Informe" onclick="download()" ><i class="md md-file-download"></i></div></th>
+					</tr></thead><tbody>';
 		while($row_des = mysql_fetch_assoc($res_des)) {
-			//botones
-			$b1 = '<div class="btn btn-floating-mini btn-primary" title="Confirmar" onclick="change(1,'.$row_des['de_id'].')" ><i class="md md-check"></i></div>';
-			$b2 = '<div class="btn btn-floating-mini btn-warning" title="Cancelar" onclick="change(2,'.$row_des['de_id'].')" ><i class="md md-warning"></i></div>';
-			$b3 = '<div class="btn btn-floating-mini btn-danger" title="Borrar" onclick="change(3,'.$row_des['de_id'].')" ><i class="md md-delete"></i></div>';
-			$t1 = '<div class="btn btn-flat btn-warning">Cancelado</div>';
-			$t2 = '<div class="btn btn-flat btn-danger">Borrado</div>';
-
-			switch ($row_des["de_estado"]) {
-				case 1: $btnset=$b1.$b3; break;//sugerido
-				case 2: $btnset=$b2.$b3; break;//autorizado
-				case 3: $btnset=$t1; break;//cancelado
-				case 99: $btnset=$t2; break;//borrado
-			}
+			//fecha de salida
+			$fecha = split(" ", $row_des['de_timestamp']);
+			list($año, $mes, $dia) = split('[/.-]', $fecha[0]);
 
 			//list-group
-			$item.='
-					<div class="list-group">
-					  <a class="list-group-item" >
-					    <h4 class="list-group-item-heading">'.$row_des['pe_nombre'].'</h4>
-					    <p class="list-group-item-text">';
-			$item.='	<table class="table table-striped table-hover "><tbody><tr>';
-			$item.='	<td><i class="md md-drive-eta"></i> '.$row_des['ve_placa'].'</td>';
-			$item.='	<td><i class="md md-access-alarm"></i> '.$row_des['tu_hora_ini'].'</td>';
-			$item.='	<td><i class="md md-place"></i> '.$row_des['fi_codigo'].'</td>';
-			$item.='	<td><i class="md md-description"></i> <input type="text"></td>';
-			$item.='	<td>'.$btnset.'</td>';
-			$item.='	</tr></tbody></table>';
-			$item.='
-					    </p>
-					  </a>
-					</div>';
+			$item.='<tr>';
+			$item.='	<td><i title="Nombre" class="md md-person"></i> '.$row_des['pe_nombre'].'</td>';
+			$item.='	<td title="Placa"><i class="md md-drive-eta"></i> '.$row_des['ve_placa'].'</td>';
+			$item.='	<td title="Fecha Salida"><i class="md md-today"></i> '.$año."-".$mes."-".($dia+1).'</td>';
+			$item.='	<td title="Hora Salida"><i class="md md-access-alarm"></i> '.$row_des['tu_hora_ini'].'</td>';
+			$item.='	<td title="Finca"><i class="md md-place"></i> '.$row_des['fi_codigo'].'</td>';
+			$item.='	<td title="ICA"><i class="md md-description"></i> '.$row_des['de_ica'].'</td>';
+			$item.='</tr>';
 		}
-
+		$item.='</tbody></table>';
+		$item.='
+				    
+				</div>';
 		
 		$html = $item;
 
@@ -152,6 +148,34 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 
 	}
 
+	function gen_report(){
+		$fun = new funciones();
+		$msg = new messages();
+		$response = new StdClass;
+
+		/*recibimos variables*/
+		$o = $_POST['o'];
+		$c = $_POST['c'];
+		$t = $_POST['t'];
+		$n = $o."_".date('YmdGis');
+
+		//$fun->create_report($c,$n,$t);
+		require_once '../lib/dompdf/dompdf_config.inc.php';
+		$dompdf = new DOMPDF();
+		$dompdf->load_html($c);
+		$dompdf->render();
+		switch ($t) {
+			case 'pdf': $ext = ".pdf"; break;
+			case 'excel': $ext = ".xls"; break;
+			case 'word': $ext = ".doc"; break;
+		}
+		echo $n.$ext;
+		$dompdf->stream($n.$ext);
+
+
+		$response->res = true;
+		echo json_encode($response);
+	}
 
   //validamos si es una petición ajax
   if(isset($_POST['action']) && !empty($_POST['action'])) {
@@ -159,6 +183,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
       switch($action) {
           case 'get_info_des' : get_des();break;
           case 'update_delivery' : upd_despacho();break;
+          case 'send_report' : gen_report();break;
       }
   }
 ?>

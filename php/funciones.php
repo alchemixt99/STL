@@ -191,5 +191,18 @@ class funciones{
 		fputs($file,$content);
 		fclose($file);
 	}
+	function create_report($content, $filename, $filetype){
+		require_once '../lib/dompdf/dompdf_config.inc.php';
+		$dompdf = new DOMPDF();
+		$dompdf->load_html($content);
+		$dompdf->render();
+		switch ($filetype) {
+			case 'pdf': $ext = ".pdf"; break;
+			case 'excel': $ext = ".xls"; break;
+			case 'word': $ext = ".doc"; break;
+		}
+		$dompdf->stream($filename.$ext);
+
+	}
 }
 ?>
