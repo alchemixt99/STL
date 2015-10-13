@@ -36,6 +36,18 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 		$can_des = mysql_num_rows($res_des);
 		$item="";
 		$html="";
+
+		$btn_export='
+		<div class="btn-group">
+		  <a href="#" class="btn btn-primary"><i class="md md-file-download"></i> Exportar</a>
+		  <a href="#" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
+		  <ul class="dropdown-menu">
+		    <li><a href="#" onclick="download(1)">PDF</a></li>
+		    <li class="divider"></li>
+		    <li><a href="#" onclick="download(2)">Word</a></li>
+		    <li><a href="#" onclick="download(3)">Excel</a></li>
+		  </ul>
+		</div>';
 		
 		$item.='<div class="list-group">';
 		$item.='	<table class="table table-striped table-hover "><thead>';
@@ -45,7 +57,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 						<th></th>
 						<th></th>
 						<th></th>
-						<th style="text-align:right"><div class="btn btn-floating-mini btn-primary" title="Descargar Informe" onclick="download()" ><i class="md md-file-download"></i></div></th>
+						<th style="text-align:right">'.$btn_export.'</th>
 					</tr></thead><tbody>';
 		while($row_des = mysql_fetch_assoc($res_des)) {
 			//fecha de salida
@@ -158,20 +170,6 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 		$c = $_POST['c'];
 		$t = $_POST['t'];
 		$n = $o."_".date('YmdGis');
-
-		//$fun->create_report($c,$n,$t);
-		require_once '../lib/dompdf/dompdf_config.inc.php';
-		$dompdf = new DOMPDF();
-		$dompdf->load_html($c);
-		$dompdf->render();
-		switch ($t) {
-			case 'pdf': $ext = ".pdf"; break;
-			case 'excel': $ext = ".xls"; break;
-			case 'word': $ext = ".doc"; break;
-		}
-		echo $n.$ext;
-		$dompdf->stream($n.$ext);
-
 
 		$response->res = true;
 		echo json_encode($response);

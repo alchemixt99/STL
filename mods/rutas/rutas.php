@@ -224,7 +224,7 @@ $js = $libs->get_js();
                   },
           success: function(data){    
             if(data.res==true){ 
-                alert(data.mes);
+                //alert(data.mes);
                 $("#progress").fadeOut();
                 get_info_cond($("#fecha").val(),$("#cedula").val());
               }

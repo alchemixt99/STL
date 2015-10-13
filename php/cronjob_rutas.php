@@ -23,7 +23,7 @@ if(isset($_SESSION["ses_id"])){
     $content.= "<h1>Informe, generacion de rutas</h1>";
     $content.= "<br>Fecha ".$fecha."<br>";
 
-    //traemos subnucleos
+    //traemos municipios
     $qry_sn ="SELECT * FROM tbl_subnucleos ORDER BY sn_id ASC";
     $res_sn=$fun->get_array($qry_sn);
     if(!$res_sn){$content.= $msg->get_msg("e025");}
@@ -31,9 +31,9 @@ if(isset($_SESSION["ses_id"])){
       //($res_sn);
       //cantidad de sn:
       $cant_sn = count($res_sn);
-      $content.= "Total Subnucleos: ".$cant_sn."<br>";
+      $content.= "Total Municipios: ".$cant_sn."<br>";
       for ($i=0; $i < $cant_sn; $i++) { 
-        $content.= "<h1>Subnucleo nro: ".$res_sn[$i]["sn_id"]."";
+        $content.= "<h1>municipio nro: ".$res_sn[$i]["sn_id"]."";
         $content.= "=> ".$res_sn[$i]["sn_subnucleo"]."</h1><br>";
         
         //traemos conductores asociados
@@ -77,7 +77,7 @@ if(isset($_SESSION["ses_id"])){
         }
         $cant_inv = count($arr_inv);
 
-        $content.= "<br> <h4>cantidad de inventarios de este subnucleo: ".$cant_inv."</h4>";
+        $content.= "<br> <h4>cantidad de inventarios de este municipio: ".$cant_inv."</h4>";
         /*$content.= "<pre>";
         print_r($arr_inv);
         $content.= "</pre>";*/
@@ -114,7 +114,7 @@ if(isset($_SESSION["ses_id"])){
 			        			$content.= "<pre>";
 				        		$content.= "<br> ----> [".$l."] asignando cond ".$res_con[$l]["pe_id"]." (cap. ".$res_con[$l]["ve_capacidad_m3"]."m<sup>3</sup>) a inventario ".$arr_inv[$m]["in_id"]." en el turno (".$turno."): ".$res_tur[$turno]["tu_hora_ini"]."
 				        			inventario restante: ".$inv_nuevo;
-				        		$content.= "<br><strong>Actualización de inventario tbl_inventario, in_mt_restante =".$inv_nuevo."</strong> => resultado: ";
+				        		$content.= "<br><strong>Actualizacion de inventario tbl_inventario, in_mt_restante =".$inv_nuevo."</strong> => resultado: ";
                     //$upd_vol = $fun->actualizar("inventario", "in_mt_restante =".$inv_nuevo, "in_id = ".$arr_inv[$m]["in_id"]);
                     $_SESSION[$arr_inv[$m]["in_id"]]["inv_rest"] = $inv_nuevo;
                     
@@ -136,23 +136,17 @@ if(isset($_SESSION["ses_id"])){
 		        }
         	}
         $content.= "<h3>Total turnos generados: ".$tg."</h3>";
-        }
-
-        
-
-
-        unset($arr_inv);
-        $content.= "<br>+++++++++++++++++++++++++++++++++++++++++++++++++++++++<br>";
-        // generamos informe
-        //$fun->create_file($content, $filename);
-
-        
       }
-    }
 
-
+      $content.= "<br>+++++++++++++++++++++++++++++++++++++++++++++++++++++++<br>";
+       
+    }}
+    // generamos informe
+    $fun->create_file($content, $filename);
+    //echo $content;
     $con->disconnect();
-  }
+    unset($arr_inv);
+}
 programar_rutas();
 }else
 {

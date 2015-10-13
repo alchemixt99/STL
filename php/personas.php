@@ -20,13 +20,15 @@ class personas{
       $item =" ";
       $script ="<script>$(document).ready(function(){";
       while($row_res = mysql_fetch_assoc($res)) {
+        if ($row_res["pe_tipo"]==1) {$lic = '';}
+        else{$lic = $row_res["pe_licencia"].' - ('.$row_res["pe_licencia_vigencia"].')';}
         $item.='
               <tr id="'.$row_res["pe_cedula"].'">
                 <td>'.$row_res["pe_cedula"].'</td>
                 <td>'.$row_res["pe_nombre"].'</td>
                 <td>'.$row_res["pe_tel"].' - '.$row_res["pe_cel"].'</td>
                 <td>'.$row_res["pe_dir"].'</td>
-                <td>'.$row_res["pe_licencia"].' - ('.$row_res["pe_licencia_vigencia"].')</td>
+                <td>'.$lic.'</td>
                 <td>
                   <div id="edt-button" style="display:none;" onclick="" class="btn btn-floating-mini btn-success" title="Modificar"><i class="md  md-edit"></i></div>
                   <div id="del-button" onclick="" class="btn btn-floating-mini btn-danger" title="Borrar"><i class="md  md-delete"></i></div>

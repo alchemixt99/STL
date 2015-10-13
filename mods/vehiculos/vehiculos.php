@@ -184,7 +184,10 @@ $js = $libs->get_js();
             </div>
             <div class="modal-body">
               <!-- caja para mensajes -->
-              <div id="msg_box"></div>
+              <div id="msg_box" style="display:none" class="alert alert-dismissible alert-success">
+                <button type="button" class="close" data-dismiss="alert"><i class="md md-clear"></i></button>
+                <div id="msg_body"></div>
+              </div>
 
               <!-- formulario -->
               <form class="form-horizontal" action="/" method="GET" id="frm_users">
@@ -542,14 +545,20 @@ $js = $libs->get_js();
                   tipo_llanta_dir: $("#tipo_llanta_dir").val(),
                   tipo_llanta_tra: $("#tipo_llanta_tra").val()
                 },    
-          success: function(data){    
-          if(data.res==true){         
-            alert(data.mes);
+          success: function(data){           
+           if(data.res==true){
+              $("#msg_box").addClass("alert-success");
+              $("#msg_body").text(data.mes);
+              $("#msg_box").fadeIn();
+              $("#frm_finca").trigger("reset");
+              setTimeout(function(){location.reload();}, 3000);
+            }else if(data.res==false){
+              $("#msg_box").addClass("alert-danger");
+              $("#msg_body").text(data.mes);
+              $("#msg_box").fadeIn();
+            }
           }
-          else{
-            alert(data.mes);
-          }
-        }});
+        });
 
       });
       //logout

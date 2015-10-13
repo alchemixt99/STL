@@ -65,8 +65,8 @@ class fincas{
 
     //consultamos subnucleos habilitados desde la Gerencia
     if(isset($_SESSION["ses_id"])){
-      $qry='SELECT DISTINCT sn_id ,subnucleo, municipio, depto FROM tbl_subnucleos 
-            INNER JOIN tbl_matriz_ica ON subnucleo = sn_subnucleo
+      $qry='SELECT DISTINCT sn_id , sn_subnucleo, municipio, depto FROM tbl_subnucleos 
+            INNER JOIN tbl_matriz_ica ON municipio = sn_subnucleo
             INNER JOIN tbl_fincas ON fi_sn_id = sn_id
             WHERE fi_estado = 1';
 
@@ -75,7 +75,7 @@ class fincas{
       $script ="<script>$(document).ready(function(){";
       while($row_res = mysql_fetch_assoc($res)) {
         $item.='
-              <option value="'.$row_res["sn_id"].'">'.$row_res["subnucleo"].' ('.$row_res["municipio"].'-'.$row_res["depto"].')</option>
+              <option value="'.$row_res["sn_id"].'">'.$row_res["sn_subnucleo"].' ('.$row_res["depto"].')</option>
         ';
         $script.='';
       }

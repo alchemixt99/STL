@@ -169,7 +169,7 @@ $js = $libs->get_js();
               <!-- caja para mensajes -->
               <div class="alert alert-dismissible alert-info" style="display:none" id="caja_mensaje">
                 <button type="button" class="close" data-dismiss="alert"><i class="md md-clear"></i></button>
-                <strong>Aviso: </strong> <div id="texto-mensaje"></div>
+                <div id="texto-mensaje"></div>
               </div>
               <!-- formulario -->
               <form class="form-horizontal" action="/" method="GET">

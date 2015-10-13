@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 10-10-2015 a las 08:35:40
+-- Tiempo de generación: 14-10-2015 a las 00:48:18
 -- Versión del servidor: 5.6.25
 -- Versión de PHP: 5.6.11
 
@@ -53,14 +53,14 @@ CREATE TABLE IF NOT EXISTS `tbl_control_inventarios` (
   `ci_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `ci_created` int(11) NOT NULL,
   `ci_estado` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `tbl_control_inventarios`
 --
 
 INSERT INTO `tbl_control_inventarios` (`ci_id`, `ci_fi_id`, `ci_in_lote`, `ci_vol_ini`, `ci_vol_act`, `ci_timestamp`, `ci_created`, `ci_estado`) VALUES
-(62, 46, 106, 494.7, 374.7, '2015-10-08 20:41:14', 20, 1);
+(65, 47, 109, 310, 221, '2015-10-13 16:46:26', 20, 1);
 
 -- --------------------------------------------------------
 
@@ -79,24 +79,18 @@ CREATE TABLE IF NOT EXISTS `tbl_despachos` (
   `de_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `de_created` int(11) NOT NULL,
   `de_estado` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=173 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=248 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `tbl_despachos`
 --
 
 INSERT INTO `tbl_despachos` (`de_id`, `de_pe_id`, `de_ve_capacidad_m3`, `de_in_id`, `de_tu_id`, `de_inv_rest`, `de_ica`, `de_timestamp`, `de_created`, `de_estado`) VALUES
-(162, 18, 15, 117, 10, 105, '200588749', '2015-10-08 21:35:37', 21, 2),
-(163, 19, 10, 117, 11, 95, '200588750', '2015-10-08 21:35:37', 21, 2),
-(164, 20, 10, 117, 12, 85, '', '2015-10-08 21:35:37', 21, 1),
-(165, 21, 10, 117, 13, 75, '', '2015-10-08 21:35:37', 21, 1),
-(166, 22, 10, 117, 14, 65, '', '2015-10-08 21:35:37', 21, 1),
-(167, 23, 10, 117, 15, 55, '200588751', '2015-10-08 21:35:37', 21, 2),
-(168, 24, 10, 117, 16, 45, '', '2015-10-08 21:35:37', 21, 1),
-(169, 25, 10, 117, 17, 35, '', '2015-10-08 21:35:37', 21, 1),
-(170, 26, 10, 117, 18, 25, '', '2015-10-08 21:35:37', 21, 1),
-(171, 27, 10, 117, 19, 15, '', '2015-10-08 21:35:37', 21, 1),
-(172, 28, 10, 117, 20, 5, '', '2015-10-08 21:35:37', 21, 1);
+(243, 32, 15, 120, 10, 74, '2008545401', '2015-10-13 22:07:02', 21, 2),
+(244, 33, 15, 120, 11, 59, '2008545402', '2015-10-13 22:07:02', 21, 2),
+(245, 34, 15, 120, 12, 44, '2008545403', '2015-10-13 22:07:02', 21, 2),
+(246, 35, 15, 120, 13, 29, '2008545404', '2015-10-13 22:07:02', 21, 2),
+(247, 36, 15, 120, 14, 14, '2008545405', '2015-10-13 22:07:02', 21, 2);
 
 -- --------------------------------------------------------
 
@@ -111,14 +105,14 @@ CREATE TABLE IF NOT EXISTS `tbl_fincas` (
   `fi_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `fi_created` int(11) NOT NULL,
   `fi_estado` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `tbl_fincas`
 --
 
 INSERT INTO `tbl_fincas` (`fi_id`, `fi_codigo`, `fi_sn_id`, `fi_timestamp`, `fi_created`, `fi_estado`) VALUES
-(46, '11ANDES', 9, '2015-10-08 17:13:29', 17, 1);
+(47, '11BOLIV', 93, '2015-10-13 16:13:04', 17, 1);
 
 -- --------------------------------------------------------
 
@@ -138,14 +132,14 @@ CREATE TABLE IF NOT EXISTS `tbl_inventario` (
   `in_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `in_created` int(11) NOT NULL,
   `in_estado` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=118 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=121 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `tbl_inventario`
 --
 
 INSERT INTO `tbl_inventario` (`in_id`, `in_fi_id`, `in_supervisor`, `in_mt_cubico`, `in_mt_restante`, `in_lote`, `in_tipo_materia`, `in_pe_id`, `in_timestamp`, `in_created`, `in_estado`) VALUES
-(117, 46, '28', 120, 85, '106', 2, 0, '2015-10-09 17:10:22', 20, 1);
+(120, 47, '31', 89, -16, '109', 1, 0, '2015-10-13 22:17:27', 20, 1);
 
 -- --------------------------------------------------------
 
@@ -160,18 +154,14 @@ CREATE TABLE IF NOT EXISTS `tbl_lotes_autorizados` (
   `la_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `la_created` int(11) NOT NULL,
   `la_estado` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=110 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `tbl_lotes_autorizados`
 --
 
 INSERT INTO `tbl_lotes_autorizados` (`la_id`, `la_fi_id`, `la_idlote`, `la_timestamp`, `la_created`, `la_estado`) VALUES
-(104, 46, '41', '2015-10-08 17:13:29', 17, 1),
-(105, 46, '52', '2015-10-08 17:13:29', 17, 1),
-(106, 46, '1D', '2015-10-08 17:13:29', 17, 1),
-(107, 46, '16', '2015-10-08 17:13:29', 17, 1),
-(108, 46, '32', '2015-10-08 17:13:29', 17, 1);
+(109, 47, '6', '2015-10-13 16:13:46', 17, 1);
 
 -- --------------------------------------------------------
 
@@ -3818,27 +3808,20 @@ CREATE TABLE IF NOT EXISTS `tbl_personas` (
   `pe_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `pe_created` int(11) NOT NULL,
   `pe_estado` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `tbl_personas`
 --
 
 INSERT INTO `tbl_personas` (`pe_id`, `pe_nombre`, `pe_tel`, `pe_cedula`, `pe_licencia`, `pe_licencia_vigencia`, `pe_dir`, `pe_cel`, `pe_tipo`, `pe_ve_id`, `pe_f1`, `pe_f2`, `pe_f3`, `pe_timestamp`, `pe_created`, `pe_estado`) VALUES
-(16, 'Propietario', '0000000', '9009009', '', '0000-00-00', 'dir propietario', '00000000000', 1, 0, 0, 0, 0, '2015-10-08 17:00:07', 21, 1),
-(18, 'Conductor 1', '1234567', '12345666', '12345666', '2018-04-04', 'Kr 12 cll 14', '123456789', 2, 12, 9, 3, 0, '2015-10-08 20:44:18', 21, 1),
-(19, 'Conductor 2', '1234567', '12345777', '12345777', '2018-04-04', 'Kr 12 cll 14', '123456789', 2, 13, 9, 3, 0, '2015-10-08 20:46:18', 21, 1),
-(20, 'Conductor 3', '1234567', '12345888', '12345888', '2018-04-04', 'Kr 12 cll 14', '123456789', 2, 14, 9, 3, 0, '2015-10-08 20:46:18', 21, 1),
-(21, 'Conductor 4', '1234567', '12345999', '12345999', '2018-04-04', 'Kr 12 cll 14', '123456789', 2, 15, 9, 3, 0, '2015-10-08 20:46:18', 21, 1),
-(22, 'Conductor 5', '1234567', '12345000', '12345000', '2018-04-04', 'Kr 12 cll 14', '123456789', 2, 16, 9, 3, 0, '2015-10-08 20:46:18', 21, 1),
-(23, 'Conductor 6', '1234567', '12345001', '12345001', '2018-04-04', 'Kr 12 cll 14', '123456789', 2, 17, 9, 3, 0, '2015-10-08 20:46:18', 21, 1),
-(24, 'Conductor 7', '1234567', '12345002', '12345002', '2018-04-04', 'Kr 12 cll 14', '123456789', 2, 18, 9, 3, 0, '2015-10-08 20:46:18', 21, 1),
-(25, 'Conductor 8', '1234567', '12345003', '12345003', '2018-04-04', 'Kr 12 cll 14', '123456789', 2, 19, 9, 3, 0, '2015-10-08 20:46:18', 21, 1),
-(26, 'Conductor 9', '1234567', '12345004', '12345004', '2018-04-04', 'Kr 12 cll 14', '123456789', 2, 20, 9, 3, 0, '2015-10-08 20:46:18', 21, 1),
-(27, 'Conductor 10', '1234567', '12345005', '12345005', '2018-04-04', 'Kr 12 cll 14', '123456789', 2, 21, 9, 3, 0, '2015-10-08 20:46:18', 21, 1),
-(28, 'Conductor 11', '1234567', '12345006', '12345006', '2018-04-04', 'Kr 12 cll 14', '123456789', 2, 22, 9, 3, 0, '2015-10-08 20:46:18', 21, 1),
-(29, 'Conductor 12', '1234567', '12345007', '12345007', '2018-04-04', 'Kr 12 cll 14', '123456789', 2, 23, 9, 3, 0, '2015-10-08 20:46:18', 21, 1),
-(30, 'Conductor 13', '1234567', '12345008', '12345008', '2018-04-04', 'Kr 12 cll 14', '123456789', 2, 24, 9, 3, 0, '2015-10-08 20:46:18', 21, 1);
+(31, 'Propietario Nombre', '1234567', '0000000', '', '0000-00-00', 'Dir propietario', '1234567890', 1, 0, 0, 0, 0, '2015-10-13 16:47:56', 21, 1),
+(32, 'Conductor A-001', '1234568', '101', '000000000001', '2025-05-15', 'value', '1234567890', 2, 25, 93, 93, 0, '2015-10-13 22:10:00', 21, 1),
+(33, 'Conductor A-002', '1234569', '102', '000000000001', '2025-05-15', 'value', '1234567890', 2, 26, 93, 93, 0, '2015-10-13 22:09:56', 21, 1),
+(34, 'Conductor A-002', '1234570', '103', '000000000001', '2025-05-15', 'value', '1234567890', 2, 27, 93, 93, 0, '2015-10-13 22:10:05', 21, 1),
+(35, 'Conductor A-002', '1234571', '104', '000000000001', '2025-05-15', 'value', '1234567890', 2, 28, 93, 93, 0, '2015-10-13 22:10:08', 21, 1),
+(36, 'Conductor A-002', '1234572', '105', '000000000001', '2025-05-15', 'value', '1234567890', 2, 29, 93, 93, 0, '2015-10-13 22:10:11', 21, 1),
+(37, 'Conductor A-002', '1234573', '106', '000000000001', '2025-05-15', 'value', '1234567890', 2, 30, 93, 93, 0, '2015-10-13 22:10:15', 21, 1);
 
 -- --------------------------------------------------------
 
@@ -3855,14 +3838,14 @@ CREATE TABLE IF NOT EXISTS `tbl_remisiones_fisicas` (
   `rf_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `rf_created` int(11) NOT NULL,
   `rf_estado` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `tbl_remisiones_fisicas`
 --
 
 INSERT INTO `tbl_remisiones_fisicas` (`rf_id`, `rf_tipo_doc`, `rf_dig_ini`, `rf_dig_fin`, `rf_cant_usados`, `rf_timestamp`, `rf_created`, `rf_estado`) VALUES
-(9, '', 200588749, 200598749, 3, '2015-10-10 05:24:22', 20, 99);
+(10, '', 2008545401, 2008546401, 5, '2015-10-13 22:17:45', 20, 99);
 
 -- --------------------------------------------------------
 
@@ -3876,104 +3859,46 @@ CREATE TABLE IF NOT EXISTS `tbl_subnucleos` (
   `sn_created` int(11) NOT NULL,
   `sn_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `sn_estado` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=125 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `tbl_subnucleos`
 --
 
 INSERT INTO `tbl_subnucleos` (`sn_id`, `sn_subnucleo`, `sn_created`, `sn_timestamp`, `sn_estado`) VALUES
-(1, 'America', 1, '2015-10-01 15:40:48', 1),
-(2, 'Alegrias', 1, '2015-10-01 15:40:48', 1),
-(3, 'Guayabal', 1, '2015-10-01 15:40:48', 1),
-(4, 'Condor', 1, '2015-10-01 15:40:48', 1),
-(5, 'Emilia', 1, '2015-10-01 15:40:48', 1),
-(6, 'Mediaciones', 1, '2015-10-01 15:40:48', 1),
-(7, 'Villablanca', 1, '2015-10-01 15:40:48', 1),
-(8, 'Maravillas', 1, '2015-10-01 15:40:48', 1),
-(9, 'Andes_N', 1, '2015-10-01 15:40:48', 1),
-(10, 'Sonora_N', 1, '2015-10-01 15:40:48', 1),
-(11, 'Alturas', 1, '2015-10-01 15:40:48', 1),
-(12, 'Mi_Ranchito', 1, '2015-10-01 15:40:48', 1),
-(13, 'Yanahuanca', 1, '2015-10-01 15:40:48', 1),
-(14, 'Roblebonito', 1, '2015-10-01 15:40:48', 1),
-(15, 'Perla', 1, '2015-10-01 15:40:48', 1),
-(16, 'Alejandria', 1, '2015-10-01 15:40:48', 1),
-(17, 'La_Maria', 1, '2015-10-01 15:40:48', 1),
-(18, 'Chiveras', 1, '2015-10-01 15:40:48', 1),
-(19, 'Gaviota_C', 1, '2015-10-01 15:40:48', 1),
-(20, 'Hermosa', 1, '2015-10-01 15:40:48', 1),
-(21, 'Balkanes', 1, '2015-10-01 15:40:48', 1),
-(22, 'Sinai_Bol', 1, '2015-10-01 15:40:48', 1),
-(23, 'Diamante', 1, '2015-10-01 15:40:48', 1),
-(24, 'Estancia', 1, '2015-10-01 15:40:48', 1),
-(25, 'San_Gerardo', 1, '2015-10-01 15:40:48', 1),
-(26, 'Sonora_C', 1, '2015-10-01 15:40:48', 1),
-(27, 'Sinabrio', 1, '2015-10-01 15:40:48', 1),
-(28, 'Morena', 1, '2015-10-01 15:40:48', 1),
-(29, 'Caicedonia', 1, '2015-10-01 15:40:48', 1),
-(30, 'Angela_Maria', 1, '2015-10-01 15:40:48', 1),
-(31, 'Libano', 1, '2015-10-01 15:40:48', 1),
-(32, 'Selva', 1, '2015-10-01 15:40:48', 1),
-(33, 'El_Riel', 1, '2015-10-01 15:40:48', 1),
-(34, 'Gaviota_N', 1, '2015-10-01 15:40:48', 1),
-(35, 'Primavera', 1, '2015-10-01 15:40:48', 1),
-(36, 'Cabuyerita', 1, '2015-10-01 15:40:48', 1),
-(37, 'Chupillauta', 1, '2015-10-01 15:40:48', 1),
-(38, 'San_Jose', 1, '2015-10-01 15:40:48', 1),
-(39, 'Claridad', 1, '2015-10-01 15:40:48', 1),
-(40, 'Maria', 1, '2015-10-01 15:40:48', 1),
-(41, 'Santa_Rosa', 1, '2015-10-01 15:40:48', 1),
-(42, 'Retiro', 1, '2015-10-01 15:40:48', 1),
-(43, 'Versalles', 1, '2015-10-01 15:40:48', 1),
-(44, 'Fondas', 1, '2015-10-01 15:40:48', 1),
-(45, 'Caicelandia', 1, '2015-10-01 15:40:48', 1),
-(46, 'Cajete', 1, '2015-10-01 15:40:48', 1),
-(47, 'Riohondo', 1, '2015-10-01 15:40:48', 1),
-(48, 'Carpinterias', 1, '2015-10-01 15:40:48', 1),
-(49, 'Suecia', 1, '2015-10-01 15:40:48', 1),
-(50, 'Altamira', 1, '2015-10-01 15:40:48', 1),
-(51, 'Ortegas', 1, '2015-10-01 15:40:48', 1),
-(52, 'Providencia', 1, '2015-10-01 15:40:48', 1),
-(53, 'Bermeja', 1, '2015-10-01 15:40:48', 1),
-(54, 'Munchiquito', 1, '2015-10-01 15:40:48', 1),
-(55, 'Buena_Vista', 1, '2015-10-01 15:40:48', 1),
-(56, 'Porvenir_S', 1, '2015-10-01 15:40:48', 1),
-(57, 'Penas_Negras', 1, '2015-10-01 15:40:48', 1),
-(58, 'Catana', 1, '2015-10-01 15:40:48', 1),
-(59, 'Chantral', 1, '2015-10-01 15:40:48', 1),
-(60, 'Juanambu', 1, '2015-10-01 15:40:48', 1),
-(61, 'Galicia', 1, '2015-10-01 15:40:48', 1),
-(62, 'Vanesa', 1, '2015-10-01 15:40:48', 1),
-(63, 'Canada', 1, '2015-10-01 15:40:48', 1),
-(64, 'Cristalina', 1, '2015-10-01 15:40:48', 1),
-(65, 'Alaska', 1, '2015-10-01 15:40:48', 1),
-(66, 'Samaria', 1, '2015-10-01 15:40:48', 1),
-(67, 'Cecilia', 1, '2015-10-01 15:40:48', 1),
-(68, 'Pinal', 1, '2015-10-01 15:40:48', 1),
-(69, 'Aguaclara', 1, '2015-10-01 15:40:48', 1),
-(70, 'Carbonero', 1, '2015-10-01 15:40:48', 1),
-(71, 'Maruja', 1, '2015-10-01 15:40:48', 1),
-(72, 'Romerito', 1, '2015-10-01 15:40:48', 1),
-(73, 'Andes_C', 1, '2015-10-01 15:40:48', 1),
-(74, 'Playa_Rica', 1, '2015-10-01 15:40:48', 1),
-(75, 'Tambos', 1, '2015-10-01 15:40:48', 1),
-(76, 'Rancho_Grande', 1, '2015-10-01 15:40:48', 1),
-(77, 'Chancos', 1, '2015-10-01 15:40:48', 1),
-(78, 'Sinai_Rpo', 1, '2015-10-01 15:40:48', 1),
-(79, 'San_Antonio', 1, '2015-10-01 15:40:48', 1),
-(80, 'Sinai_N', 1, '2015-10-01 15:40:48', 1),
-(81, 'Indostan', 1, '2015-10-01 15:40:48', 1),
-(82, 'Cedral', 1, '2015-10-01 15:40:48', 1),
-(83, 'Gerardina', 1, '2015-10-01 15:40:48', 1),
-(84, 'Floridas', 1, '2015-10-01 15:40:48', 1),
-(85, 'Cimarronas', 1, '2015-10-01 15:40:48', 1),
-(86, 'Quince', 1, '2015-10-01 15:40:48', 1),
-(87, 'Tortolas', 1, '2015-10-01 15:40:48', 1),
-(88, 'Trinidad', 1, '2015-10-01 15:40:48', 1),
-(89, 'Aguacate', 1, '2015-10-01 15:40:48', 1),
-(90, 'Mesa', 1, '2015-10-01 15:40:48', 1),
-(91, 'Muneca', 1, '2015-10-01 15:40:48', 1);
+(92, 'Calarca', 1, '2015-10-13 16:09:56', 1),
+(93, 'Salento', 1, '2015-10-13 16:09:56', 1),
+(94, 'Cajamarca', 1, '2015-10-13 16:09:56', 1),
+(95, 'Pijao', 1, '2015-10-13 16:09:56', 1),
+(96, 'Filandia', 1, '2015-10-13 16:09:56', 1),
+(97, 'Riosucio', 1, '2015-10-13 16:09:56', 1),
+(98, 'Guatica', 1, '2015-10-13 16:09:56', 1),
+(99, 'Quinchia', 1, '2015-10-13 16:09:56', 1),
+(100, 'Bolivar', 1, '2015-10-13 16:09:56', 1),
+(101, 'Trujillo', 1, '2015-10-13 16:09:56', 1),
+(102, 'Yumbo', 1, '2015-10-13 16:09:56', 1),
+(103, 'Sevilla', 1, '2015-10-13 16:09:56', 1),
+(104, 'Caicedonia', 1, '2015-10-13 16:09:56', 1),
+(105, 'Santa Rosa de Cabal', 1, '2015-10-13 16:09:56', 1),
+(106, 'Pereira', 1, '2015-10-13 16:09:56', 1),
+(107, 'Cajibio', 1, '2015-10-13 16:09:56', 1),
+(108, 'Popayan', 1, '2015-10-13 16:09:56', 1),
+(109, 'Tambo, El', 1, '2015-10-13 16:09:56', 1),
+(110, 'Timbio', 1, '2015-10-13 16:09:56', 1),
+(111, 'Sotara (Paispamba)', 1, '2015-10-13 16:09:56', 1),
+(112, 'Jamundi', 1, '2015-10-13 16:09:56', 1),
+(113, 'Suarez', 1, '2015-10-13 16:09:56', 1),
+(114, 'Buenos Aires', 1, '2015-10-13 16:09:56', 1),
+(115, 'Darien (Calima)', 1, '2015-10-13 16:09:56', 1),
+(116, 'Riofrio', 1, '2015-10-13 16:09:56', 1),
+(117, 'Dagua', 1, '2015-10-13 16:09:56', 1),
+(118, 'Cumbre, La', 1, '2015-10-13 16:09:56', 1),
+(119, 'Vijes', 1, '2015-10-13 16:09:56', 1),
+(120, 'Palmira', 1, '2015-10-13 16:09:56', 1),
+(121, 'Ginebra', 1, '2015-10-13 16:09:56', 1),
+(122, 'Restrepo', 1, '2015-10-13 16:09:56', 1),
+(123, 'Cerrito, El', 1, '2015-10-13 16:09:56', 1),
+(124, 'Santander de Quilichao', 1, '2015-10-13 16:09:56', 1);
 
 -- --------------------------------------------------------
 
@@ -3988,14 +3913,15 @@ CREATE TABLE IF NOT EXISTS `tbl_supervisores` (
   `su_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `su_created` int(11) NOT NULL,
   `su_estado` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `tbl_supervisores`
 --
 
 INSERT INTO `tbl_supervisores` (`su_id`, `su_nombre`, `su_fi_id`, `su_timestamp`, `su_created`, `su_estado`) VALUES
-(28, 'Supervisor uno', 46, '2015-10-08 20:38:43', 20, 1);
+(31, 'Supervisor uno', 47, '2015-10-13 16:21:54', 17, 1),
+(32, 'Supervisor dos', 47, '2015-10-13 16:22:46', 17, 1);
 
 -- --------------------------------------------------------
 
@@ -4092,26 +4018,19 @@ CREATE TABLE IF NOT EXISTS `tbl_vehiculos` (
   `ve_linea` varchar(60) NOT NULL,
   `ve_created` int(11) NOT NULL,
   `ve_estado` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `tbl_vehiculos`
 --
 
 INSERT INTO `tbl_vehiculos` (`ve_id`, `ve_tipo_vehiculo`, `ve_modelo`, `ve_marca`, `ve_color`, `ve_nro_motor`, `ve_nro_chasis`, `ve_soat`, `ve_soat_nro`, `ve_soat_vence`, `ve_tecno`, `ve_tecno_vence`, `ve_empresa`, `ve_empresa_telefono`, `ve_placa`, `ve_remolque_tipo`, `ve_remolque_color`, `ve_remolque_marca`, `ve_pe_id`, `ve_timestamp`, `ve_capacidad_m3`, `ve_tipo_llanta_traccion`, `ve_tipo_llanta_direccional`, `ve_linea`, `ve_created`, `ve_estado`) VALUES
-(12, 0, 0, 'Marca', 'Color', 1234, 1234, 'empresa', '123123', '0000-00-00', 'Empresa', '0000-00-00', '', '', 'PLC-001', 'aaaa', 'asdasd', 'asdasd', 0, '2015-10-05 05:27:24', 15, 'asd', 'asd', 'Linea', 21, 1),
-(13, 0, 0, 'Marca', 'Color', 1234, 1234, 'empresa', '123123', '0000-00-00', 'Empresa', '0000-00-00', '', '', 'PLC-002', 'aaaa', 'asdasd', 'asdasd', 0, '2015-10-05 05:28:23', 10, 'asd', 'asd', 'Linea', 21, 1),
-(14, 0, 0, 'Marca', 'Color', 1234, 1234, 'empresa', '123123', '0000-00-00', 'Empresa', '0000-00-00', '', '', 'PLC-003', 'aaaa', 'asdasd', 'asdasd', 0, '2015-10-05 05:28:34', 10, 'asd', 'asd', 'Linea', 21, 1),
-(15, 0, 0, 'Marca', 'Color', 1234, 1234, 'empresa', '123123', '0000-00-00', 'Empresa', '0000-00-00', '', '', 'PLC-004', 'aaaa', 'asdasd', 'asdasd', 0, '2015-10-05 05:28:42', 10, 'asd', 'asd', 'Linea', 21, 1),
-(16, 0, 0, 'Marca', 'Color', 1234, 1234, 'empresa', '123123', '0000-00-00', 'Empresa', '0000-00-00', '', '', 'PLC-005', 'aaaa', 'asdasd', 'asdasd', 0, '2015-10-05 05:28:47', 10, 'asd', 'asd', 'Linea', 21, 1),
-(17, 0, 0, 'Marca', 'Color', 1234, 1234, 'empresa', '123123', '0000-00-00', 'Empresa', '0000-00-00', '', '', 'PLC-006', 'aaaa', 'asdasd', 'asdasd', 0, '2015-10-05 05:29:19', 10, 'asd', 'asd', 'Linea', 21, 1),
-(18, 0, 0, 'Marca', 'Color', 1234, 1234, 'empresa', '123123', '0000-00-00', 'Empresa', '0000-00-00', '', '', 'PLC-007', 'aaaa', 'asdasd', 'asdasd', 0, '2015-10-05 05:29:24', 10, 'asd', 'asd', 'Linea', 21, 1),
-(19, 0, 0, 'Marca', 'Color', 1234, 1234, 'empresa', '123123', '0000-00-00', 'Empresa', '0000-00-00', '', '', 'PLC-008', 'aaaa', 'asdasd', 'asdasd', 0, '2015-10-05 05:29:29', 10, 'asd', 'asd', 'Linea', 21, 1),
-(20, 0, 0, 'Marca', 'Color', 1234, 1234, 'empresa', '123123', '0000-00-00', 'Empresa', '0000-00-00', '', '', 'PLC-009', 'aaaa', 'asdasd', 'asdasd', 0, '2015-10-05 05:29:35', 10, 'asd', 'asd', 'Linea', 21, 1),
-(21, 0, 0, 'Marca', 'Color', 1234, 1234, 'empresa', '123123', '0000-00-00', 'Empresa', '0000-00-00', '', '', 'PLC-010', 'aaaa', 'asdasd', 'asdasd', 0, '2015-10-05 05:29:40', 10, 'asd', 'asd', 'Linea', 21, 1),
-(22, 0, 0, 'Marca', 'Color', 1234, 1234, 'empresa', '123123', '0000-00-00', 'Empresa', '0000-00-00', '', '', 'PLC-011', 'aaaa', 'asdasd', 'asdasd', 0, '2015-10-05 05:29:45', 10, 'asd', 'asd', 'Linea', 21, 1),
-(23, 0, 0, 'Marca', 'Color', 1234, 1234, 'empresa', '123123', '0000-00-00', 'Empresa', '0000-00-00', '', '', 'PLC-012', 'aaaa', 'asdasd', 'asdasd', 0, '2015-10-05 05:29:49', 10, 'asd', 'asd', 'Linea', 21, 1),
-(24, 0, 0, 'Marca', 'Color', 1234, 1234, 'empresa', '123123', '0000-00-00', 'Empresa', '0000-00-00', '', '', 'PLC-013', 'aaaa', 'asdasd', 'asdasd', 0, '2015-10-05 05:29:53', 10, 'asd', 'asd', 'Linea', 21, 1);
+(25, 0, 1234, 'value', 'value', 0, 0, 'value', '0000000', '2025-05-15', 'value', '2025-05-15', '', '', 'abc-123', 'value', 'value', 'value', 0, '2015-10-13 16:53:48', 15, 'value', 'value', 'value', 21, 1),
+(26, 0, 1234, 'value', 'value', 0, 0, 'value', '0000000', '2025-05-15', 'value', '2025-05-15', '', '', 'abc-456', 'value', 'value', 'value', 0, '2015-10-13 16:55:52', 15, 'value', 'value', 'value', 21, 1),
+(27, 0, 1234, 'value', 'value', 0, 0, 'value', '0000000', '2025-05-15', 'value', '2025-05-15', '', '', 'abc-789', 'value', 'value', 'value', 0, '2015-10-13 16:56:08', 15, 'value', 'value', 'value', 21, 1),
+(28, 0, 1234, 'value', 'value', 0, 0, 'value', '0000000', '2025-05-15', 'value', '2025-05-15', '', '', 'abc-012', 'value', 'value', 'value', 0, '2015-10-13 16:56:17', 15, 'value', 'value', 'value', 21, 1),
+(29, 0, 1234, 'value', 'value', 0, 0, 'value', '0000000', '2025-05-15', 'value', '2025-05-15', '', '', 'abc-345', 'value', 'value', 'value', 0, '2015-10-13 16:56:23', 15, 'value', 'value', 'value', 21, 1),
+(30, 0, 1234, 'value', 'value', 0, 0, 'value', '0000000', '2025-05-15', 'value', '2025-05-15', '', '', 'abc-678', 'value', 'value', 'value', 0, '2015-10-13 16:56:36', 20, 'value', 'value', 'value', 21, 1);
 
 --
 -- Índices para tablas volcadas
@@ -4239,27 +4158,27 @@ ALTER TABLE `tbl_cancelar_remisiones`
 -- AUTO_INCREMENT de la tabla `tbl_control_inventarios`
 --
 ALTER TABLE `tbl_control_inventarios`
-  MODIFY `ci_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=63;
+  MODIFY `ci_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=66;
 --
 -- AUTO_INCREMENT de la tabla `tbl_despachos`
 --
 ALTER TABLE `tbl_despachos`
-  MODIFY `de_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=173;
+  MODIFY `de_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=248;
 --
 -- AUTO_INCREMENT de la tabla `tbl_fincas`
 --
 ALTER TABLE `tbl_fincas`
-  MODIFY `fi_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=47;
+  MODIFY `fi_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=48;
 --
 -- AUTO_INCREMENT de la tabla `tbl_inventario`
 --
 ALTER TABLE `tbl_inventario`
-  MODIFY `in_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=118;
+  MODIFY `in_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=121;
 --
 -- AUTO_INCREMENT de la tabla `tbl_lotes_autorizados`
 --
 ALTER TABLE `tbl_lotes_autorizados`
-  MODIFY `la_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=109;
+  MODIFY `la_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=110;
 --
 -- AUTO_INCREMENT de la tabla `tbl_modulos`
 --
@@ -4284,22 +4203,22 @@ ALTER TABLE `tbl_permisos_x_modulo`
 -- AUTO_INCREMENT de la tabla `tbl_personas`
 --
 ALTER TABLE `tbl_personas`
-  MODIFY `pe_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=31;
+  MODIFY `pe_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=38;
 --
 -- AUTO_INCREMENT de la tabla `tbl_remisiones_fisicas`
 --
 ALTER TABLE `tbl_remisiones_fisicas`
-  MODIFY `rf_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
+  MODIFY `rf_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT de la tabla `tbl_subnucleos`
 --
 ALTER TABLE `tbl_subnucleos`
-  MODIFY `sn_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=92;
+  MODIFY `sn_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=125;
 --
 -- AUTO_INCREMENT de la tabla `tbl_supervisores`
 --
 ALTER TABLE `tbl_supervisores`
-  MODIFY `su_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=29;
+  MODIFY `su_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=33;
 --
 -- AUTO_INCREMENT de la tabla `tbl_turnos`
 --
@@ -4314,7 +4233,7 @@ ALTER TABLE `tbl_usuarios`
 -- AUTO_INCREMENT de la tabla `tbl_vehiculos`
 --
 ALTER TABLE `tbl_vehiculos`
-  MODIFY `ve_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=25;
+  MODIFY `ve_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=31;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

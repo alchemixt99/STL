@@ -15,6 +15,7 @@ class vehiculos{
       $qry='SELECT * FROM tbl_vehiculos AS V
             INNER JOIN tbl_personas AS P ON P.pe_ve_id = V.ve_id
             WHERE V.ve_estado=1;';
+      //echo $qry;
       $res = mysql_query($qry);
 
       $item =" ";

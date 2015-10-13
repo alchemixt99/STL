@@ -35,9 +35,10 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 				if(!$res_existe){
 
 					/* subnucleos */
-					$qry_sn = 'SELECT DISTINCT sn_id, subnucleo FROM `tbl_matriz_ica` 
-							INNER JOIN tbl_subnucleos ON sn_subnucleo = subnucleo 
+					$qry_sn = 'SELECT DISTINCT sn_id, municipio FROM `tbl_matriz_ica` 
+							INNER JOIN tbl_subnucleos ON sn_subnucleo = municipio 
 							WHERE codfinca = "'.$cod.'"';
+				    //echo $qry_sn;
 					$sn_id = $fun->get_custom($qry_sn);
 
 

@@ -216,7 +216,7 @@ $js = $libs->get_js();
 <?php echo $html_snippet->load_footer(); ?>
     <script type="text/javascript">
     /* descarga de reporte */
-    function download(){
+    function download(tipo){
       $("#progress").fadeIn();
       var cont = $("#resultados").html();
       $.ajax({      
@@ -227,10 +227,11 @@ $js = $libs->get_js();
                   action: "send_report",
                   o: "ica",
                   c: cont,
-                  t: "pdf"
+                  t: tipo
                 },
         success: function(data){    
           $("#progress").fadeOut();
+          $(location).attr('href','../../php/exportar.php');
         }
       });
     }

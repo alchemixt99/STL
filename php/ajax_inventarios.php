@@ -32,7 +32,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 			$resp = mysql_query($qry);
 			if(upd_matriz()){
 				//cargamos variable de sesion con nuevo porcentaje
-				$vol_p = $_SESSION["vol_perc"];
+				$vol_p = round($_SESSION["vol_perc"], 2);
 					switch ($vol_p) {
 						case ($vol_p>=30):
 							 $msg_por = '&nbsp;&nbsp;&nbsp;<span class="label label-success">AVISO: Capacidad actual del lote: '.$vol_p.'%</span>';

@@ -184,7 +184,10 @@ $js = $libs->get_js();
             </div>
             <div class="modal-body">
               <!-- caja para mensajes -->
-              <div id="msg_box"></div>
+              <div id="msg_box" style="display:none" class="alert alert-dismissible alert-success">
+                <button type="button" class="close" data-dismiss="alert"><i class="md md-clear"></i></button>
+                <div id="msg_body"></div>
+              </div>
 
               <!-- formulario -->
               <form class="form-horizontal" action="/" method="GET" id="frm_users">
@@ -344,23 +347,7 @@ $js = $libs->get_js();
     </script>
 
     <script type="text/javascript">
-    function validar_clave(pfx){
-      if(pfx==2){pf="ch_";}else{pf="";}
-      var pass= $("#"+pf+"pass").val();
-      var pass_re= $("#"+pf+"pass_re").val();
-
-      if(pass.length>=6){
-        if(pass==pass_re){
-          return true;
-        }else{
-          alert("las claves no coinciden");
-          return false;
-        }
-      }else{
-        alert("La clave necesita tener más de 6 caracteres");
-        return false;
-      }
-    }
+    $("#msg_box").fadeOut();
     function borrar_usuario(u, obj){
       var c = confirm("Seguro desea borrar el registro?");
       if(c){
@@ -392,10 +379,7 @@ $js = $libs->get_js();
     }
     $("#btn_back").on("click", function(){$("#progress").fadeIn(); modalx("off"); $("#progress").fadeOut();});
     $("#btn_new").on("click", function(){$("#add_modal").modal()});
-    function cambiar_clave(id){
-      $("#codi").val(id); 
-      $("#change_pass_modal").modal();
-    }
+
     function load_modal(f,l){
       $("#progress").fadeIn();
       $.ajax({      

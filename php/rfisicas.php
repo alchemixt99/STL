@@ -29,6 +29,7 @@ class rfisicas{
             $btn = '<div id="act-button" style="display:none" onclick="change(1, '.$row_res['rf_id'].')" class="btn btn-floating-mini btn-success" title="Activar Paquete"><i class="md  md-done"></i></div>
                   <div id="des-button" style="display:" onclick="change(2, '.$row_res['rf_id'].')" class="btn btn-floating-mini btn-warning" title="Desactivar Paquete"><i class="md  md-close"></i></div>';
           }
+          $btn_del = '<div id="act-button" onclick="change(99, '.$row_res['rf_id'].')" class="btn btn-floating-mini btn-danger" title="Borrar Paquete"><i class="md  md-delete"></i></div>';
         //--
 
         $item.='
