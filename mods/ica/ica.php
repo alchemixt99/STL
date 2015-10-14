@@ -5,11 +5,13 @@ require("../../php/funciones.php");
 include('../../php/app_menu.php');
 include('../../php/aside_menu.php');
 include('../../php/rutas.php');
+include('../../php/fincas.php');
 include('../../php/html_snippets.php');
 //menu aplicacion
 $app_menu = new app_menu();
 $aside_menu = new aside_menu();
 $html_snippet = new html_snippets();
+$fincas = new fincas();
 $rutas = new rutas();
 
 $rt = new route();
@@ -41,6 +43,29 @@ $js = $libs->get_js();
     <link rel="stylesheet" href="dist/materia.css" type="text/css">
     <script src="dist/materia.js" type="text/javascript"></script>
     -->
+    <script type="text/javascript">
+      /* descarga de reporte */
+        function desc(tipo){
+          $("#progress").fadeIn();
+          var cont = $("#plain_html").html();
+          $.ajax({      
+            url: "../../php/ajax_ica.php",     
+            dataType: "json",     
+              type: "POST",     
+              data: { 
+                      action: "send_report",
+                      o: "ica",
+                      c: cont,
+                      t: tipo
+                    },
+            success: function(data){    
+              $("#progress").fadeOut();
+              var url = '../../php/exportar.php';
+              window.open(url, '_blank');
+            }
+          });
+        }
+    </script>
 
     <style>
     <?php echo $html_snippet->load_header_css(); ?>
@@ -177,12 +202,21 @@ $js = $libs->get_js();
     <div class="col-lg-4">
       <div class="panel panel-primary">
         <div class="panel-heading">
-          <h3 class="panel-title">Consulta por Fecha</h3>
+          <h3 class="panel-title">Criterios de Búsqueda</h3>
         </div>
         <div class="panel-body">
           <!-- formulario -->
               <form class="form-horizontal" action="/" method="GET" id="frm_general">
                 <fieldset>
+                  <div class="form-group">
+                    <label class="col-lg-1 control-label"></label>
+                    <div class="col-lg-9" style="margin-top: 30px">
+                      <?php echo $fincas->get_options_fincas_aut("finca_aut",true); ?>
+                      <label for="finca_aut" class="">Finca</label>
+                    </div>
+                    <label class="col-lg-2 control-label"></label>
+                  </div>
+                </fieldset>
                   <div class="form-group">
                     <label class="col-lg-1 control-label"></label>
                     <div class="col-lg-5" style="margin-top: 30px">
@@ -205,7 +239,7 @@ $js = $libs->get_js();
     <div class="col-lg-8">
       <div class="panel panel-primary">
         <div class="panel-heading">
-          <h3 class="panel-title">Despachos</h3>
+          <h3 class="panel-title">Resultados encontrados:</h3>
         </div>
         <div class="panel-body" id="resultados">
 
@@ -215,26 +249,7 @@ $js = $libs->get_js();
   </div>
 <?php echo $html_snippet->load_footer(); ?>
     <script type="text/javascript">
-    /* descarga de reporte */
-    function download(tipo){
-      $("#progress").fadeIn();
-      var cont = $("#resultados").html();
-      $.ajax({      
-        url: "../../php/ajax_ica.php",     
-        dataType: "json",     
-          type: "POST",     
-          data: { 
-                  action: "send_report",
-                  o: "ica",
-                  c: cont,
-                  t: tipo
-                },
-        success: function(data){    
-          $("#progress").fadeOut();
-          $(location).attr('href','../../php/exportar.php');
-        }
-      });
-    }
+    
     
       (function(){
         $('.bs-component [data-toggle="popover"]').popover();
@@ -272,7 +287,7 @@ $js = $libs->get_js();
       })();
 
     /* Información de conductores */
-    function get_info_des(f1,f2){
+    function get_info_des(f1,f2,fi){
       $("#progress").fadeIn();
       $.ajax({      
         url: "../../php/ajax_ica.php",     
@@ -281,7 +296,8 @@ $js = $libs->get_js();
           data: { 
                   action: "get_info_des",
                   f1: f1,
-                  f2: f2
+                  f2: f2,
+                  fi:fi
                 },
         success: function(data){    
           if(data.res==true){ 
@@ -305,7 +321,7 @@ $js = $libs->get_js();
 
       $("#f2").keypress(function(e) {
           if(e.which == 13) {
-             get_info_des($("#f1").val(),$("#f2").val());
+             get_info_des($("#f1").val(),$("#f2").val(),$("#finca_aut").val());
           }
       });
 

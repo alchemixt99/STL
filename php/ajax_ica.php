@@ -16,6 +16,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 		/*recibimos variables*/
 		$f1 = $_POST["f1"];
 		$f2 = $_POST["f2"];
+		$fi = $_POST["fi"];
 
 		$con = new con();
 		$con->connect();
@@ -28,6 +29,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 					INNER JOIN tbl_inventario ON in_id = de_in_id
 					INNER JOIN tbl_fincas ON fi_id=in_fi_id
 					WHERE 
+					fi_id = '.$fi.' AND
 					de_timestamp BETWEEN "'.$f1.' 00:00:00" AND "'.$f2.' 23:59:59"
 					AND de_estado = 2
 					;';
@@ -36,16 +38,17 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 		$can_des = mysql_num_rows($res_des);
 		$item="";
 		$html="";
+		$html_plain = '<div id="plain_html" style="display:none;">';
 
 		$btn_export='
 		<div class="btn-group">
-		  <a href="#" class="btn btn-primary"><i class="md md-file-download"></i> Exportar</a>
-		  <a href="#" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
+		  <a href="" class="btn btn-primary"><i class="md md-file-download"></i> Exportar</a>
+		  <a href="" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
 		  <ul class="dropdown-menu">
-		    <li><a href="#" onclick="download(1)">PDF</a></li>
+		    <li><a href="#" onClick="desc(1)">PDF</a></li>
 		    <li class="divider"></li>
-		    <li><a href="#" onclick="download(2)">Word</a></li>
-		    <li><a href="#" onclick="download(3)">Excel</a></li>
+		    <li><a href="#" onClick="desc(2)">Word</a></li>
+		    <li><a href="#" onClick="desc(3)">Excel</a></li>
 		  </ul>
 		</div>';
 		
@@ -59,6 +62,18 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 						<th></th>
 						<th style="text-align:right">'.$btn_export.'</th>
 					</tr></thead><tbody>';
+		$html_plain .= '
+					<table><thead>
+					<tr>
+						<th>Id</th>
+						<th>Nombre Conductor</th>
+						<th>Placa vehiculo</th>
+						<th>Fecha Salida</th>
+						<th>Hora Salida</th>
+						<th>Finca de Destino</th>
+						<th>ICA Asignado</th>
+					</tr></thead><tbody>
+					';
 		while($row_des = mysql_fetch_assoc($res_des)) {
 			//fecha de salida
 			$fecha = split(" ", $row_des['de_timestamp']);
@@ -73,13 +88,23 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 			$item.='	<td title="Finca"><i class="md md-place"></i> '.$row_des['fi_codigo'].'</td>';
 			$item.='	<td title="ICA"><i class="md md-description"></i> '.$row_des['de_ica'].'</td>';
 			$item.='</tr>';
+
+			//html_plain
+			$html_plain.='<tr>';
+			$html_plain.='	<td>'.$row_des['de_id'].'</td>';
+			$html_plain.='	<td>'.$row_des['pe_nombre'].'</td>';
+			$html_plain.='	<td>'.$row_des['ve_placa'].'</td>';
+			$html_plain.='	<td>'.$año."-".$mes."-".($dia+1).'</td>';
+			$html_plain.='	<td>'.$row_des['tu_hora_ini'].'</td>';
+			$html_plain.='	<td>'.$row_des['fi_codigo'].'</td>';
+			$html_plain.='	<td>'.$row_des['de_ica'].'</td>';
+			$html_plain.='</tr>';
+
 		}
-		$item.='</tbody></table>';
-		$item.='
-				    
-				</div>';
+		$item.='</tbody></table></div>';
+		$html_plain.='</tbody></table></div>';
 		
-		$html = $item;
+		$html = $item.$html_plain;
 
 		if ($res_des) {
 			$res=true;
@@ -165,11 +190,11 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 		$msg = new messages();
 		$response = new StdClass;
 
-		/*recibimos variables*/
-		$o = $_POST['o'];
-		$c = $_POST['c'];
-		$t = $_POST['t'];
-		$n = $o."_".date('YmdGis');
+		/* Enviamos datos por Session */
+		$_SESSION['report']['o'] = $_POST['o'];
+		$_SESSION['report']['c'] = $_POST['c'];
+		$_SESSION['report']['t'] = $_POST['t'];
+		$_SESSION['report']['n'] = $_POST['o']."_".date('YmdGis');
 
 		$response->res = true;
 		echo json_encode($response);

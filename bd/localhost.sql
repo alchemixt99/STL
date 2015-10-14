@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 14-10-2015 a las 00:48:18
+-- Tiempo de generación: 14-10-2015 a las 22:08:06
 -- Versión del servidor: 5.6.25
 -- Versión de PHP: 5.6.11
 
@@ -105,14 +105,15 @@ CREATE TABLE IF NOT EXISTS `tbl_fincas` (
   `fi_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `fi_created` int(11) NOT NULL,
   `fi_estado` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `tbl_fincas`
 --
 
 INSERT INTO `tbl_fincas` (`fi_id`, `fi_codigo`, `fi_sn_id`, `fi_timestamp`, `fi_created`, `fi_estado`) VALUES
-(47, '11BOLIV', 93, '2015-10-13 16:13:04', 17, 1);
+(47, '11BOLIV', 93, '2015-10-13 16:13:04', 17, 1),
+(48, '11GRECI', 96, '2015-10-14 05:11:15', 17, 1);
 
 -- --------------------------------------------------------
 
@@ -154,14 +155,15 @@ CREATE TABLE IF NOT EXISTS `tbl_lotes_autorizados` (
   `la_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `la_created` int(11) NOT NULL,
   `la_estado` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=110 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=111 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `tbl_lotes_autorizados`
 --
 
 INSERT INTO `tbl_lotes_autorizados` (`la_id`, `la_fi_id`, `la_idlote`, `la_timestamp`, `la_created`, `la_estado`) VALUES
-(109, 47, '6', '2015-10-13 16:13:46', 17, 1);
+(109, 47, '6', '2015-10-13 16:13:46', 17, 1),
+(110, 48, 'CV', '2015-10-14 05:11:15', 17, 1);
 
 -- --------------------------------------------------------
 
@@ -4168,7 +4170,7 @@ ALTER TABLE `tbl_despachos`
 -- AUTO_INCREMENT de la tabla `tbl_fincas`
 --
 ALTER TABLE `tbl_fincas`
-  MODIFY `fi_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=48;
+  MODIFY `fi_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=49;
 --
 -- AUTO_INCREMENT de la tabla `tbl_inventario`
 --
@@ -4178,7 +4180,7 @@ ALTER TABLE `tbl_inventario`
 -- AUTO_INCREMENT de la tabla `tbl_lotes_autorizados`
 --
 ALTER TABLE `tbl_lotes_autorizados`
-  MODIFY `la_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=110;
+  MODIFY `la_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=111;
 --
 -- AUTO_INCREMENT de la tabla `tbl_modulos`
 --
