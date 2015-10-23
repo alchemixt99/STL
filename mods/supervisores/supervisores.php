@@ -154,7 +154,7 @@ $js = $libs->get_js();
     <nav id="topbar" class="toolbar toolbar-expanded mtr-light-blue-800">
       <div class="container-fluid header-title">
         <div class="row">
-          <div class="col-sm-12">STL SAS Logistik</div>
+          <div class="col-sm-12"><?php echo $html_snippet->app_name("001", " / Supervisores"); ?></div>
         </div>
       </div>
     </nav>
@@ -175,6 +175,50 @@ $js = $libs->get_js();
     <div id="progress" class="progress progress-striped active" style="margin-bottom: 20px; display:none;">
       <div class="progress-bar" style="width: 100%"></div>
     </div>
+    <div id="edt_modal" class="modal fade">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button id="btn_exit" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="md md-close"></i></button>
+              <h4 class="modal-title">Modificar Supervisores</h4>
+            </div>
+            <div class="modal-body">
+              <!-- caja para mensajes -->
+              <div id="msg_box_e" style="display:none" class="alert alert-dismissible alert-success">
+                <button type="button" class="close" data-dismiss="alert"><i class="md md-clear"></i></button>
+                <div id="msg_body_e"></div>
+              </div>
+
+              <!-- formulario -->
+              <form class="form-horizontal" action="/" method="GET" id="frm_users">
+                <fieldset>
+                  <div class="row" >
+                    <!-- -->
+                    <label class="col-lg-2 control-label"></label>
+                    <div class="col-lg-4" style="margin-top: 10px">
+                      <input type="hidden" class="form-control" id="id_e">
+                      <input type="text" class="form-control" id="nomb_e">
+                      <label for="cod" class="">Nombre</label>
+                    </div>
+                    <div class="col-lg-4" style="margin-top: 10px">
+                      <?php echo $fincas->get_options_fincas_aut("cbx_finca_e", true); ?>
+                      <label for="cod" class="">Fincas</label>
+                    </div>
+                    <label class="col-lg-2 control-label"></label>
+                    <!-- -->
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-12 text-right">
+                      <a href="#" id="btn_edit" class="btn btn-primary">Guardar</a>
+                    </div>
+                  </div>
+                </fieldset>
+              </form>
+              <!-- -->
+            </div>
+          </div>
+        </div>
+      </div>
     <div id="add_modal" class="modal fade">
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
@@ -218,90 +262,17 @@ $js = $libs->get_js();
           </div>
         </div>
       </div>
-    <div id="change_pass_modal" class="modal fade">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button id="btn_exit" type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="md md-close"></i></button>
-              <h4 class="modal-title">Cambiar Contraseña</h4>
-            </div>
-            <div class="modal-body">
-              <!-- caja para mensajes -->
-              <div id="msg_box" style="display:none" class="alert alert-dismissible alert-success">
-                <button type="button" class="close" data-dismiss="alert"><i class="md md-clear"></i></button>
-                <div id="msg_body"></div>
-              </div>
-
-              <!-- formulario -->
-              <form class="form-horizontal" action="/" method="GET" id="frm_users">
-                <fieldset>
-                  <input type="hidden" id="codi">
-                  <div class="row" >
-                    <!-- -->
-                    <label class="col-lg-2 control-label"></label>
-                    <div class="col-lg-4" style="margin-top: 10px">
-                      <input type="password" class="form-control" id="ch_pass">
-                      <label for="cod" class="">Clave</label>
-                    </div>
-                    <div class="col-lg-4" style="margin-top: 10px">
-                      <input type="password" class="form-control" id="ch_pass_re">
-                      <label for="cod" class="">Repetir Clave</label>
-                    </div>
-                    <label class="col-lg-2 control-label"></label>
-                    <!-- -->
-                  </div>
-                  <div class="form-group">
-                    <div class="col-sm-12 text-right">
-                      <a href="#" id="btn_change_pass" class="btn btn-primary">Guardar</a>
-                    </div>
-                  </div>
-                </fieldset>
-              </form>
-              <!-- -->
-            </div>
-          </div>
-        </div>
-      </div>
     <div class="container-fluid">
-      <div class="page-header" id="banner">
+      <div class="" id="banner">
         <div class="row">
           <label class="col-lg-2 control-label"></label>
           <div class="col-sm-8 text-center">
-            <p class="lead">Gestión de Supervisores.</p>
             <div class="col-lg-12">
             <div class="col-lg-5"></div>
             <div class="col-lg-6  "></div>
-            <div class="col-lg-1"><a href="#" id="btn_new" class="btn btn-floating-mini btn-danger" data-ripple-centered="" title="Agregar Usuario"><i class="md md-group-add"></i></a></div>
+            <div class="col-lg-1"><br><a href="#" id="btn_new" class="btn btn-floating-mini btn-danger" data-ripple-centered="" title="Agregar Usuario"><i class="md md-group-add"></i></a></div>
             </div>
             <p><?php echo $supervisores->get_supervisores(); ?></p>
-          </div>
-          <label class="col-lg-2 control-label"></label>
-        </div>
-      </div>
-
-      <div id="modalx" style="display:none;">
-        <div class="row">
-          <label class="col-lg-2 control-label"></label>
-          <div class="col-sm-8 text-center">
-            <p class="lead" style="margin-top:40px;">Gestión de Supervisores.<br><br></p>
-            <div class="row">
-              <input type="hidden" id="cod_finca">
-              <div class="col-lg-10" id="inv_box"></div>
-              <div class="col-lg-2"><a href="#" id="btn_back" class="btn btn-floating-mini btn-danger" data-ripple-centered=""><i class="md md-close"></i></a></div>
-            </div>
-            <table class="table table-striped table-hover ">
-            <thead>
-              <tr>
-                <th>Id</th>
-                <th>Nombre</th>
-                <th>Finca</th>
-                <th>Fecha Registro</th>
-                <th>Opciones</th>
-              </tr>
-            </thead>
-            <tbody id="turnos_box">
-            </tbody>
-          </table> 
           </div>
           <label class="col-lg-2 control-label"></label>
         </div>
@@ -361,7 +332,7 @@ $js = $libs->get_js();
                 },
           success: function(data){    
             if(data.res==true){       
-              alert(data.mes);
+              //alert(data.mes);
               $(obj).closest('tr').fadeOut();
             }
             else{
@@ -370,6 +341,13 @@ $js = $libs->get_js();
           }
         });
       }
+    }
+
+    function editar_usuario(id,n,f,obj){
+      $("#id_e").val(id);
+      $("#nomb_e").val(n);
+      $('#cbx_finca_e > option[value="'+f+'"]').attr('selected', 'selected');
+      $("#edt_modal").modal();      
     }
     function modalx(x){
       switch(x){
@@ -437,11 +415,39 @@ $js = $libs->get_js();
       });
 
       //==============Activar menuitem====================  
-      $("#usuarios").parents(1).addClass("active");
+      $("#Supervisores").parents(1).addClass("active");
 
     });
   $(document).ready(function(){
       //==============AJAX==============
+      //Guardar cambios
+      $('#btn_edit').on('click', function() {
+
+        $.ajax({      
+          url: "../../php/ajax_supervisores.php",     
+          dataType: "json",     
+          type: "POST",     
+          data: { 
+                  action: "edit",
+                  id: $("#id_e").val(),
+                  nomb: $("#nomb_e").val(),
+                  finc: $("#cbx_finca_e").val()
+                },    
+          success: function(data){    
+          if(data.res==true){
+            $("#msg_box_e").fadeIn();
+            $("#msg_box_e").addClass("alert-success");
+            $("#msg_body_e").text(data.mes);         
+            setTimeout(function(){location.reload();}, 3000);
+          }
+          else{
+            $("#msg_box_e").fadeIn();
+            $("#msg_box_e").addClass("alert-danger");
+            $("#msg_body_e").text(data.mes);
+          }
+        }});
+
+      });
       //Guardar usuarios
       $('#btn_save').on('click', function() {
 

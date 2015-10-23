@@ -177,7 +177,7 @@ $js = $libs->get_js();
     <nav id="topbar" class="toolbar toolbar-expanded mtr-light-blue-800">
       <div class="container-fluid header-title">
         <div class="row">
-          <div class="col-sm-12">STL SAS Logistik</div>
+          <div class="col-sm-12"><?php echo $html_snippet->app_name("001", " / ICA"); ?></div>
         </div>
       </div>
     </nav>
@@ -250,7 +250,27 @@ $js = $libs->get_js();
 <?php echo $html_snippet->load_footer(); ?>
     <script type="text/javascript">
     
-    
+    function insert_cons(id){
+      $("#progress").fadeIn();
+      var cons = $("#cons_"+id).val();
+      $.ajax({      
+        url: "../../php/ajax_ica.php",     
+        dataType: "json",     
+          type: "POST",     
+          data: { 
+                  action: "insert_cons",
+                  id:id,
+                  cons:cons
+                },
+        success: function(data){    
+          if(data.res==true){
+            $("#progress").fadeOut();
+            get_info_des($("#f1").val(),$("#f2").val(),$("#finca_aut").val());
+          }
+        }
+      });
+    }
+
       (function(){
         $('.bs-component [data-toggle="popover"]').popover();
         $('.bs-component [data-toggle="tooltip"]').tooltip();
@@ -324,6 +344,8 @@ $js = $libs->get_js();
              get_info_des($("#f1").val(),$("#f2").val(),$("#finca_aut").val());
           }
       });
+
+
 
       
       $('.btn, .dropdown-menu a, .navbar a, .navbar-panel a, .toolbar a, .nav-pills a, .nav-tabs a, .pager a, .pagination a, .list-group a').mtrRipple({live: true}).on('click', function(e) {

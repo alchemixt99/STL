@@ -13,7 +13,7 @@ class rfisicas{
 
     //consultamos fincas
     if(isset($_SESSION["ses_id"])){
-      $qry='SELECT * FROM tbl_remisiones_fisicas ORDER BY rf_timestamp DESC ';
+      $qry='SELECT * FROM tbl_remisiones_fisicas ORDER BY rf_estado DESC ';
       $res = mysql_query($qry);
 
       $item =" ";
@@ -35,6 +35,7 @@ class rfisicas{
         $item.='
               <tr>
                 <td>'.$row_res["rf_timestamp"].'</td>
+                <td>'.$row_res["rf_interventor"].'</td>
                 <td>'.$row_res["rf_dig_ini"].'</td>
                 <td>'.$row_res["rf_dig_fin"].'</td>
                 <td><div class="progress progress-striped active">
@@ -57,6 +58,7 @@ class rfisicas{
             <thead>
               <tr>
                 <th>Fecha Registro</th>
+                <th>Interventor</th>
                 <th>Inicia</th>
                 <th>Termina</th>
                 <th>Usados</th>

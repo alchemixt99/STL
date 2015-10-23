@@ -271,14 +271,75 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 		$response->mes = $mes;
 		echo json_encode($response);
 	}
+	//Actualizar inventario
+	function upd_inventario(){
+		$fun = new funciones();
+		$msg = new messages();
+		$response = new StdClass;
+		$res = false;
+
+		/*recibimos variables*/
+		$inv=$_POST["inv"];
+		$oin=$_POST["oin"];
+		$id=$_POST["id"];
+
+		//traemos inventario restante y lo recalculamos
+		$i_r = $fun->get_custom("SELECT in_mt_restante FROM tbl_inventario WHERE in_id=".$id.";");
+		$inv_res = ($oin - $inv)-$i_r;
+		if($inv_res<0){$inv_res=$inv_res*(-1);}
+
+		$tbl="inventario";
+		$cambios = 'in_mt_cubico = '.$inv.', in_mt_restante = '.$inv_res.' ';
+		$where = 'in_id = '.$id;
+
+		$res=$fun->actualizar($tbl, $cambios, $where);
+
+		if ($res) {
+			$res=true;
+			$mes=$msg->get_msg("e004");
+		}else{
+			$res=false;
+			$mes=$msg->get_msg("e019");
+		}
+		
+		$response->res = $res;
+		$response->mes = $mes;
+		echo json_encode($response);
+	}
+	
+	//traer inventario x
+	function get_single(){
+		$fun = new funciones();
+		$msg = new messages();
+		$response = new StdClass;
+
+		/*recibimos variables*/
+		$inv=$_POST["inv"];
+		$qry_inv = "SELECT * FROM tbl_inventario WHERE in_id =".$inv;
+		$res_inv=$fun->get_array($qry_inv);
+		if ($res_inv) {
+			//$fun->print_array($res_inv);
+			$res=true;
+			$mes=$res_inv[0]['in_mt_cubico'];
+		}else{
+			$res=false;
+			$mes=$msg->get_msg("e030");
+		}
+		
+		$response->res = $res;
+		$response->mes = $mes;
+		echo json_encode($response);
+	}
   //validamos si es una petición ajax
   if(isset($_POST['action']) && !empty($_POST['action'])) {
       $action = $_POST['action'];
       switch($action) {
           case 'save' : add_inventario();break;
+          case 'update' : upd_inventario();break;
           case 'get_lotes' : lotes_au();break;
           case 'get_supervisores' : supervisores();break;
           case 'del_inventario' : remove_inv();break;
+          case 'get_singular' : get_single();break;
       }
   }
 ?>

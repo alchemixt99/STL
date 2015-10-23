@@ -42,7 +42,7 @@ class fincas{
             <thead>
               <tr>
                 <th style="text-align:center;">Código</th>
-                <th style="text-align:center;">Subnucleo</th>
+                <th style="text-align:center;">Municipio</th>
                 <th style="text-align:center;">Fecha Autorización</th>
                 <th style="text-align:center;">Acciones</th>
               </tr>

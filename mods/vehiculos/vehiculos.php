@@ -13,6 +13,7 @@ $aside_menu = new aside_menu();
 $html_snippet = new html_snippets();
 $vehiculos = new vehiculos();
 $fincas = new fincas();
+$fun = new funciones();
 
 $rt = new route();
 $rt->check_session();
@@ -154,7 +155,7 @@ $js = $libs->get_js();
     <nav id="topbar" class="toolbar toolbar-expanded mtr-light-blue-800">
       <div class="container-fluid header-title">
         <div class="row">
-          <div class="col-sm-12">STL SAS Logistik</div>
+          <div class="col-sm-12"><?php echo $html_snippet->app_name("001", " / Vehiculos"); ?></div>
         </div>
       </div>
     </nav>
@@ -233,6 +234,10 @@ $js = $libs->get_js();
                         <?php echo $vehiculos->get_options_propietarios(); ?>
                         <label for="cod" class="">Propietario</label>
                       </div>
+                      <div class="col-lg-4" style="margin-top: 10px">
+                        <input type="text" class="form-control" id="emp">
+                        <label for="emp" class="">Empresa</label>
+                      </div>
                   </div>
                 </div>
                 <div class="panel panel-primary">
@@ -250,9 +255,9 @@ $js = $libs->get_js();
                         <input type="text" class="form-control" id="num_soat">
                         <label for="cod" class="">Numero</label>
                       </div>
-                      <div class="col-lg-2" style="margin-top: 10px">
-                        <input type="text" class="form-control" id="ven_soat">
-                        <label for="cod" class="">Vence</label>
+                      <div class="col-lg-3" style="margin-top: 10px">
+                        <?php echo $fun->datepicker("ven_soat","dmy"); ?>
+                        <label for="cod" style="float:none">Vence</label>
                       </div>
                     </div>
                     <div class="row">
@@ -265,8 +270,8 @@ $js = $libs->get_js();
                         <input type="text" class="form-control" id="num_rt">
                         <label for="cod" class="">Numero</label>
                       </div>
-                      <div class="col-lg-2" style="margin-top: 10px">
-                        <input type="text" class="form-control" id="ven_rt">
+                      <div class="col-lg-3" style="margin-top: 10px">
+                        <?php echo $fun->datepicker("ven_rt","dmy"); ?>
                         <label for="cod" class="">Vence</label>
                       </div>
                     </div>
@@ -320,7 +325,6 @@ $js = $libs->get_js();
         <div class="row">
           <label class="col-lg-2 control-label"></label>
           <div class="col-sm-8 text-center">
-            <p class="lead">Gestión de Vehiculos.</p>
             <div class="col-lg-12">
             <div class="col-lg-5"></div>
             <div class="col-lg-6  "></div>
@@ -509,14 +513,15 @@ $js = $libs->get_js();
       });
 
       //==============Activar menuitem====================  
-      $("#usuarios").parents(1).addClass("active");
+      $("#Vehiculos").parents(1).addClass("active");
 
     });
   $(document).ready(function(){
       //==============AJAX===============
       //Guardar usuarios
       $('#btn_save').on('click', function() {
-
+        var vs = $("#ven_soat_y").val()+'-'+$("#ven_soat_m").val()+'-'+$("#ven_soat_d").val();
+        var vr = $("#ven_rt_y").val()+'-'+$("#ven_rt_m").val()+'-'+$("#ven_rt_d").val();
         $.ajax({      
           url: "../../php/ajax_vehiculos.php",     
           dataType: "json",     
@@ -532,12 +537,13 @@ $js = $libs->get_js();
                   nro_motor: $("#nro_motor").val(),
                   nro_chasis: $("#nro_chasis").val(),
                   cod_prop: $("#cod_prop").val(),
+                  emp: $("#emp").val(),
                   emp_soat: $("#emp_soat").val(),
                   num_soat: $("#num_soat").val(),
-                  ven_soat: $("#ven_soat").val(),
+                  ven_soat: vs,
                   emp_rt: $("#emp_rt").val(),
                   num_rt: $("#num_rt").val(),
-                  ven_rt: $("#ven_rt").val(),
+                  ven_rt: vr,
                   tipo_rem: $("#tipo_rem").val(),
                   color_rem: $("#color_rem").val(),
                   marca_rem: $("#marca_rem").val(),

@@ -31,5 +31,15 @@ class html_snippets{
 		";
 		return $css;
 	}
+
+	function app_name($e, $a=""){
+		$mod = '<span style="font-size:23px;">'.$a.'</span>';
+		$str = [
+			"001" => "STL SAS - Logistik".$mod
+		];
+		/* ====================== */
+		return $str[$e];
+	}
+
 }
 ?>

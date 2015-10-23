@@ -20,13 +20,14 @@ class supervisores{
       $item =" ";
       $script ="<script>$(document).ready(function(){";
       while($row_res = mysql_fetch_assoc($res)) {
+        $fn = "editar_usuario(".$row_res["su_id"].", '".$row_res["su_nombre"]."',".$row_res["su_fi_id"].", this)";
         $item.='
               <tr>
-                <td>'.$row_res["su_id"].'</td>
                 <td>'.$row_res["su_nombre"].'</td>
                 <td>'.$row_res["fi_codigo"].'</td>
                 <td>'.$row_res["fi_timestamp"].'</td>
                 <td>
+                  <div onClick="'.$fn.'" class="btn btn-floating-mini btn-success" title="Modificar"><i class="md md-edit"></i> </div>
                   <div id="del-button" onClick="borrar_usuario('.$row_res["su_id"].', this)" class="btn btn-floating-mini btn-danger" title="Borrar"><i class="md md-delete"></i> </div>
                 </td>
               </tr>
@@ -41,7 +42,6 @@ class supervisores{
           <table class="table table-striped table-hover ">
             <thead>
               <tr>
-                <th>Id</th>
                 <th>Nombre</th>
                 <th>Perfil</th>
                 <th>Fecha Registro</th>

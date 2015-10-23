@@ -127,7 +127,7 @@ $js = $libs->get_js();
     <nav id="topbar" class="toolbar toolbar-expanded mtr-light-blue-800">
       <div class="container-fluid header-title">
         <div class="row">
-          <div class="col-sm-12">STL SAS Logistik</div>
+          <div class="col-sm-12"><?php echo $html_snippet->app_name("001", " / Fincas"); ?></div>
         </div>
       </div>
     </nav>
@@ -147,9 +147,8 @@ $js = $libs->get_js();
         <?php echo $app_menu->build_menu(); ?>
     <div class="container-fluid">
 
-      <div class="page-header" id="banner">
+      <div id="banner">
           <div class="col-sm-12 text-center">
-            <p class="lead">Gestión de Fincas.</p>
             <div class="col-sm-12 text-right">
             <div class="col-lg-5"></div>
             <div class="col-lg-5">
@@ -186,26 +185,28 @@ $js = $libs->get_js();
               <form class="form-horizontal" action="/" method="GET" id="frm_finca">
                 <fieldset>
                   <div class="form-group" id="gr_cod_finca">
-                    <label class="col-lg-2 control-label"></label>
-                    <div class="col-lg-10" style="margin-top: 30px" id="combo_fincas_all">
-                        <?php echo $fincas->get_options_fincas(); ?>
-                      <label for="cod" class="">Seleccione Finca(*)</label>
+                    <div class="row">
+                      <label class="col-lg-2 control-label"></label>
+                      <div class="col-lg-8" style="margin-top: 30px" id="combo_fincas_all">
+                          <?php echo $fincas->get_options_fincas(); ?>
+                        <label for="cod" class="">Seleccione Finca(*)</label>
+                      </div>
+                      <label class="col-lg-2 control-label"></label>
                     </div>
-                    <div class="col-lg-10" style="margin-top: 30px; display:none;" id="combo_fincas_aut">
-                        <?php echo $fincas->get_options_fincas_aut("cod_aut"); ?>
-                      <label for="cod" class="">Código Finca(*)</label>
+                    <div class="row">
+                      <label class="col-lg-2 control-label"></label>
+                      <div class="col-lg-8" style="margin-top: 30px; display:none;" id="combo_fincas_aut">
+                          <?php echo $fincas->get_options_fincas_aut("cod_aut"); ?>
+                        <label for="cod" class="">Código Finca(*)</label>
+                      </div>
+                      <label class="col-lg-2 control-label"></label>
                     </div>
                   </div>
                   <div class="form-group">
                     <label class="col-lg-2 control-label"></label>
-                    <div class="col-lg-10" style="margin-top: 30px">
-                    </div>
-                    <label class="col-lg-2 control-label"></label>
-                    <div class="col-lg-10" style="margin-top: 30px">
+                    <div class="col-lg-8" style="margin-top: 30px">
                       <label for="lote_especie" class="">Autorizar Lotes</label>
-                      <div class="checkbox" id="lote_especie">
-                        
-                      </div>
+                      <div class="checkbox" id="lote_especie"></div>
                     </div>
                   </div>
                   <div class="form-group">

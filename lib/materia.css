@@ -5609,3 +5609,11 @@ input[type="radio"], .radio input[type="radio"], .radio-inline input[type="radio
   min-height: 0;
   margin-bottom: 1em;
   border-bottom: 1px solid #bdbdbd; }
+
+/***** CUSTOM CSS ******/
+td {
+  text-align: center;
+}
+th{
+  text-align: center;
+}

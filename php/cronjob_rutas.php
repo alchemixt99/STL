@@ -62,6 +62,7 @@ if(isset($_SESSION["ses_id"])){
         $c=0;
         for ($j=0; $j < $cant_fin; $j++) { 
           $qry_inv = 'SELECT * FROM tbl_inventario WHERE in_fi_id = '.$res_fin[$j]["fi_id"].' AND in_mt_restante > 0 AND in_estado=1;';
+          //$content.= $qry_inv;
           $res_inv = $fun->get_array($qry_inv);
           $c = count($res_inv);
           if($c>1){

@@ -18,6 +18,13 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 		$f2 = $_POST["f2"];
 		$fi = $_POST["fi"];
 
+		if ($fi=="Seleccione") {
+			$str_fi=" ";
+		} else {
+			$str_fi= 'fi_id = '.$fi.' AND';
+		}
+		
+
 		$con = new con();
 		$con->connect();
 
@@ -28,8 +35,13 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 					INNER JOIN tbl_turnos ON tu_id = de_tu_id
 					INNER JOIN tbl_inventario ON in_id = de_in_id
 					INNER JOIN tbl_fincas ON fi_id=in_fi_id
+					INNER JOIN tbl_supervisores ON su_id = in_supervisor
+					INNER JOIN tbl_subnucleos ON sn_id = fi_sn_id
+                    INNER JOIN tbl_lotes_autorizados ON la_id = in_lote
+					INNER JOIN tbl_matriz_ica ON codfinca = fi_codigo
 					WHERE 
-					fi_id = '.$fi.' AND
+					idlote = la_idlote AND
+					'.$str_fi.'
 					de_timestamp BETWEEN "'.$f1.' 00:00:00" AND "'.$f2.' 23:59:59"
 					AND de_estado = 2
 					;';
@@ -60,18 +72,28 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 						<th></th>
 						<th></th>
 						<th></th>
-						<th style="text-align:right">'.$btn_export.'</th>
+						<th colspan="2" style="text-align:right">'.$btn_export.'</th>
 					</tr></thead><tbody>';
 		$html_plain .= '
 					<table><thead>
 					<tr>
-						<th>Id</th>
-						<th>Nombre Conductor</th>
-						<th>Placa vehiculo</th>
-						<th>Fecha Salida</th>
-						<th>Hora Salida</th>
-						<th>Finca de Destino</th>
-						<th>ICA Asignado</th>
+						<th>Fecha</th>
+						<th>Hora</th>
+						<th>Supervisor</th>
+						<th>Finca</th>
+						<th>Nucleo</th>
+						<th>Registro ICA</th>
+						<th>Conductor</th>
+						<th>Cédula</th>
+						<th>Placa</th>
+						<th>m3</th>
+						<th>Empresa</th>
+						<th>Tipo</th>
+						<th># Formato</th>
+						<th># Aplicativo</th>
+						<th>Especie</th>
+						<th>Destino</th>
+						<th>Tipo</th>
 					</tr></thead><tbody>
 					';
 		while($row_des = mysql_fetch_assoc($res_des)) {
@@ -79,25 +101,49 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 			$fecha = split(" ", $row_des['de_timestamp']);
 			list($año, $mes, $dia) = split('[/.-]', $fecha[0]);
 
+			if($row_des['de_sistema']==0){
+				$kdown='onkeydown="if (event.keyCode == 13) insert_cons('.$row_des['de_id'].')"';
+				$btn_sys = '<input style="border:none;width: 65%;" '.$kdown.' id="cons_'.$row_des['de_id'].'" placeholder="Consecutivo">';
+			}else{
+				$btn_sys = $row_des['de_sistema'];
+			}
+
 			//list-group
 			$item.='<tr>';
-			$item.='	<td><i title="Nombre" class="md md-person"></i> '.$row_des['pe_nombre'].'</td>';
-			$item.='	<td title="Placa"><i class="md md-drive-eta"></i> '.$row_des['ve_placa'].'</td>';
 			$item.='	<td title="Fecha Salida"><i class="md md-today"></i> '.$año."-".$mes."-".($dia+1).'</td>';
 			$item.='	<td title="Hora Salida"><i class="md md-access-alarm"></i> '.$row_des['tu_hora_ini'].'</td>';
 			$item.='	<td title="Finca"><i class="md md-place"></i> '.$row_des['fi_codigo'].'</td>';
+			$item.='	<td><i title="Nombre" class="md md-person"></i> '.$row_des['pe_nombre'].'</td>';
+			$item.='	<td title="Placa"><i class="md md-drive-eta"></i> '.$row_des['ve_placa'].'</td>';
 			$item.='	<td title="ICA"><i class="md md-description"></i> '.$row_des['de_ica'].'</td>';
+			$item.='	<td title="Consecutivo del sistema"><i class="md md-input"></i>'.$btn_sys.'</td>';
 			$item.='</tr>';
 
 			//html_plain
+			if ($row_des['in_tipo_materia']==1) {
+				$tm="Troza";
+			} else {
+				$tm="Pulpa";
+			}
+			
 			$html_plain.='<tr>';
-			$html_plain.='	<td>'.$row_des['de_id'].'</td>';
-			$html_plain.='	<td>'.$row_des['pe_nombre'].'</td>';
-			$html_plain.='	<td>'.$row_des['ve_placa'].'</td>';
 			$html_plain.='	<td>'.$año."-".$mes."-".($dia+1).'</td>';
 			$html_plain.='	<td>'.$row_des['tu_hora_ini'].'</td>';
+			$html_plain.='	<td>'.$row_des['su_nombre'].'</td>';
 			$html_plain.='	<td>'.$row_des['fi_codigo'].'</td>';
+			$html_plain.='	<td>'.$row_des['sn_subnucleo'].'</td>';
+			$html_plain.='	<td>'.$row_des['registro_ica'].'</td>';
+			$html_plain.='	<td>'.$row_des['pe_nombre'].'</td>';
+			$html_plain.='	<td>'.$row_des['pe_cedula'].'</td>';
+			$html_plain.='	<td>'.$row_des['ve_placa'].'</td>';
+			$html_plain.='	<td>'.$row_des['ve_capacidad_m3'].'</td>';
+			$html_plain.='	<td>'.$row_des['ve_empresa'].'</td>';
+			$html_plain.='	<td>'.$row_des['ve_tipo_vehiculo'].'</td>';
 			$html_plain.='	<td>'.$row_des['de_ica'].'</td>';
+			$html_plain.='	<td>'.$row_des['de_sistema'].'</td>';
+			$html_plain.='	<td>'.$row_des['especie_ica'].'</td>';
+			$html_plain.='	<td></td>';
+			$html_plain.='	<td>'.$tm.'</td>';
 			$html_plain.='</tr>';
 
 		}
@@ -185,6 +231,32 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 
 	}
 
+	function add_consecutivo(){
+		$fun = new funciones();
+		$msg = new messages();
+		$response = new StdClass;
+
+		/*recibimos variables*/
+		$id = $_POST['id'];
+		$cons = $_POST['cons'];
+
+		$con = new con();
+		$con->connect();
+
+		//preguntamos si existe el despacho y si está sugerido
+		$existe = $fun->existe("despachos","de_id",$id, "");
+		if($existe){
+			$upd_vol = $fun->actualizar("despachos", "de_sistema =".$cons, "de_id = ".$id);
+		}
+
+		$con->disconnect();
+		
+		$response->res = true;
+		$response->mes = '';
+		echo json_encode($response);
+
+	}
+
 	function gen_report(){
 		$fun = new funciones();
 		$msg = new messages();
@@ -207,6 +279,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
           case 'get_info_des' : get_des();break;
           case 'update_delivery' : upd_despacho();break;
           case 'send_report' : gen_report();break;
+          case 'insert_cons' : add_consecutivo();break;
       }
   }
 ?>

@@ -15,6 +15,7 @@ $html_snippet = new html_snippets();
 $personas = new personas();
 $vehiculos = new vehiculos();
 $fincas = new fincas();
+$fun = new funciones();
 
 $rt = new route();
 $rt->check_session();
@@ -133,7 +134,7 @@ $js = $libs->get_js();
     <nav id="topbar" class="toolbar toolbar-expanded mtr-light-blue-800">
       <div class="container-fluid header-title">
         <div class="row">
-          <div class="col-sm-12">STL SAS Logistik</div>
+          <div class="col-sm-12"><?php echo $html_snippet->app_name("001", " / Conductores y Propietarios"); ?></div>
         </div>
       </div>
     </nav>
@@ -153,13 +154,12 @@ $js = $libs->get_js();
         <?php echo $app_menu->build_menu(); ?>
     <div class="container-fluid">
 
-      <div class="page-header" id="banner">
+      <div class="" id="banner">
         <div class="row">
           <div class="col-sm-12 text-right">
             <div id='add-button' class='btn btn-floating-mini btn-danger' title="Nuevo"><i class='md  md-add'></i></div>
           </div>
           <div class="col-sm-12 text-center">
-            <p class="lead">Gestión de Personas.<br><br></p>
              <div class="col-sm-12 text-right">
                 <p><?php echo $personas->get_personas(); ?></p>
              </div>
@@ -216,8 +216,8 @@ $js = $libs->get_js();
                       <input type="text" class="form-control" id="lic">
                       <label for="cod" class="">Licencia</label>
                     </div>
-                    <div class="col-lg-4" style="margin-top: 30px">
-                      <input type="text" class="form-control" id="lic_v">
+                    <div class="col-lg-3" style="margin-top: 30px">
+                      <?php echo $fun->datepicker("lic_v","dmy"); ?>
                       <label for="cod" class="">Vence</label>
                     </div>
                     <label class="col-lg-2 control-label"></label>
@@ -257,11 +257,11 @@ $js = $libs->get_js();
                     <label class="col-lg-2 control-label"></label>
                     <div class="col-lg-4" style="margin-top: 30px">
                       <?php echo $fincas->get_options_subnucleos("sn1"); ?>
-                      <label for="cod" class="">Subnucleo 1</label>
+                      <label for="cod" class="">Municipio 1</label>
                     </div>
                     <div class="col-lg-4" style="margin-top: 30px">
                       <?php echo $fincas->get_options_subnucleos("sn2"); ?>
-                      <label for="cod" class="">Subnucleo 2</label>
+                      <label for="cod" class="">Municipio 2</label>
                     </div>
                     <label class="col-lg-2 control-label"></label>
 
@@ -386,7 +386,7 @@ $js = $libs->get_js();
       });
       //guardar finca
       $('#btn_save').on('click', function() {
-
+        var vl = $("#lic_v_y").val()+'-'+$("#lic_v_m").val()+'-'+$("#lic_v_d").val();
         //ejecutamos ajax
         $.ajax({      
           url: "../../php/ajax_personas.php",     
@@ -398,7 +398,7 @@ $js = $libs->get_js();
                   tipo: $("#tipo").val(),
                   ced: $("#ced").val(),
                   lic: $("#lic").val(),
-                  lic_v: $("#lic_v").val(),
+                  lic_v: vl,
                   dir: $("#dir").val(),
                   tel: $("#tel").val(),
                   cel: $("#cel").val(),

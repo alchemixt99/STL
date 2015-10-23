@@ -127,7 +127,7 @@ $js = $libs->get_js();
     <nav id="topbar" class="toolbar toolbar-expanded mtr-light-blue-800">
       <div class="container-fluid header-title">
         <div class="row">
-          <div class="col-sm-12">STL SAS Logistic APP</div>
+          <div class="col-sm-12"><?php echo $html_snippet->app_name("001", " / Remisiones Fisicas"); ?></div>
         </div>
       </div>
     </nav>
@@ -147,13 +147,12 @@ $js = $libs->get_js();
         <?php echo $app_menu->build_menu(); ?>
     <div class="container-fluid">
 
-      <div class="page-header" id="banner">
+      <div class="" id="banner">
         <div class="row">
           <div class="col-sm-12 text-right">
             <div id='add-button' class='btn btn-floating-mini btn-danger' title="Nuevo"><i class='md  md-add'></i></div>
           </div>
           <div class="col-sm-12 text-center">
-            <p class="lead">Gestión de Remisiones Físicas.<br><br></p>
             <p><?php echo $rf->get_rfisicas(); ?></p>
           </div>
         </div>
@@ -183,6 +182,14 @@ $js = $libs->get_js();
                     <div class="col-lg-4" style="margin-top: 30px">
                       <input type="text" class="form-control " id="fin">
                       <label for="fin" class="">Termina</label>
+                    </div>
+                    <label class="col-lg-2 control-label"></label>
+                  </div>
+                  <div class="row">
+                  <label class="col-lg-2 control-label"></label>
+                    <div class="col-lg-8" style="margin-top: 30px">
+                      <input type="text" class="form-control " id="inter">
+                      <label for="ini" class="">Interventor</label>
                     </div>
                     <label class="col-lg-2 control-label"></label>
                   </div>
@@ -327,6 +334,7 @@ $js = $libs->get_js();
       $('#btn_save').on('click', function() {
         var ini = $("#ini").val();
         var fin = $("#fin").val();
+        var inter = $("#inter").val();
 
         if(ini<fin){
           $.ajax({      
@@ -336,6 +344,7 @@ $js = $libs->get_js();
             data: { 
                     action: "save",
                     ini: ini,
+                    inter: inter,
                     fin: fin
                   },
             success: function(data){    

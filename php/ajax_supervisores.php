@@ -55,6 +55,49 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 
 		$con->disconnect();
 
+	}//editar usuario
+	function edt_usuario(){	
+		$fun = new funciones();
+		$msg = new messages();
+		$response = new StdClass;
+
+		/*recibimos variables*/
+		$id=mysql_real_escape_string($_POST['id']);
+		$nomb=mysql_real_escape_string($_POST['nomb']);
+		$finc=mysql_real_escape_string($_POST['finc']);
+
+		/* Encriptamos clave */
+		//$pass = sha1(md5($pass));
+		if($nomb=="" || $finc==""){
+			$res=false;
+			$mes=$msg->get_msg("e005");
+		}else
+		{
+			$con = new con();
+			$con->connect();
+
+			/* verificamos que exista la cuenta para evitar redundancias*/
+			$res_us = $fun->existe("supervisores","su_id",$id);
+			if($res_us){
+				/* actualizamos datos del supervisor */
+				$cambios = 'su_nombre = "'.$nomb.'", su_fi_id = '.$finc;
+				$where = "su_id = ".$id;
+				$qry = $fun->actualizar("supervisores", $cambios, $where);
+				$resp = mysql_query($qry);
+				$res=true;
+				$mes=$msg->get_msg("e004");
+			}else{
+				$res=false;
+				$mes=$msg->get_msg("e029");
+			}
+		}			
+		
+		$response->res = $res;
+		$response->mes = $mes;
+		echo json_encode($response);
+
+		$con->disconnect();
+
 	}
 	//Borrar usuario
 	function remove_user(){
@@ -82,6 +125,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
       $action = $_POST['action'];
       switch($action) {
           case 'save' : add_usuario();break;
+          case 'edit' : edt_usuario();break;
           case 'change_pass' : change_usuario();break;
           case 'del_user' : remove_user();break;
       }

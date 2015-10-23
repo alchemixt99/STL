@@ -191,5 +191,37 @@ class funciones{
 		fputs($file,$content);
 		fclose($file);
 	}
+
+	function datepicker($id="",$f){
+		//año
+		$año ='	<select class="form-control valued" style="width:50px; float:left;" id="'.$id.'_y">';
+			for ($i=(date("Y")+1); $i >= 2000; $i--) { 
+				$año.='<option value="'.$i.'">'.$i.'</option>';
+			}   
+	    $año.=' </select>';
+		//mes
+		$meses = array('Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');
+		$mes ='	<select class="form-control valued" style="width:95px; float:left;" id="'.$id.'_m">';
+			for ($i=1; $i <= 12; $i++) { 
+				$mes.='<option value="'.$i.'">'.$meses[($i-1)].'</option>';
+			}   
+	    $mes.=' </select>';
+		//dia
+		$dia ='	<select class="form-control valued" style="width:40px; float:left;" id="'.$id.'_d">';
+			for ($i=1; $i <= 31; $i++) { 
+				$dia.='<option value="'.$i.'">'.$i.'</option>';
+			}   
+	    $dia.=' </select>';
+
+	    switch ($f) {
+	    	case 'dmy':
+	    		return $dia.' '.$mes.' '.$año;
+	    	break;
+	    }
+
+
+
+		
+	}
 }
 ?>

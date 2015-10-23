@@ -15,8 +15,9 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 		/*recibimos variables*/
 		$ini=$_POST["ini"];
 		$fin=$_POST["fin"];
+		$inter=$_POST["inter"];
 
-		if($ini=="" || $fin == ""){
+		if($ini=="" || $fin == "" || $inter == ""){
 			$res=false;
 			$mes=$msg->get_msg("e005");
 		}else{
@@ -24,8 +25,8 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 			$con->connect();
 
 			/* ingresamos datos de la finca */
-			$qry ="INSERT INTO tbl_remisiones_fisicas (rf_dig_ini, rf_dig_fin, rf_created, rf_estado)
-					VALUES (".$ini.",".$fin.",".$_SESSION["ses_id"].",1);";
+			$qry ="INSERT INTO tbl_remisiones_fisicas (rf_interventor, rf_dig_ini, rf_dig_fin, rf_created, rf_estado)
+					VALUES ('".$inter."',".$ini.",".$fin.",".$_SESSION["ses_id"].",1);";
 
 			$resp = mysql_query($qry);
 			if(!$resp){

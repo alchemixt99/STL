@@ -34,6 +34,8 @@ class messages{
 			"e026" => "Error al intentar realizar la consulta.",
 			"e027" => "Error al intentar autorizar el despacho, comuniquese con soporte, gracias.",
 			"e028" => "No existe el despacho que está buscando, comuniquese con soporte, gracias.",
+			"e029" => "Este supervisor no está registrado en el sistema.",
+			"e030" => "Error al cargar datos del inventario.",
 
 		];
 		/* ====================== */

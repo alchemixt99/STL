@@ -127,19 +127,17 @@ $js = $libs->get_js();
     <nav id="topbar" class="toolbar toolbar-expanded mtr-light-blue-800">
       <div class="container-fluid header-title">
         <div class="row">
-          <div class="col-sm-12">STL SAS Logistic APP</div>
+          <div class="col-sm-12"><?php echo $html_snippet->app_name("001", " / Inventarios"); ?></div>
         </div>
       </div>
     </nav>
 
     <nav class="toolbar toolbar-fixed">
       <div class="container-fluid">
-        
         <div class="toolbar-header">
           <a  id="headerToggle" href="#" class="menu-toggle" data-ripple-centered="true" data-ripple-color="#fff">
             <i class="md md-menu"></i>
           </a>
-          
         </div>
       </div>
     </nav>
@@ -147,14 +145,52 @@ $js = $libs->get_js();
         <?php echo $app_menu->build_menu(); ?>
     <div class="container-fluid">
 
-      <div class="page-header" id="banner">
+      <div class="" id="banner">
         <div class="row">
           <div class="col-sm-12 text-right">
             <div id='add-button' class='btn btn-floating-mini btn-danger' title="Nuevo"><i class='md  md-add'></i></div>
           </div>
           <div class="col-sm-12 text-center">
-            <p class="lead">Gestión de Inventarios.<br><br></p>
             <p><?php echo $inventario->get_inventario(); ?></p>
+          </div>
+        </div>
+      </div>
+      <div id="edt-modal" class="modal fade">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="md md-close"></i></button>
+              <h4 class="modal-title">Modificar Inventario</h4>
+            </div>
+            <div class="modal-body">
+              <!-- caja para mensajes -->
+              <div id="msg_box_e" style="display:none" class="alert alert-dismissible alert-success">
+                <button type="button" class="close" data-dismiss="alert"><i class="md md-clear"></i></button>
+                <div id="msg_body_e"></div>
+              </div>
+
+              <!-- formulario -->
+              <form class="form-horizontal" action="/" method="GET">
+                <fieldset>
+                  <div class="form-group">
+                    <label class="col-lg-2 control-label"></label>
+                    <div class="col-lg-8" style="margin-top: 30px">
+                      <input type="hidden" class="form-control" id="id_e">
+                      <input type="hidden" class="form-control" id="old_inv_e">
+                      <input type="text" class="form-control" id="inv_e">
+                      <label for="inventario" class="">Inventario (m3)</label>
+                    </div>
+                    <label class="col-lg-2 control-label"></label>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-12 text-right">
+                      <a href="#" id="btn_edit" class="btn btn-primary">Guardar</a>
+                    </div>
+                  </div>
+                </fieldset>
+              </form>
+              <!-- -->
+            </div>
           </div>
         </div>
       </div>
@@ -167,7 +203,10 @@ $js = $libs->get_js();
             </div>
             <div class="modal-body">
               <!-- caja para mensajes -->
-              <div id="msg_box"></div>
+              <div id="msg_box" style="display:none" class="alert alert-dismissible alert-success">
+                <button type="button" class="close" data-dismiss="alert"><i class="md md-clear"></i></button>
+                <div id="msg_body"></div>
+              </div>
 
               <!-- formulario -->
               <form class="form-horizontal" action="/" method="GET">
@@ -209,8 +248,28 @@ $js = $libs->get_js();
       </div>
     </div>
 <?php echo $html_snippet->load_footer(); ?>
-
     <script>
+
+      function editar_inv(i, obj){
+        $.ajax({      
+          url: "../../php/ajax_inventarios.php",     
+          dataType: "json",     
+          type: "POST",     
+          data: { 
+                  action: "get_singular",
+                  inv: i
+                },
+          success: function(data){    
+            if(data.res==true){       
+              $("#id_e").val(i);
+              $("#inv_e").val(data.mes);
+              $("#old_inv_e").val(data.mes);
+              $("#edt-modal").modal();
+            }
+          }
+        });
+      }
+
       function borrar_inv(i, obj){
         var c = confirm("Seguro desea borrar el inventario seleccionado?");
         if(c){
@@ -234,6 +293,7 @@ $js = $libs->get_js();
           });
         }
       }
+
       (function(){
         $("#add-button").click(function(){
           // Clean ripple
@@ -385,6 +445,32 @@ $js = $libs->get_js();
           }
         });
       });
+      //actualizar inventario
+      $('#btn_edit').on('click', function() {
+          $.ajax({      
+            url: "../../php/ajax_inventarios.php",     
+            dataType: "json",     
+            type: "POST",     
+            data: { 
+                    action: "update",
+                    id: $("#id_e").val(),
+                    inv: $("#inv_e").val(),
+                    oin: $("#old_inv_e").val()
+                  },
+            success: function(data){    
+              if(data.res==true){
+                $("#msg_box_e").fadeIn();
+                $("#msg_box_e").addClass("alert-success");
+                $("#msg_body_e").text(data.mes);
+                setTimeout(function(){location.reload();},2000);
+              }else if(data.res==false){
+                $("#msg_box_e").fadeIn();
+                $("#msg_box_e").addClass("alert-danger");
+                $("#msg_body_e").text(data.mes);
+              }
+            }
+          });        
+      });
       //guardar inventario
       $('#btn_save').on('click', function() {
         var body = "Está seguro que desea registrar la siguiente información:"+"\n"+
@@ -409,10 +495,14 @@ $js = $libs->get_js();
                   },
             success: function(data){    
               if(data.res==true){
-                $("#msg_box").html(data.mes);
+                $("#msg_box").fadeIn();
+                $("#msg_box").addClass("alert-success");
+                $("#msg_body").html(data.mes);
                 setTimeout(function(){location.reload();},2000);
               }else if(data.res==false){
-                $("#msg_box").text(data.mes);
+                $("#msg_box").fadeIn();
+                $("#msg_box").addClass("alert-danger");
+                $("#msg_body").html(data.mes);
               }
             }
           });

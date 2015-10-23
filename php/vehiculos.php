@@ -23,7 +23,6 @@ class vehiculos{
       while($row_res = mysql_fetch_assoc($res)) {
         $item.='
               <tr>
-                <td>'.$row_res["ve_id"].'</td>
                 <td>'.$row_res["ve_placa"].'</td>
                 <td>'.$row_res["pe_nombre"].'</td>
                 <td>'.$row_res["ve_timestamp"].'</td>
@@ -42,7 +41,6 @@ class vehiculos{
           <table class="table table-striped table-hover ">
             <thead>
               <tr>
-                <th>Id</th>
                 <th>Placa</th>
                 <th>Propietario</th>
                 <th>Fecha Registro</th>
