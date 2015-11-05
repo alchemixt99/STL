@@ -72,7 +72,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 						<th></th>
 						<th></th>
 						<th></th>
-						<th colspan="2" style="text-align:right">'.$btn_export.'</th>
+						<th colspan="4" style="text-align:right">'.$btn_export.'</th>
 					</tr></thead><tbody>';
 		$html_plain .= '
 					<table><thead>
@@ -103,9 +103,18 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 
 			if($row_des['de_sistema']==0){
 				$kdown='onkeydown="if (event.keyCode == 13) insert_cons('.$row_des['de_id'].')"';
-				$btn_sys = '<input style="border:none;width: 65%;" '.$kdown.' id="cons_'.$row_des['de_id'].'" placeholder="Consecutivo">';
+				$btn_sys = '<input style="border:none;width: 45%;" '.$kdown.' id="cons_'.$row_des['de_id'].'" placeholder="Consecutivo">';
 			}else{
 				$btn_sys = $row_des['de_sistema'];
+			}
+
+			if ($row_des['in_tipo_materia']==1) {
+				$tm="Troza";
+				$kdown='onkeydown="if (event.keyCode == 13) insert_des('.$row_des['de_id'].')"';
+				$btn_des = '<input style="border:none;width: 45%;" '.$kdown.' id="cons_'.$row_des['de_id'].'" placeholder="Consecutivo">';
+			} else {
+				$tm="Pulpa";
+				$btn_des = 'Yumbo';
 			}
 
 			//list-group
@@ -113,19 +122,14 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 			$item.='	<td title="Fecha Salida"><i class="md md-today"></i> '.$año."-".$mes."-".($dia+1).'</td>';
 			$item.='	<td title="Hora Salida"><i class="md md-access-alarm"></i> '.$row_des['tu_hora_ini'].'</td>';
 			$item.='	<td title="Finca"><i class="md md-place"></i> '.$row_des['fi_codigo'].'</td>';
-			$item.='	<td><i title="Nombre" class="md md-person"></i> '.$row_des['pe_nombre'].'</td>';
+			$item.='	<td title="Nombre"><i class="md md-person"></i> '.$row_des['pe_nombre'].'</td>';
 			$item.='	<td title="Placa"><i class="md md-drive-eta"></i> '.$row_des['ve_placa'].'</td>';
 			$item.='	<td title="ICA"><i class="md md-description"></i> '.$row_des['de_ica'].'</td>';
 			$item.='	<td title="Consecutivo del sistema"><i class="md md-input"></i>'.$btn_sys.'</td>';
+			$item.='	<td title="Destino"><i class="md md-input"></i>'.$btn_des.'</td>';
 			$item.='</tr>';
 
 			//html_plain
-			if ($row_des['in_tipo_materia']==1) {
-				$tm="Troza";
-			} else {
-				$tm="Pulpa";
-			}
-			
 			$html_plain.='<tr>';
 			$html_plain.='	<td>'.$año."-".$mes."-".($dia+1).'</td>';
 			$html_plain.='	<td>'.$row_des['tu_hora_ini'].'</td>';
@@ -142,7 +146,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 			$html_plain.='	<td>'.$row_des['de_ica'].'</td>';
 			$html_plain.='	<td>'.$row_des['de_sistema'].'</td>';
 			$html_plain.='	<td>'.$row_des['especie_ica'].'</td>';
-			$html_plain.='	<td></td>';
+			$html_plain.='	<td>'.$btn_des.'</td>';
 			$html_plain.='	<td>'.$tm.'</td>';
 			$html_plain.='</tr>';
 

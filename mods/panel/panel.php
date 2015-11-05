@@ -23,12 +23,16 @@ $js = $libs->get_js();
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
       
+    <link rel="stylesheet" href="chart/morris.css" type="text/css"> 
+
     <script src="js/jquery.min.js"></script>
     <script src="js/jquery.easing.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/jquery.mtr-ripple.js"></script>
     <script src="js/jquery.mtr-panel.js"></script>
     <script src="js/jquery.mtr-header.js"></script>
+    <script src="chart/raphael-min.js"></script>
+    <script src="chart/morris.min.js"></script>
     <?php 
       echo $js;
       echo $css;
@@ -144,11 +148,44 @@ $js = $libs->get_js();
 <?php echo $app_menu->build_menu(); ?>
     <div class="container-fluid">
 
-      <div class="page-header" id="banner">
+      <div class="page-header">
         <div class="row">
-          <div class="col-sm-12 text-center">
-            <p class="lead"><br><br><br><br><br><br><br><br><br></p>
+          <div class="col-sm-1"></div>
+          <div class="col-sm-5">
+            <div class="panel panel-primary">
+              <div class="panel-heading">
+                <h3 class="panel-title">Despachos Programados</h3>
+              </div>
+              <div class="panel-body" id="chart_001" style="height: 250px;">
+                
+              </div>
+            </div>
           </div>
+          <div class="col-sm-5">
+            <div class="panel panel-primary">
+              <div class="panel-heading">
+                <h3 class="panel-title">Fincas Activas</h3>
+              </div>
+              <div class="panel-body" id="chart_002" style="height: 250px;">
+                
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-1"></div>
+        </div>
+        <div class="row">
+          <div class="col-sm-1"></div>
+          <div class="col-sm-10">
+            <div class="panel panel-primary">
+              <div class="panel-heading">
+                <h3 class="panel-title">Estado de Inventarios</h3>
+              </div>
+              <div class="panel-body" id="chart_003" style="height: 250px;">
+                
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-1"></div>
         </div>
       </div>
 
@@ -171,6 +208,77 @@ $js = $libs->get_js();
     </div>
 <?php echo $html_snippet->load_footer(); ?>
     <script>
+    function plot_morris(x,y,data,l,e,t){
+      switch(t){
+        case "line":
+          new Morris.Line({
+            element: e,
+            data: data,
+            xkey: x,
+            ykeys: [y],
+            labels: [l],
+            resize: true
+          });
+        break;
+        case "bar":
+          new Morris.Bar({
+            element: e,
+            data: data,
+            xkey: x,
+            ykeys: [y],
+            labels: [l],
+            fillOpacity: 0.6,
+            hideHover: 'auto',
+            behaveLikeLine: true,
+            resize: true,
+            pointFillColors:['#ffffff'],
+            pointStrokeColors: ['black'],
+            lineColors:['green']
+          });
+        break;
+        case "donut":
+          new Morris.Donut({
+            element: e,
+            data: data,
+            resize: true
+          });
+        break;
+      }
+    }
+    function get_chart(id){
+      $.ajax({      
+        url: "../../php/ajax_charts.php",     
+        dataType: "json",     
+        type: "POST",     
+        data: { 
+                action: "get_00"+id
+              },
+        success: function(resp){    
+          if(resp.res==true){
+            var r= resp.mes;
+            switch(id){
+              case 1:
+                plot_morris("month","value",r,'Value','chart_00'+id,'line');
+              break;
+              case 2:
+                plot_morris("lb","val",r,'-','chart_00'+id,'donut');
+              break;
+              case 3:
+                plot_morris("id",'vol',r,'Volumen Restante','chart_00'+id,'bar');
+              break;
+            }
+          }
+          else{
+            
+          }
+        }
+      });
+    }
+    $(document).ready(function(){
+      get_chart(1);      
+      get_chart(2);      
+      get_chart(3);      
+    });
       (function(){
         var $button = $("<div id='source-button' class='btn btn-floating-mini btn-primary'><i class='md  md-developer-mode'></i></div>").click(function(){
           // Clean ripple

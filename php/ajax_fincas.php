@@ -114,14 +114,25 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 		/* ingresamos datos de la finca */
 		$item="";
 		$checked = "";
-		$qry_lotes ='SELECT idlote, especie_ica, ano_plant, vol_ica_m3 FROM tbl_matriz_ica WHERE codfinca="'.$cod.'";';
+		if(isset($_POST['aut']) && $_POST['aut']){
+			$qry_lotes ='SELECT idlote, especie_ica, ano_plant, vol_ica_m3, codfinca, fi_id FROM tbl_matriz_ica 
+						INNER JOIN tbl_fincas ON fi_codigo = codfinca  
+						WHERE codfinca="'.$cod.'";';
+			}else{
+			$qry_lotes ='SELECT idlote, especie_ica, ano_plant, vol_ica_m3, codfinca FROM tbl_matriz_ica 
+						WHERE codfinca="'.$cod.'";';	
+			}
 		$res_lotes = mysql_query($qry_lotes);
+		//echo $qry_lotes;
 		while($row_lotes = mysql_fetch_assoc($res_lotes)) {
 			//autorizados true?
 			if(isset($_POST['aut']) && $_POST['aut']){
 				$js_fn = 'save_check("'.$cod.'", this)';
 				$onclick = "onclick='".$js_fn."'";
-				$qry_aut='SELECT * FROM tbl_lotes_autorizados INNER JOIN tbl_fincas ON tbl_fincas.fi_codigo = "'.$cod.'" AND tbl_lotes_autorizados.la_idlote = "'.$row_lotes['idlote'].'" AND tbl_lotes_autorizados.la_estado < 99;';
+				$qry_aut='SELECT * FROM tbl_lotes_autorizados INNER JOIN tbl_fincas ON tbl_fincas.fi_codigo = "'.$cod.'" 
+							AND tbl_lotes_autorizados.la_fi_id = "'.$row_lotes['fi_id'].'" 
+							AND tbl_lotes_autorizados.la_idlote = "'.$row_lotes['idlote'].'" 
+							AND tbl_lotes_autorizados.la_estado = 1;';
 				$res_aut = mysql_query($qry_aut);
 				$row_aut = mysql_fetch_assoc($res_aut);
 				$cant_aut = mysql_num_rows($res_aut);
@@ -166,7 +177,6 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 						INNER JOIN tbl_fincas ON tbl_fincas.fi_id=tbl_control_inventarios.ci_fi_id 
 						INNER JOIN tbl_lotes_autorizados ON tbl_lotes_autorizados.la_id = tbl_control_inventarios.ci_in_lote ;';
 		$res_lotes = mysql_query($qry_lotes);
-		
 		while($row_res = mysql_fetch_assoc($res_lotes)) {
 	        $item.='
 	              <option value="'.$row_res["fi_id"].'">'.$row_res["fi_codigo"].'</option>

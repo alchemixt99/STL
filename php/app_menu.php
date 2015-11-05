@@ -42,6 +42,21 @@ class app_menu{
                     <ul class="dropdown-menu" role="menu">
                     '.$menuitem.'
                     </ul>
+                  </li>
+                  <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Reportes <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="reportes.php" target="_blank" id="" class="">Reporte de Consecutivos ICA generados</a></li>              
+                      <li><a href="reportes.php" target="_blank" id="" class="">Reporte de Despachos Generados</a></li>              
+                      <li><a href="reportes.php" target="_blank" id="" class="">Reporte de Estado de los lotes</a></li>              
+                    </ul>
+                  </li>
+                  <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Programación (Cronjobs) <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="reportes.php" target="_blank" id="" class="">Despachos</a></li>              
+                      <li><a href="reportes.php" target="_blank" id="" class="">Consecutivos ICA</a></li>              
+                    </ul>
                   </li>';
       $menuitem=$dropdown;      
     }

@@ -199,15 +199,15 @@ $js = $libs->get_js();
                   </div>
                   <div class="panel-body">
                       <div class="col-lg-2" style="margin-top: 10px">
-                        <input type="text" class="form-control" id="tipo">
-                        <label for="cod" class="">Tipo</label>
+                        <?php echo $html_snippet->cbx_config("tipo"); ?>
+                        <label for="cod" class="">Configuración</label>
                       </div>
                       <div class="col-lg-2" style="margin-top: 10px">
                         <input type="text" class="form-control" id="marca">
                         <label for="cod" class="">Marca</label>
                       </div>
                       <div class="col-lg-2" style="margin-top: 10px">
-                        <input type="text" class="form-control" id="modelo">
+                        <?php echo $html_snippet->cbx_years("modelo",1975,2020); ?>
                         <label for="cod" class="">Modelo</label>
                       </div>
                       <div class="col-lg-2" style="margin-top: 10px">
@@ -237,6 +237,10 @@ $js = $libs->get_js();
                       <div class="col-lg-4" style="margin-top: 10px">
                         <input type="text" class="form-control" id="emp">
                         <label for="emp" class="">Empresa</label>
+                      </div>
+                      <div class="col-lg-2" style="margin-top: 10px; display:none" id="cap_cont_1">
+                        <input type="text" class="form-control" id="capacidad">
+                        <label for="cod" class="">Capacidad (m<sup>3</sup>)</label>
                       </div>
                   </div>
                 </div>
@@ -294,7 +298,7 @@ $js = $libs->get_js();
                         <input type="text" class="form-control" id="marca_rem">
                         <label for="cod" class="">Marca</label>
                       </div>
-                      <div class="col-lg-2" style="margin-top: 10px">
+                      <div class="col-lg-2" style="margin-top: 10px" id="cap_cont_2">
                         <input type="text" class="form-control" id="capacidad">
                         <label for="cod" class="">Capacidad (m<sup>3</sup>)</label>
                       </div>

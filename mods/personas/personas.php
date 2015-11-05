@@ -283,6 +283,48 @@ $js = $libs->get_js();
 <?php echo $html_snippet->load_footer(); ?>
 
     <script>
+    function act_persona(id, obj){
+      var c = confirm("¿Seguro que desea habilitar a este conductor?");
+      if(c){
+         $.ajax({      
+          url: "../../php/ajax_personas.php",     
+          dataType: "json",     
+          type: "POST",     
+          data: { 
+                  action: "act",
+                  id: id
+                },
+          success: function(data){    
+          if(data.res==true){         
+            location.reload();
+          }
+          else{
+            alert(data.mes);
+          }
+        }});
+      }
+    }
+    function des_persona(id, obj){
+      var c = confirm("¿Seguro que desea deshabilitar a este conductor?");
+      if(c){
+         $.ajax({      
+          url: "../../php/ajax_personas.php",     
+          dataType: "json",     
+          type: "POST",     
+          data: { 
+                  action: "des",
+                  id: id
+                },
+          success: function(data){    
+          if(data.res==true){         
+            location.reload();
+          }
+          else{
+            alert(data.mes);
+          }
+        }});
+      }
+    }
       (function(){
         $("#add-button").click(function(){
           $("#add-modal").modal();
