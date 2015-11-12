@@ -249,7 +249,22 @@ $js = $libs->get_js();
     </div>
 <?php echo $html_snippet->load_footer(); ?>
     <script>
-
+      $("#inventario").click(function(){
+        $.ajax({      
+          url: "../../php/ajax_inventarios.php",     
+          dataType: "json",     
+          type: "POST",     
+          data: { 
+                  action: "get_cap",
+                  cod: $("#cod").val(),
+                  lote: $("#lote").val()
+                },
+          success: function(data){    
+            alert("Capacidad del lote: "+data.mes+" m3");
+          }
+        });
+      });
+        
       function editar_inv(i, obj){
         $.ajax({      
           url: "../../php/ajax_inventarios.php",     
@@ -295,6 +310,9 @@ $js = $libs->get_js();
       }
 
       (function(){
+        $("#inventario").on("click", function(){
+          
+        });
         $("#add-button").click(function(){
           // Clean ripple
           /*$(this).parent().find('.mtr-ripple-wrapper').remove();
@@ -378,6 +396,7 @@ $js = $libs->get_js();
 
     });
   $(document).ready(function(){
+
       //==============AJAX===============
       //logout
       $('#btn_logout').on('click', function() {

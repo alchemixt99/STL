@@ -178,7 +178,7 @@ $js = $libs->get_js();
           <div class="col-sm-10">
             <div class="panel panel-primary">
               <div class="panel-heading">
-                <h3 class="panel-title">Estado de Inventarios</h3>
+                <h3 class="panel-title">Estado de Lotes</h3>
               </div>
               <div class="panel-body" id="chart_003" style="height: 250px;">
                 
@@ -208,7 +208,7 @@ $js = $libs->get_js();
     </div>
 <?php echo $html_snippet->load_footer(); ?>
     <script>
-    function plot_morris(x,y,data,l,e,t){
+    function plot_morris(x,y,yy,data,l,ll,e,t){
       switch(t){
         case "line":
           new Morris.Line({
@@ -227,6 +227,22 @@ $js = $libs->get_js();
             xkey: x,
             ykeys: [y],
             labels: [l],
+            fillOpacity: 0.6,
+            hideHover: 'auto',
+            behaveLikeLine: true,
+            resize: true,
+            pointFillColors:['#ffffff'],
+            pointStrokeColors: ['black'],
+            lineColors:['green']
+          });
+        break;
+        case "bars":
+          new Morris.Bar({
+            element: e,
+            data: data,
+            xkey: x,
+            ykeys: [y,yy],
+            labels: [l,ll],
             fillOpacity: 0.6,
             hideHover: 'auto',
             behaveLikeLine: true,
@@ -258,13 +274,13 @@ $js = $libs->get_js();
             var r= resp.mes;
             switch(id){
               case 1:
-                plot_morris("month","value",r,'Value','chart_00'+id,'line');
+                plot_morris("month","value",0,r,'Value',"",'chart_00'+id,'line');
               break;
               case 2:
-                plot_morris("lb","val",r,'-','chart_00'+id,'donut');
+                plot_morris("lb","val",0,r,'-',"",'chart_00'+id,'donut');
               break;
               case 3:
-                plot_morris("id",'vol',r,'Volumen Restante','chart_00'+id,'bar');
+                plot_morris("id",'vol_i','vol_a',r,'Volumen Total',"Volumen Restante",'chart_00'+id,'bars');
               break;
             }
           }

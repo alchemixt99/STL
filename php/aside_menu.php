@@ -32,7 +32,9 @@ class aside_menu{
         switch ($row_res['pe_permiso']) {
           case 1://superAdmin
               $script.='$("#usuarios").on("click", function(){$(location).attr("href","../users/users.php"); });';
+              $script.='$("#reportar").on("click", function(){$(location).attr("href","../reportar/reportar.php"); });';
               $menuitem.='<li><a href="#" id="usuarios" class=""><i class="md md-user"></i>Usuarios</a></li>';
+              $menuitem.='<li><a href="#" id="reportar" class=""><i class="md md-user"></i>Reportar Consecutivo</a></li>';
               $icon='<a href="#" class="btn btn-floating-mini btn-warning" title="'.$row_res['pe_descripcion'].'" data-ripple-centered=""><i class="md md-account-circle"></i></a>';
             break;
           case 2: //Jefeop

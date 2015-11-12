@@ -173,6 +173,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 			//echo "QUERY: ".$qry;
 			$resp = mysql_query($qry);
 			$cant=mysql_num_rows($resp);
+			$script = '<script></script>';
 			if($cant>0){
 				$item='';
 				while($row_resp = mysql_fetch_assoc($resp)){
@@ -186,7 +187,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 			        <label for="lote" class="">Lote</label>
 			    ';
 				$res=true;
-				$mes=$html;
+				$mes=$script.$html;
 
 
 			}else{
@@ -330,6 +331,33 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 		$response->mes = $mes;
 		echo json_encode($response);
 	}
+	//traer inventario x
+	function get_cap(){
+		$fun = new funciones();
+		$msg = new messages();
+		$response = new StdClass;
+
+		/*recibimos variables*/
+		$cod=$_POST["cod"];
+		$lote=$_POST["lote"];
+		$qry_cap = "SELECT vol_ica_m3 FROM `tbl_matriz_ica` 
+					INNER JOIN tbl_fincas ON fi_codigo = codfinca
+					INNER JOIN tbl_lotes_autorizados ON la_idlote = idlote
+					WHERE fi_id = '".$cod."' AND la_id = ".$lote;
+		$res_cap=$fun->get_array($qry_cap);
+		if ($res_cap) {
+			//$fun->print_array($res_inv);
+			$res=true;
+			$mes=$res_cap[0]['vol_ica_m3'];
+		}else{
+			$res=false;
+			$mes=$msg->get_msg("e030");
+		}
+		
+		$response->res = $res;
+		$response->mes = $mes;
+		echo json_encode($response);
+	}
   //validamos si es una petición ajax
   if(isset($_POST['action']) && !empty($_POST['action'])) {
       $action = $_POST['action'];
@@ -340,6 +368,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
           case 'get_supervisores' : supervisores();break;
           case 'del_inventario' : remove_inv();break;
           case 'get_singular' : get_single();break;
+          case 'get_cap' : get_cap();break;
       }
   }
 ?>

@@ -35,6 +35,7 @@ class rfisicas{
         $item.='
               <tr>
                 <td>'.$row_res["rf_timestamp"].'</td>
+                <td>'.$row_res["rf_persona_entrega"].'</td>
                 <td>'.$row_res["rf_interventor"].'</td>
                 <td>'.$row_res["rf_dig_ini"].'</td>
                 <td>'.$row_res["rf_dig_fin"].'</td>
@@ -58,6 +59,7 @@ class rfisicas{
             <thead>
               <tr>
                 <th>Fecha Registro</th>
+                <th>Recibido</th>
                 <th>Interventor</th>
                 <th>Inicia</th>
                 <th>Termina</th>

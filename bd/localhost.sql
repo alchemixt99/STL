@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 23-10-2015 a las 11:45:14
+-- Tiempo de generación: 12-11-2015 a las 08:17:25
 -- Versión del servidor: 5.6.25
 -- Versión de PHP: 5.6.11
 
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `tbl_control_inventarios` (
   `ci_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `ci_created` int(11) NOT NULL,
   `ci_estado` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `tbl_control_inventarios`
@@ -61,7 +61,8 @@ CREATE TABLE IF NOT EXISTS `tbl_control_inventarios` (
 
 INSERT INTO `tbl_control_inventarios` (`ci_id`, `ci_fi_id`, `ci_in_lote`, `ci_vol_ini`, `ci_vol_act`, `ci_timestamp`, `ci_created`, `ci_estado`) VALUES
 (69, 47, 109, 310, 190, '2015-10-23 05:05:13', 17, 1),
-(70, 51, 120, 714.3, 624.3, '2015-10-23 08:30:39', 17, 1);
+(70, 51, 120, 714.3, 624.3, '2015-10-23 08:30:39', 17, 1),
+(71, 52, 122, 803.1, 683.1, '2015-10-27 21:40:16', 20, 1);
 
 -- --------------------------------------------------------
 
@@ -78,22 +79,30 @@ CREATE TABLE IF NOT EXISTS `tbl_despachos` (
   `de_inv_rest` int(11) NOT NULL COMMENT 'inventario restante en ese momento del registro',
   `de_ica` varchar(25) NOT NULL,
   `de_sistema` int(11) NOT NULL,
+  `de_ica_observacion` text NOT NULL COMMENT 'Observaciones en caso de ser anulado',
   `de_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `de_created` int(11) NOT NULL,
   `de_estado` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=267 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=274 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `tbl_despachos`
 --
 
-INSERT INTO `tbl_despachos` (`de_id`, `de_pe_id`, `de_ve_capacidad_m3`, `de_in_id`, `de_tu_id`, `de_inv_rest`, `de_ica`, `de_sistema`, `de_timestamp`, `de_created`, `de_estado`) VALUES
-(261, 32, 15, 125, 10, 75, '2008545413', 265602, '2015-10-23 08:33:17', 17, 2),
-(262, 33, 15, 125, 11, 60, '2008545414', 265603, '2015-10-23 08:33:17', 17, 2),
-(263, 34, 15, 125, 12, 45, '2008545415', 265604, '2015-10-23 08:33:17', 17, 2),
-(264, 35, 15, 125, 13, 30, '2008545416', 265605, '2015-10-23 08:33:17', 17, 2),
-(265, 36, 15, 125, 14, 15, '2008545417', 265606, '2015-10-23 08:33:17', 17, 2),
-(266, 32, 15, 125, 17, 0, '2008545418', 265607, '2015-10-23 08:33:17', 17, 2);
+INSERT INTO `tbl_despachos` (`de_id`, `de_pe_id`, `de_ve_capacidad_m3`, `de_in_id`, `de_tu_id`, `de_inv_rest`, `de_ica`, `de_sistema`, `de_ica_observacion`, `de_timestamp`, `de_created`, `de_estado`) VALUES
+(261, 32, 15, 125, 10, 75, '2008545413', 0, '', '2015-10-23 08:33:17', 17, 2),
+(262, 33, 15, 125, 11, 60, '2008545414', 265603, 'adasdasd', '2015-10-23 08:33:17', 17, 3),
+(263, 34, 15, 125, 12, 45, '2008545415', 265604, '', '2015-10-23 08:33:17', 17, 2),
+(264, 35, 15, 125, 13, 30, '2008545416', 265605, '', '2015-10-23 08:33:17', 17, 2),
+(265, 36, 15, 125, 14, 15, '2008545417', 265606, '', '2015-10-23 08:33:17', 17, 2),
+(266, 32, 15, 125, 17, 0, '2008545418', 265607, '', '2015-10-23 08:33:17', 17, 2),
+(267, 32, 15, 126, 10, 105, '200468900', 1234566, '', '2015-10-27 22:02:11', 21, 2),
+(268, 33, 15, 126, 11, 90, '200468901', 1234567, '', '2015-10-27 22:02:11', 21, 2),
+(269, 34, 15, 126, 12, 75, '200468902', 1234568, '', '2015-10-27 22:02:11', 21, 2),
+(270, 35, 15, 126, 13, 60, '200468903', 1234569, '', '2015-10-27 22:02:11', 21, 2),
+(271, 36, 15, 126, 14, 45, '200468904', 1234570, '', '2015-10-27 22:02:11', 21, 2),
+(272, 37, 20, 126, 15, 25, '200468905', 1234571, '', '2015-10-27 22:02:11', 21, 2),
+(273, 32, 15, 126, 17, 10, '200468906', 1234572, '', '2015-10-27 22:02:11', 21, 2);
 
 -- --------------------------------------------------------
 
@@ -108,7 +117,7 @@ CREATE TABLE IF NOT EXISTS `tbl_fincas` (
   `fi_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `fi_created` int(11) NOT NULL,
   `fi_estado` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `tbl_fincas`
@@ -119,7 +128,8 @@ INSERT INTO `tbl_fincas` (`fi_id`, `fi_codigo`, `fi_sn_id`, `fi_timestamp`, `fi_
 (48, '11GRECI', 96, '2015-10-14 05:11:15', 17, 1),
 (49, '12PINTA', 97, '2015-10-19 15:02:18', 14, 1),
 (50, '11EMILI', 93, '2015-10-22 18:00:50', 17, 1),
-(51, '11GUAYA', 93, '2015-10-23 08:28:30', 17, 1);
+(51, '11GUAYA', 93, '2015-10-23 08:28:30', 17, 1),
+(52, '15ALTO_', 105, '2015-10-27 21:22:31', 17, 1);
 
 -- --------------------------------------------------------
 
@@ -139,15 +149,16 @@ CREATE TABLE IF NOT EXISTS `tbl_inventario` (
   `in_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `in_created` int(11) NOT NULL,
   `in_estado` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=126 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=127 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `tbl_inventario`
 --
 
 INSERT INTO `tbl_inventario` (`in_id`, `in_fi_id`, `in_supervisor`, `in_mt_cubico`, `in_mt_restante`, `in_lote`, `in_tipo_materia`, `in_pe_id`, `in_timestamp`, `in_created`, `in_estado`) VALUES
-(124, 47, '31', 120, 100, '109', 1, 0, '2015-10-23 08:31:47', 17, 99),
-(125, 51, '31', 90, 0, '120', 2, 0, '2015-10-23 08:44:25', 17, 1);
+(124, 47, '31', 120, 100, '109', 1, 0, '2015-11-05 07:32:54', 17, 1),
+(125, 51, '31', 90, 0, '120', 2, 0, '2015-10-23 08:44:25', 17, 1),
+(126, 52, '38', 120, 10, '122', 2, 0, '2015-10-27 22:12:33', 20, 1);
 
 -- --------------------------------------------------------
 
@@ -162,7 +173,7 @@ CREATE TABLE IF NOT EXISTS `tbl_lotes_autorizados` (
   `la_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `la_created` int(11) NOT NULL,
   `la_estado` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=122 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=123 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `tbl_lotes_autorizados`
@@ -181,7 +192,8 @@ INSERT INTO `tbl_lotes_autorizados` (`la_id`, `la_fi_id`, `la_idlote`, `la_times
 (118, 51, '8', '2015-10-23 08:28:30', 17, 1),
 (119, 51, '17', '2015-10-23 08:28:30', 17, 1),
 (120, 51, '5', '2015-10-23 08:28:30', 17, 1),
-(121, 51, '6', '2015-10-23 08:28:30', 17, 1);
+(121, 51, '6', '2015-10-23 08:28:30', 17, 1),
+(122, 52, 'I215', '2015-10-27 21:22:31', 17, 1);
 
 -- --------------------------------------------------------
 
@@ -3829,7 +3841,7 @@ CREATE TABLE IF NOT EXISTS `tbl_personas` (
   `pe_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `pe_created` int(11) NOT NULL,
   `pe_estado` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `tbl_personas`
@@ -3837,12 +3849,12 @@ CREATE TABLE IF NOT EXISTS `tbl_personas` (
 
 INSERT INTO `tbl_personas` (`pe_id`, `pe_nombre`, `pe_tel`, `pe_cedula`, `pe_licencia`, `pe_licencia_vigencia`, `pe_dir`, `pe_cel`, `pe_tipo`, `pe_ve_id`, `pe_f1`, `pe_f2`, `pe_f3`, `pe_timestamp`, `pe_created`, `pe_estado`) VALUES
 (31, 'Propietario Nombre', '1234567', '0000000', '', '0000-00-00', 'Dir propietario', '1234567890', 1, 0, 0, 0, 0, '2015-10-19 15:30:14', 21, 1),
-(32, 'Conductor A-001', '1234568', '101', '000000000001', '2025-05-15', 'value', '1234567890', 2, 25, 93, 97, 0, '2015-10-19 15:30:09', 21, 1),
-(33, 'Conductor A-002', '1234569', '102', '000000000001', '2025-05-15', 'value', '1234567890', 2, 26, 93, 97, 0, '2015-10-19 15:30:09', 21, 1),
-(34, 'Conductor A-003', '1234570', '103', '000000000001', '2025-05-15', 'value', '1234567890', 2, 27, 93, 97, 0, '2015-10-19 15:30:09', 21, 1),
-(35, 'Conductor A-004', '1234571', '104', '000000000001', '2025-05-15', 'value', '1234567890', 2, 28, 93, 97, 0, '2015-10-19 15:30:09', 21, 1),
-(36, 'Conductor A-005', '1234572', '105', '000000000001', '2025-05-15', 'value', '1234567890', 2, 29, 93, 97, 0, '2015-10-19 15:30:09', 21, 1),
-(37, 'Conductor A-006', '1234573', '106', '000000000001', '2025-05-15', 'value', '1234567890', 2, 30, 93, 97, 0, '2015-10-19 15:30:09', 21, 1);
+(32, 'Conductor A-001', '1234568', '101', '000000000001', '2025-05-15', 'value', '1234567890', 2, 25, 105, 97, 0, '2015-11-05 08:56:36', 21, 1),
+(33, 'Conductor A-002', '1234569', '102', '000000000001', '2025-05-15', 'value', '1234567890', 2, 26, 105, 97, 0, '2015-10-27 21:52:18', 21, 1),
+(34, 'Conductor A-003', '1234570', '103', '000000000001', '2025-05-15', 'value', '1234567890', 2, 27, 105, 97, 0, '2015-11-05 09:28:46', 21, 1),
+(35, 'Conductor A-004', '1234571', '104', '000000000001', '2025-05-15', 'value', '1234567890', 2, 28, 105, 97, 0, '2015-10-27 21:52:26', 21, 1),
+(36, 'Conductor A-005', '1234572', '105', '000000000001', '2025-05-15', 'value', '1234567890', 2, 29, 105, 97, 0, '2015-10-27 21:52:30', 21, 1),
+(37, 'Conductor A-006', '1234573', '106', '000000000001', '2025-05-15', 'value', '1234567890', 2, 30, 105, 97, 0, '2015-10-27 21:52:33', 21, 1);
 
 -- --------------------------------------------------------
 
@@ -3856,18 +3868,42 @@ CREATE TABLE IF NOT EXISTS `tbl_remisiones_fisicas` (
   `rf_dig_ini` int(11) NOT NULL,
   `rf_dig_fin` int(11) NOT NULL,
   `rf_cant_usados` int(11) NOT NULL,
+  `rf_persona_entrega` varchar(30) NOT NULL,
   `rf_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `rf_created` int(11) NOT NULL,
   `rf_estado` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `tbl_remisiones_fisicas`
 --
 
-INSERT INTO `tbl_remisiones_fisicas` (`rf_id`, `rf_interventor`, `rf_dig_ini`, `rf_dig_fin`, `rf_cant_usados`, `rf_timestamp`, `rf_created`, `rf_estado`) VALUES
-(10, '', 2008545401, 2008546401, 18, '2015-10-23 09:31:17', 20, 99),
-(11, 'Interventor rf uno', 2008546402, 2008547401, 0, '2015-10-23 08:32:31', 17, 1);
+INSERT INTO `tbl_remisiones_fisicas` (`rf_id`, `rf_interventor`, `rf_dig_ini`, `rf_dig_fin`, `rf_cant_usados`, `rf_persona_entrega`, `rf_timestamp`, `rf_created`, `rf_estado`) VALUES
+(10, '', 2008545401, 2008546401, 18, 'Persona 1', '2015-11-12 04:43:08', 20, 1),
+(11, 'Interventor rf uno', 2008546402, 2008547401, 0, 'Persona 2', '2015-11-12 04:43:13', 17, 1),
+(12, 'Interventor aaa', 200468900, 200469900, 7, 'Persona 3', '2015-11-12 04:43:18', 20, 99);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tbl_reporte_consecutivo`
+--
+
+CREATE TABLE IF NOT EXISTS `tbl_reporte_consecutivo` (
+  `rp_id` int(11) NOT NULL,
+  `rp_consecutivo` varchar(30) NOT NULL,
+  `rp_causa` varchar(30) NOT NULL,
+  `rp_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `rp_created` int(11) NOT NULL,
+  `rp_estado` int(11) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `tbl_reporte_consecutivo`
+--
+
+INSERT INTO `tbl_reporte_consecutivo` (`rp_id`, `rp_consecutivo`, `rp_causa`, `rp_timestamp`, `rp_created`, `rp_estado`) VALUES
+(1, '123123123', 'Robo', '2015-11-12 07:06:55', 14, 1);
 
 -- --------------------------------------------------------
 
@@ -3935,7 +3971,7 @@ CREATE TABLE IF NOT EXISTS `tbl_supervisores` (
   `su_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `su_created` int(11) NOT NULL,
   `su_estado` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `tbl_supervisores`
@@ -3948,7 +3984,8 @@ INSERT INTO `tbl_supervisores` (`su_id`, `su_nombre`, `su_fi_id`, `su_timestamp`
 (34, 'Supervisor cuatro', 48, '2015-10-19 19:57:09', 17, 1),
 (35, 'Supervisor cinco', 50, '2015-10-22 18:01:31', 17, 1),
 (36, 'Supervisor YX', 48, '2015-10-22 22:49:38', 17, 99),
-(37, 'asdasdasd', 49, '2015-10-22 22:50:27', 17, 99);
+(37, 'asdasdasd', 49, '2015-10-22 22:50:27', 17, 99),
+(38, 'Supervisor seis', 52, '2015-10-27 21:26:06', 20, 1);
 
 -- --------------------------------------------------------
 
@@ -4020,7 +4057,7 @@ INSERT INTO `tbl_usuarios` (`us_id`, `us_cc`, `us_tipo`, `us_nombre`, `us_usuari
 
 CREATE TABLE IF NOT EXISTS `tbl_vehiculos` (
   `ve_id` int(11) NOT NULL,
-  `ve_tipo_vehiculo` int(11) NOT NULL,
+  `ve_tipo_vehiculo` varchar(11) NOT NULL,
   `ve_modelo` int(11) NOT NULL,
   `ve_marca` varchar(40) NOT NULL,
   `ve_color` varchar(40) NOT NULL,
@@ -4033,6 +4070,7 @@ CREATE TABLE IF NOT EXISTS `tbl_vehiculos` (
   `ve_tecno_vence` date NOT NULL,
   `ve_empresa` varchar(60) NOT NULL,
   `ve_empresa_telefono` varchar(60) NOT NULL,
+  `ve_t_op` varchar(30) NOT NULL COMMENT 'Tarjeta de Operación',
   `ve_placa` varchar(10) NOT NULL,
   `ve_remolque_tipo` varchar(30) NOT NULL,
   `ve_remolque_color` varchar(20) NOT NULL,
@@ -4045,19 +4083,21 @@ CREATE TABLE IF NOT EXISTS `tbl_vehiculos` (
   `ve_linea` varchar(60) NOT NULL,
   `ve_created` int(11) NOT NULL,
   `ve_estado` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `tbl_vehiculos`
 --
 
-INSERT INTO `tbl_vehiculos` (`ve_id`, `ve_tipo_vehiculo`, `ve_modelo`, `ve_marca`, `ve_color`, `ve_nro_motor`, `ve_nro_chasis`, `ve_soat`, `ve_soat_nro`, `ve_soat_vence`, `ve_tecno`, `ve_tecno_vence`, `ve_empresa`, `ve_empresa_telefono`, `ve_placa`, `ve_remolque_tipo`, `ve_remolque_color`, `ve_remolque_marca`, `ve_pe_id`, `ve_timestamp`, `ve_capacidad_m3`, `ve_tipo_llanta_traccion`, `ve_tipo_llanta_direccional`, `ve_linea`, `ve_created`, `ve_estado`) VALUES
-(25, 0, 1234, 'value', 'value', '0', '0', 'value', '0000000', '2025-05-15', 'value', '2025-05-15', '', '', 'abc-123', 'value', 'value', 'value', 0, '2015-10-13 16:53:48', 15, 'value', 'value', 'value', 21, 1),
-(26, 0, 1234, 'value', 'value', '0', '0', 'value', '0000000', '2025-05-15', 'value', '2025-05-15', '', '', 'abc-456', 'value', 'value', 'value', 0, '2015-10-13 16:55:52', 15, 'value', 'value', 'value', 21, 1),
-(27, 0, 1234, 'value', 'value', '0', '0', 'value', '0000000', '2025-05-15', 'value', '2025-05-15', '', '', 'abc-789', 'value', 'value', 'value', 0, '2015-10-13 16:56:08', 15, 'value', 'value', 'value', 21, 1),
-(28, 0, 1234, 'value', 'value', '0', '0', 'value', '0000000', '2025-05-15', 'value', '2025-05-15', '', '', 'abc-012', 'value', 'value', 'value', 0, '2015-10-13 16:56:17', 15, 'value', 'value', 'value', 21, 1),
-(29, 0, 1234, 'value', 'value', '0', '0', 'value', '0000000', '2025-05-15', 'value', '2025-05-15', '', '', 'abc-345', 'value', 'value', 'value', 0, '2015-10-13 16:56:23', 15, 'value', 'value', 'value', 21, 1),
-(30, 0, 1234, 'value', 'value', '0', '0', 'value', '0000000', '2025-05-15', 'value', '2025-05-15', '', '', 'abc-678', 'value', 'value', 'value', 0, '2015-10-13 16:56:36', 20, 'value', 'value', 'value', 21, 1);
+INSERT INTO `tbl_vehiculos` (`ve_id`, `ve_tipo_vehiculo`, `ve_modelo`, `ve_marca`, `ve_color`, `ve_nro_motor`, `ve_nro_chasis`, `ve_soat`, `ve_soat_nro`, `ve_soat_vence`, `ve_tecno`, `ve_tecno_vence`, `ve_empresa`, `ve_empresa_telefono`, `ve_t_op`, `ve_placa`, `ve_remolque_tipo`, `ve_remolque_color`, `ve_remolque_marca`, `ve_pe_id`, `ve_timestamp`, `ve_capacidad_m3`, `ve_tipo_llanta_traccion`, `ve_tipo_llanta_direccional`, `ve_linea`, `ve_created`, `ve_estado`) VALUES
+(25, '3S1', 1234, 'value', 'value', '123123aaa', '123123asa', 'value', '0000000', '2025-05-15', 'value', '2025-05-15', '', '', '', 'abc-123', 'value', 'value', 'value', 0, '2015-11-05 13:42:49', 15, 'value', 'value', 'value', 21, 1),
+(26, '2S3', 1234, 'value', 'value', '0', '0', 'value', '0000000', '2025-05-15', 'value', '2025-05-15', '', '', '', 'abc-456', 'value', 'value', 'value', 0, '2015-11-05 13:42:53', 15, 'value', 'value', 'value', 21, 1),
+(27, '4', 1234, 'value', 'value', '0', '0', 'value', '0000000', '2025-05-15', 'value', '2025-05-15', '', '', '', 'abc-789', 'value', 'value', 'value', 0, '2015-11-05 13:42:56', 15, 'value', 'value', 'value', 21, 1),
+(28, '2R2', 1234, 'value', 'value', '0', '0', 'value', '0000000', '2025-05-15', 'value', '2025-05-15', '', '', '', 'abc-012', 'value', 'value', 'value', 0, '2015-11-05 13:43:10', 15, 'value', 'value', 'value', 21, 1),
+(29, '2B3', 1234, 'value', 'value', '0', '0', 'value', '0000000', '2025-05-15', 'value', '2025-05-15', '', '', '', 'abc-345', 'value', 'value', 'value', 0, '2015-11-05 13:43:29', 15, 'value', 'value', 'value', 21, 1),
+(30, '4R4', 1234, 'value', 'value', '0', '0', 'value', '0000000', '2025-05-15', 'value', '2025-05-15', '', '', '', 'abc-678', 'value', 'value', 'value', 0, '2015-11-05 13:43:39', 20, 'value', 'value', 'value', 21, 1),
+(31, '3B2', 0, '', '', '', '', 'Empresa', '123456', '2016-01-01', 'Empresa', '2016-01-01', '', '', '', 'MND005', '', '', '', 31, '2015-11-05 13:43:49', 10, '', '', '', 21, 1),
+(32, '3', 2012, 'Chevrolet', 'Rojo', '12312312312', '123123123123', 'value', '123123123', '2016-01-01', 'value', '2016-01-01', 'Empresa', '', '1231231231', 'ABG333', '', '', '', 31, '2015-11-05 13:38:01', 15, '', '', 'Value', 14, 1);
 
 --
 -- Índices para tablas volcadas
@@ -4142,6 +4182,12 @@ ALTER TABLE `tbl_remisiones_fisicas`
   ADD PRIMARY KEY (`rf_id`);
 
 --
+-- Indices de la tabla `tbl_reporte_consecutivo`
+--
+ALTER TABLE `tbl_reporte_consecutivo`
+  ADD PRIMARY KEY (`rp_id`);
+
+--
 -- Indices de la tabla `tbl_subnucleos`
 --
 ALTER TABLE `tbl_subnucleos`
@@ -4185,27 +4231,27 @@ ALTER TABLE `tbl_cancelar_remisiones`
 -- AUTO_INCREMENT de la tabla `tbl_control_inventarios`
 --
 ALTER TABLE `tbl_control_inventarios`
-  MODIFY `ci_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=71;
+  MODIFY `ci_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=72;
 --
 -- AUTO_INCREMENT de la tabla `tbl_despachos`
 --
 ALTER TABLE `tbl_despachos`
-  MODIFY `de_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=267;
+  MODIFY `de_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=274;
 --
 -- AUTO_INCREMENT de la tabla `tbl_fincas`
 --
 ALTER TABLE `tbl_fincas`
-  MODIFY `fi_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=52;
+  MODIFY `fi_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=53;
 --
 -- AUTO_INCREMENT de la tabla `tbl_inventario`
 --
 ALTER TABLE `tbl_inventario`
-  MODIFY `in_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=126;
+  MODIFY `in_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=127;
 --
 -- AUTO_INCREMENT de la tabla `tbl_lotes_autorizados`
 --
 ALTER TABLE `tbl_lotes_autorizados`
-  MODIFY `la_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=122;
+  MODIFY `la_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=123;
 --
 -- AUTO_INCREMENT de la tabla `tbl_modulos`
 --
@@ -4230,12 +4276,17 @@ ALTER TABLE `tbl_permisos_x_modulo`
 -- AUTO_INCREMENT de la tabla `tbl_personas`
 --
 ALTER TABLE `tbl_personas`
-  MODIFY `pe_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=39;
+  MODIFY `pe_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=38;
 --
 -- AUTO_INCREMENT de la tabla `tbl_remisiones_fisicas`
 --
 ALTER TABLE `tbl_remisiones_fisicas`
-  MODIFY `rf_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
+  MODIFY `rf_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
+--
+-- AUTO_INCREMENT de la tabla `tbl_reporte_consecutivo`
+--
+ALTER TABLE `tbl_reporte_consecutivo`
+  MODIFY `rp_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `tbl_subnucleos`
 --
@@ -4245,7 +4296,7 @@ ALTER TABLE `tbl_subnucleos`
 -- AUTO_INCREMENT de la tabla `tbl_supervisores`
 --
 ALTER TABLE `tbl_supervisores`
-  MODIFY `su_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=38;
+  MODIFY `su_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=39;
 --
 -- AUTO_INCREMENT de la tabla `tbl_turnos`
 --
@@ -4260,7 +4311,7 @@ ALTER TABLE `tbl_usuarios`
 -- AUTO_INCREMENT de la tabla `tbl_vehiculos`
 --
 ALTER TABLE `tbl_vehiculos`
-  MODIFY `ve_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=38;
+  MODIFY `ve_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=33;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

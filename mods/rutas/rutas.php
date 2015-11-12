@@ -6,11 +6,13 @@ include('../../php/app_menu.php');
 include('../../php/aside_menu.php');
 include('../../php/rutas.php');
 include('../../php/html_snippets.php');
+include('../../php/fincas.php');
 //menu aplicacion
 $app_menu = new app_menu();
 $aside_menu = new aside_menu();
 $html_snippet = new html_snippets();
 $rutas = new rutas();
+$fincas = new fincas();
 
 $rt = new route();
 $rt->check_session();
@@ -206,6 +208,30 @@ $js = $libs->get_js();
     <div class="col-lg-8" id="resultados">
       
     </div>
+    <div class="col-lg-8" id="programacion">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Programación por Finca</h3>
+
+        </div>
+        <div class="panel-body">
+          <!-- formulario -->
+              <form class="form-horizontal" action="/" method="GET" id="frm_general">
+                <fieldset>
+                  <div class="form-group">
+                    <label class="col-lg-1 control-label"></label>
+                    <div class="col-lg-9" style="margin-top: 30px">
+                      <?php echo $fincas->get_options_fincas_aut("cod_finca") ?>
+                    </div>
+                    <label class="col-lg-2 control-label">
+                    </label>
+                  </div>
+                </fieldset>
+              </form>
+              <!-- -->
+        </div>
+      </div>
+    </div>
   </div>
 <?php echo $html_snippet->load_footer(); ?>
     <script type="text/javascript">
@@ -213,6 +239,9 @@ $js = $libs->get_js();
       var c = confirm("¿Confirma que desea ejecutar la siguiente operación?");
       if (c) {
         $("#progress").fadeIn();
+        if(o==2){
+          var razon = prompt('Razón de la cancelación');
+        }else {razon = "";}
         $.ajax({      
           url: "../../php/ajax_rutas.php",     
           dataType: "json",     
@@ -220,6 +249,7 @@ $js = $libs->get_js();
             data: { 
                     action: "update_delivery",
                     id: id,
+                    r: razon,
                     op: o
                   },
           success: function(data){    

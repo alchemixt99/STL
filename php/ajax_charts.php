@@ -121,12 +121,13 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 				$arr=array();
 				$year = date("Y");
 				
-				$qry_gr ="SELECT * FROM tbl_inventario";
+				$qry_gr ="SELECT * FROM tbl_control_inventarios";
 				$res_gr = mysql_query($qry_gr);
 				while($row_gr = mysql_fetch_assoc($res_gr)) {
 					$arr[]=array(
-						'id' => $row_gr['in_id'],
-						'vol' => $row_gr['in_mt_restante'],
+						'id' => $row_gr['ci_id'],
+						'vol_i' => $row_gr['ci_vol_ini'],
+						'vol_a' => $row_gr['ci_vol_act'],
 						);
 				}
 				

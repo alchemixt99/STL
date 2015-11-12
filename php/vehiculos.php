@@ -24,6 +24,8 @@ class vehiculos{
         $item.='
               <tr>
                 <td>'.$row_res["ve_placa"].'</td>
+                <td>'.$row_res["ve_tipo_vehiculo"].'</td>
+                <td>'.$row_res["ve_capacidad_m3"].' m<sup>3</sup></td>
                 <td>'.$row_res["pe_nombre"].'</td>
                 <td>'.$row_res["ve_timestamp"].'</td>
                 <td>
@@ -42,6 +44,8 @@ class vehiculos{
             <thead>
               <tr>
                 <th>Placa</th>
+                <th>Configuración</th>
+                <th>Capacidad</th>
                 <th>Propietario</th>
                 <th>Fecha Registro</th>
                 <th>Opciones</th>

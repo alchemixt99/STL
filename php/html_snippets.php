@@ -51,13 +51,14 @@ class html_snippets{
 	}
 	function cbx_config($id){
 		$html='	<select class="form-control valued" id="'.$id.'">
-					<option value=""></option>
+					<option value="">Seleccione</option>
 					<option value="2">2</option>
 					<option value="3">3</option>
 					<option value="4">4</option>
 					<option value="2S1">2S1</option>
 					<option value="2S3">2S3</option>
 					<option value="3S1">3S1</option>
+					<option value="3S2">3S2</option>
 					<option value="3S3">3S3</option>
 					<option value="R2">R2</option>
 					<option value="2R2">2R2</option>

@@ -238,9 +238,13 @@ $js = $libs->get_js();
                         <input type="text" class="form-control" id="emp">
                         <label for="emp" class="">Empresa</label>
                       </div>
-                      <div class="col-lg-2" style="margin-top: 10px; display:none" id="cap_cont_1">
+                      <div class="col-lg-2" style="margin-top: 10px;" id="cap_cont_1">
                         <input type="text" class="form-control" id="capacidad">
                         <label for="cod" class="">Capacidad (m<sup>3</sup>)</label>
+                      </div>
+                      <div class="col-lg-4" style="margin-top: 10px;">
+                        <input type="text" class="form-control" id="t_oper">
+                        <label for="cod" class="">Tarjeta Operación</label>
                       </div>
                   </div>
                 </div>
@@ -281,7 +285,7 @@ $js = $libs->get_js();
                     </div>
                   </div>
                 </div>
-                <div class="panel panel-primary">
+                <div class="panel panel-primary" id="remolque_cont">
                   <div class="panel-heading">
                     <h3 class="panel-title">Información de Remolque</h3>
                   </div>
@@ -297,10 +301,6 @@ $js = $libs->get_js();
                       <div class="col-lg-2" style="margin-top: 10px">
                         <input type="text" class="form-control" id="marca_rem">
                         <label for="cod" class="">Marca</label>
-                      </div>
-                      <div class="col-lg-2" style="margin-top: 10px" id="cap_cont_2">
-                        <input type="text" class="form-control" id="capacidad">
-                        <label for="cod" class="">Capacidad (m<sup>3</sup>)</label>
                       </div>
                       <div class="col-lg-2" style="margin-top: 10px">
                         <input type="text" class="form-control" id="tipo_llanta_dir">
@@ -408,23 +408,7 @@ $js = $libs->get_js();
     </script>
 
     <script type="text/javascript">
-    function validar_clave(pfx){
-      if(pfx==2){pf="ch_";}else{pf="";}
-      var pass= $("#"+pf+"pass").val();
-      var pass_re= $("#"+pf+"pass_re").val();
 
-      if(pass.length>=6){
-        if(pass==pass_re){
-          return true;
-        }else{
-          alert("las claves no coinciden");
-          return false;
-        }
-      }else{
-        alert("La clave necesita tener más de 6 caracteres");
-        return false;
-      }
-    }
     function borrar_usuario(u, obj){
       var c = confirm("Seguro desea borrar el registro?");
       if(c){
@@ -485,6 +469,11 @@ $js = $libs->get_js();
       });
     }
     $(function() {
+      $("#tipo").on('change', function(){
+        var tipo = $("#tipo").val();
+        if(tipo=="2" || tipo=="3" || tipo=="4" || tipo=="2S1" || tipo=="2S3" || tipo=="3S1" ||  tipo=="3S2" ||  tipo=="3S3" )
+          {$("#remolque_cont").fadeOut();}else{{$("#remolque_cont").fadeIn();}}
+      });
       
       $('.btn, .dropdown-menu a, .navbar a, .navbar-panel a, .toolbar a, .nav-pills a, .nav-tabs a, .pager a, .pagination a, .list-group a').mtrRipple({live: true}).on('click', function(e) {
         e.preventDefault();
@@ -553,7 +542,8 @@ $js = $libs->get_js();
                   marca_rem: $("#marca_rem").val(),
                   capacidad: $("#capacidad").val(),
                   tipo_llanta_dir: $("#tipo_llanta_dir").val(),
-                  tipo_llanta_tra: $("#tipo_llanta_tra").val()
+                  tipo_llanta_tra: $("#tipo_llanta_tra").val(),
+                  t_oper: $("#t_oper").val()
                 },    
           success: function(data){           
            if(data.res==true){

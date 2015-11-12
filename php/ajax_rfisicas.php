@@ -16,6 +16,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 		$ini=$_POST["ini"];
 		$fin=$_POST["fin"];
 		$inter=$_POST["inter"];
+		$per=$_POST["per"];
 
 		if($ini=="" || $fin == "" || $inter == ""){
 			$res=false;
@@ -25,8 +26,8 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 			$con->connect();
 
 			/* ingresamos datos de la finca */
-			$qry ="INSERT INTO tbl_remisiones_fisicas (rf_interventor, rf_dig_ini, rf_dig_fin, rf_created, rf_estado)
-					VALUES ('".$inter."',".$ini.",".$fin.",".$_SESSION["ses_id"].",1);";
+			$qry ="INSERT INTO tbl_remisiones_fisicas (rf_persona_entrega, rf_interventor, rf_dig_ini, rf_dig_fin, rf_created, rf_estado)
+					VALUES ('".$per."','".$inter."',".$ini.",".$fin.",".$_SESSION["ses_id"].",1);";
 
 			$resp = mysql_query($qry);
 			if(!$resp){

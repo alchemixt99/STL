@@ -13,6 +13,7 @@ $aside_menu = new aside_menu();
 $html_snippet = new html_snippets();
 $fincas = new fincas();
 $rutas = new rutas();
+$fun = new funciones();
 
 $rt = new route();
 $rt->check_session();
@@ -219,13 +220,18 @@ $js = $libs->get_js();
                 </fieldset>
                   <div class="form-group">
                     <label class="col-lg-1 control-label"></label>
-                    <div class="col-lg-5" style="margin-top: 30px">
-                      <input type="text" class="form-control" id="f1" placeholder="aaaa-mm-dd">
-                      <label for="f1" class="">Fecha inicial</label>
+                    <div class="col-lg-9" style="margin-top: 30px">
+                      <label for="f1" class="">Fecha inicial</label><br>
+                      <?php echo $fun->datepicker("f1","dmy"); ?>                      
                     </div>
-                    <div class="col-lg-4" style="margin-top: 30px">
-                      <input type="text" class="form-control" id="f2" placeholder="aaaa-mm-dd" title="Enter para Consultar">
-                      <label for="f2" class="">Fecha final</label>
+                    <label class="col-lg-2 control-label">
+                    </label>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-lg-1 control-label"></label>
+                    <div class="col-lg-9" style="margin-top: 30px">
+                      <label for="f2" class="">Fecha final</label><br>
+                      <?php echo $fun->datepicker("f2","dmy"); ?>                      
                     </div>
                     <label class="col-lg-2 control-label">
                     </label>
@@ -309,14 +315,25 @@ $js = $libs->get_js();
     /* Información de conductores */
     function get_info_des(f1,f2,fi){
       $("#progress").fadeIn();
+      //concatenamos fechas
+      f1_y = $("#f1_y").val();
+      f1_m = $("#f1_m").val();
+      f1_d = $("#f1_d").val();
+
+      f2_y = $("#f2_y").val();
+      f2_m = $("#f2_m").val();
+      f2_d = $("#f2_d").val();
+
+      var fecha1 = f1_y+"-"+f1_m+"-"+f1_d;
+      var fecha2 = f2_y+"-"+f2_m+"-"+f2_d;
       $.ajax({      
         url: "../../php/ajax_ica.php",     
         dataType: "json",     
           type: "POST",     
           data: { 
                   action: "get_info_des",
-                  f1: f1,
-                  f2: f2,
+                  f1: fecha1,
+                  f2: fecha2,
                   fi:fi
                 },
         success: function(data){    
@@ -339,7 +356,7 @@ $js = $libs->get_js();
       $("#f1").val(dt);
       $("#f2").val(dt);
 
-      $("#f2").keypress(function(e) {
+      $("#f2_y").keypress(function(e) {
           if(e.which == 13) {
              get_info_des($("#f1").val(),$("#f2").val(),$("#finca_aut").val());
           }

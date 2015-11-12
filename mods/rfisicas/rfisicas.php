@@ -187,9 +187,13 @@ $js = $libs->get_js();
                   </div>
                   <div class="row">
                   <label class="col-lg-2 control-label"></label>
-                    <div class="col-lg-8" style="margin-top: 30px">
+                    <div class="col-lg-4" style="margin-top: 30px">
                       <input type="text" class="form-control " id="inter">
                       <label for="ini" class="">Interventor</label>
+                    </div>
+                    <div class="col-lg-4" style="margin-top: 30px">
+                      <input type="text" class="form-control " id="persona">
+                      <label for="ini" class="">Persona de quien recibo</label>
                     </div>
                     <label class="col-lg-2 control-label"></label>
                   </div>
@@ -335,6 +339,7 @@ $js = $libs->get_js();
         var ini = $("#ini").val();
         var fin = $("#fin").val();
         var inter = $("#inter").val();
+        var persona = $("#persona").val();
 
         if(ini<fin){
           $.ajax({      
@@ -345,6 +350,7 @@ $js = $libs->get_js();
                     action: "save",
                     ini: ini,
                     inter: inter,
+                    per: persona,
                     fin: fin
                   },
             success: function(data){    

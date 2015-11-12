@@ -54,7 +54,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 
 			switch ($row_des["de_estado"]) {
 				case 1: $btnset=$b1.$b3; break;//sugerido
-				case 2: $btnset=$b2.$b3; break;//autorizado
+				case 2: $btnset=$b2; break;//autorizado
 				case 3: $btnset=$t1; break;//cancelado
 				case 99: $btnset=$t2; break;//borrado
 			}
@@ -110,6 +110,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 		/*recibimos variables*/
 		$de_id = $_POST['id'];
 		$opt = $_POST['op'];
+		$razon = $_POST['r'];
 
 		switch ($opt) {
 			case 1:	$estado=2; break;
@@ -145,7 +146,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 				$upd_vol = $fun->actualizar("inventario", "in_mt_restante =".$inv_nuevo, "in_id = ".$arr_inv[0]["in_id"]);
 			}
 
-			$res_upd = $fun->actualizar("despachos", "de_estado=".$estado, "de_id=".$de_id);
+			$res_upd = $fun->actualizar("despachos", "de_estado=".$estado.", de_ica_observacion='".$razon."'", "de_id=".$de_id);
 			if ($res_upd) {
 				$res = true;
 				$mes = $msg->get_msg('e004');

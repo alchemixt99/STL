@@ -46,16 +46,15 @@ class app_menu{
                   <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Reportes <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                      <li><a href="reportes.php" target="_blank" id="" class="">Reporte de Consecutivos ICA generados</a></li>              
-                      <li><a href="reportes.php" target="_blank" id="" class="">Reporte de Despachos Generados</a></li>              
-                      <li><a href="reportes.php" target="_blank" id="" class="">Reporte de Estado de los lotes</a></li>              
+                      <li><a onclick="reporte(1)" target="_blank" id="" class="">Reporte de Consecutivos ICA generados</a></li>              
+                      <li><a onclick="reporte(2)" target="_blank" id="" class="">Reporte de Despachos Generados</a></li>
                     </ul>
                   </li>
                   <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Programación (Cronjobs) <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                      <li><a href="reportes.php" target="_blank" id="" class="">Despachos</a></li>              
-                      <li><a href="reportes.php" target="_blank" id="" class="">Consecutivos ICA</a></li>              
+                      <li><a onclick="go_cj_r()" target="">Despachos</a></li>              
+                      <li><a onclick="go_cj_i()" target="">Consecutivos ICA</a></li>              
                     </ul>
                   </li>';
       $menuitem=$dropdown;      
