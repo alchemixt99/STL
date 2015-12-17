@@ -256,11 +256,11 @@ $js = $libs->get_js();
                   <div class="form-group" id="fincas_box">
                     <label class="col-lg-2 control-label"></label>
                     <div class="col-lg-4" style="margin-top: 30px">
-                      <?php echo $fincas->get_options_subnucleos("sn1"); ?>
+                      <?php echo $fincas->get_options_subnucleos("sn1", null, true); ?>
                       <label for="cod" class="">Municipio 1</label>
                     </div>
                     <div class="col-lg-4" style="margin-top: 30px">
-                      <?php echo $fincas->get_options_subnucleos("sn2"); ?>
+                      <?php echo $fincas->get_options_subnucleos("sn2", null, true); ?>
                       <label for="cod" class="">Municipio 2</label>
                     </div>
                     <label class="col-lg-2 control-label"></label>
@@ -283,6 +283,27 @@ $js = $libs->get_js();
 <?php echo $html_snippet->load_footer(); ?>
 
     <script>
+    function del_persona(id, obj){
+      var c = confirm("¿Seguro que desea eliminar a este conductor?");
+      if(c){
+         $.ajax({      
+          url: "../../php/ajax_personas.php",     
+          dataType: "json",     
+          type: "POST",     
+          data: { 
+                  action: "del",
+                  id: id
+                },
+          success: function(data){    
+          if(data.res==true){ 
+            $(obj).closest('tr').fadeOut();
+          }
+          else{
+            alert(data.mes);
+          }
+        }});
+      }
+    }
     function act_persona(id, obj){
       var c = confirm("¿Seguro que desea habilitar a este conductor?");
       if(c){

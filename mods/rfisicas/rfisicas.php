@@ -157,6 +157,59 @@ $js = $libs->get_js();
           </div>
         </div>
       </div>
+      <div id="edt-modal" class="modal fade">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="md md-close"></i></button>
+              <h4 class="modal-title">Modificar Finca</h4>
+            </div>
+            <div class="modal-body">
+              <!-- caja para mensajes -->
+              <div class="alert alert-dismissible alert-info" style="display:none" id="caja_mensaje">
+                <button type="button" class="close" data-dismiss="alert"><i class="md md-clear"></i></button>
+                <div id="texto-mensaje"></div>
+              </div>
+              <!-- formulario -->
+              <form class="form-horizontal" id="edt_form" action="/" method="GET">
+                <fieldset>
+                  <div class="form-group">
+                    <label class="col-lg-2 control-label"></label>
+                    <div class="col-lg-4" style="margin-top: 30px">
+                      <input type="hidden" class="form-control " id="key">
+                      <input type="text" class="form-control " id="e_ini">
+                      <label for="ini" class="">Inicia</label>
+                    </div>
+                    <div class="col-lg-4" style="margin-top: 30px">
+                      <input type="text" class="form-control " id="e_fin">
+                      <label for="fin" class="">Termina</label>
+                    </div>
+                    <label class="col-lg-2 control-label"></label>
+                  </div>
+                  <div class="row">
+                  <label class="col-lg-2 control-label"></label>
+                    <div class="col-lg-4" style="margin-top: 30px">
+                      <input type="text" class="form-control " id="e_inter">
+                      <label for="ini" class="">Interventor</label>
+                    </div>
+                    <div class="col-lg-4" style="margin-top: 30px">
+                      <input type="text" class="form-control " id="e_persona">
+                      <label for="ini" class="">Persona de quien recibo</label>
+                    </div>
+                    <label class="col-lg-2 control-label"></label>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-12 text-right">
+                      <a href="#" id="btn_edit" class="btn btn-primary">Actualizar</a>
+                    </div>
+                  </div>
+                </fieldset>
+              </form>
+              <!-- -->
+            </div>
+          </div>
+        </div>
+      </div>
       <div id="add-modal" class="modal fade">
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
@@ -233,6 +286,30 @@ $js = $libs->get_js();
         }
       });
     }
+    function load_row(id){
+    	//limpiamos formulario
+    	$('#edt_form')[0].reset();
+    	//traemos valores
+    	$.ajax({      
+            url: "../../php/ajax_rfisicas.php",     
+            dataType: "json",     
+            type: "POST",     
+            data: { 
+                    action: "get_row",
+                    id: id
+                  },
+            success: function(data){
+                $("#key").val(data.key);
+                $("#e_ini").val(data.ini);
+		        $("#e_fin").val(data.fin);
+		        $("#e_inter").val(data.inter);
+		        $("#e_persona").val(data.persona);
+            }
+          });
+    	//cargamos modal
+  		$("#edt-modal").modal();
+
+  	}
     
       (function(){
         $("#add-button").click(function(){
@@ -281,6 +358,7 @@ $js = $libs->get_js();
     </script>
 
     <script type="text/javascript">
+
     $(function() {
       
       $('.btn, .dropdown-menu a, .navbar a, .navbar-panel a, .toolbar a, .nav-pills a, .nav-tabs a, .pager a, .pagination a, .list-group a').mtrRipple({live: true}).on('click', function(e) {
@@ -318,6 +396,7 @@ $js = $libs->get_js();
 
     });
   $(document).ready(function(){
+
       //==============AJAX===============
       //logout
       $('#btn_logout').on('click', function() {
@@ -334,7 +413,7 @@ $js = $libs->get_js();
           }
         }});
       });
-      //guardar finca
+      //guardar remision
       $('#btn_save').on('click', function() {
         var ini = $("#ini").val();
         var fin = $("#fin").val();
@@ -352,6 +431,49 @@ $js = $libs->get_js();
                     inter: inter,
                     per: persona,
                     fin: fin
+                  },
+            success: function(data){    
+              if(data.res==true){
+                $("#caja_mensaje").removeClass("alert-info");
+                $("#caja_mensaje").addClass("alert-success");
+                $("#texto-mensaje").text(data.mes);
+                $("#caja_mensaje").fadeIn();
+                setTimeout(function(){location.reload();}, 3000);
+              }else if(data.res==false){
+                $("#caja_mensaje").removeClass("alert-info");
+                $("#caja_mensaje").addClass("alert-danger");
+                $("#texto-mensaje").text(data.mes);
+                $("#caja_mensaje").fadeIn();
+              }
+            }
+          });
+        }else{
+          $("#caja_mensaje").removeClass("alert-info");
+          $("#caja_mensaje").addClass("alert-danger");
+          $("#texto-mensaje").text("verifique los valores e intentelo de nuevo");
+          $("#caja_mensaje").fadeIn();
+        }
+      });
+      //actualizar remision
+      $('#btn_edit').on('click', function() {
+        var e_key = $("#key").val();
+        var e_ini = $("#e_ini").val();
+        var e_fin = $("#e_fin").val();
+        var e_inter = $("#e_inter").val();
+        var e_persona = $("#e_persona").val();
+
+        if(e_ini<e_fin){
+          $.ajax({      
+            url: "../../php/ajax_rfisicas.php",     
+            dataType: "json",     
+            type: "POST",     
+            data: { 
+                    action: "update",
+                    key: e_key,
+                    ini: e_ini,
+                    inter: e_inter,
+                    per: e_persona,
+                    fin: e_fin
                   },
             success: function(data){    
               if(data.res==true){

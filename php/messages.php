@@ -38,6 +38,10 @@ class messages{
 			"e030" => "030 - Error al cargar datos del inventario.",
 			"e031" => "031 - Error al desactivar el conductor, comuniquese con soporte, gracias.",
 			"e032" => "032 - Error al activar el conductor, comuniquese con soporte, gracias.",
+			"e033" => "032 - Error traer los turnos, comuniquese con soporte, gracias.",
+			"e034" => "034 - Error traer las remisiones, comuniquese con soporte, gracias.",
+			"e035" => "035 - Error al borrar esta persona, comuniquese con soporte, gracias.",
+			"e036" => "036 - Error al modificar el vehiculo en la programación, comuniquese con soporte, gracias.",
 		];
 		/* ====================== */
 		return $msg[$e];

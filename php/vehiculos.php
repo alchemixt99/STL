@@ -92,7 +92,7 @@ class vehiculos{
     $con->disconnect();
     return $script.$html;
   }
-  function get_options_vehiculos(){
+  function get_options_vehiculos($id='cod_prop'){
     $con = new con();
     $msg = new messages();
     $rt = new route();
@@ -118,7 +118,7 @@ class vehiculos{
     else{$rt->routing($rt->path("login"));}
 
     $html='
-        <select class="form-control valued" id="cod_prop">
+        <select class="form-control valued" id="'.$id.'">
           '.$item.'
         </select>
     ';

@@ -7,6 +7,7 @@ class fincas{
     $con = new con();
     $msg = new messages();
     $rt = new route();
+    $fun = new funciones();
 
     $con->connect();
 
@@ -21,10 +22,17 @@ class fincas{
       $item =" ";
       $script ="<script>$(document).ready(function(){";
       while($row_res = mysql_fetch_assoc($res)) {
+        //contamos lotes autorizados
+        $qry_count = 'SELECT count(la_fi_id) AS Lotes FROM `tbl_fincas` 
+                      INNER JOIN tbl_lotes_autorizados ON la_fi_id = fi_id
+                      WHERE la_estado=1  
+                      AND fi_id ='.$row_res["fi_id"];
+        $data = $fun->get_array($qry_count);
         $item.='
               <tr>
                 <td>'.$row_res["fi_codigo"].'</td>
                 <td>'.$row_res["sn_subnucleo"].'</td>
+                <td>'.$data[0]['Lotes'].'</td>
                 <td style="text-align:center;">'.$row_res["fi_timestamp"].'</td>
                 <td style="text-align:center;">
                   <div id="del-button" onclick="borrar_finca('.$row_res["fi_id"].', this)" class="btn btn-floating-mini btn-danger" title="Borrar"><i class="md  md-delete"></i></div>
@@ -43,6 +51,7 @@ class fincas{
               <tr>
                 <th style="text-align:center;">Código</th>
                 <th style="text-align:center;">Municipio</th>
+                <th style="text-align:center;">Lotes Autorizados</th>
                 <th style="text-align:center;">Fecha Autorización</th>
                 <th style="text-align:center;">Acciones</th>
               </tr>
@@ -55,7 +64,7 @@ class fincas{
     $con->disconnect();
     return $script.$html;
   }
-  function get_options_subnucleos($select_id=null, $get_id=null){
+  function get_options_subnucleos($select_id=null, $get_id=null, $get_all=false){
     $con = new con();
     $msg = new messages();
     $rt = new route();
@@ -65,10 +74,16 @@ class fincas{
 
     //consultamos subnucleos habilitados desde la Gerencia
     if(isset($_SESSION["ses_id"])){
-      $qry='SELECT DISTINCT sn_id , sn_subnucleo, municipio, depto FROM tbl_subnucleos 
+      if($get_all==false){
+            $qry='SELECT DISTINCT sn_id , sn_subnucleo, municipio, depto FROM tbl_subnucleos 
             INNER JOIN tbl_matriz_ica ON municipio = sn_subnucleo
             INNER JOIN tbl_fincas ON fi_sn_id = sn_id
             WHERE fi_estado = 1';
+          }else{
+            $qry='SELECT DISTINCT sn_id , sn_subnucleo, municipio, depto FROM tbl_subnucleos 
+            INNER JOIN tbl_matriz_ica ON municipio = sn_subnucleo
+            WHERE sn_estado = 1';
+          }
 
       $res = mysql_query($qry);
       $item =" ";

@@ -7,12 +7,14 @@ include('../../php/aside_menu.php');
 include('../../php/rutas.php');
 include('../../php/html_snippets.php');
 include('../../php/fincas.php');
+include('../../php/vehiculos.php');
 //menu aplicacion
 $app_menu = new app_menu();
 $aside_menu = new aside_menu();
 $html_snippet = new html_snippets();
 $rutas = new rutas();
 $fincas = new fincas();
+$vh = new vehiculos();
 
 $rt = new route();
 $rt->check_session();
@@ -194,7 +196,7 @@ $js = $libs->get_js();
                     </div>
                     <div class="col-lg-4" style="margin-top: 30px">
                       <input type="text" class="form-control" id="cedula" title="Enter para Consultar">
-                      <label for="cedula" class="">cedula</label>
+                      <label for="cedula" class="">Identificación</label>
                     </div>
                     <label class="col-lg-2 control-label">
                     </label>
@@ -203,12 +205,8 @@ $js = $libs->get_js();
               </form>
               <!-- -->
         </div>
-      </div>      
-    </div>
-    <div class="col-lg-8" id="resultados">
-      
-    </div>
-    <div class="col-lg-8" id="programacion">
+      </div> 
+      <!-- Consulta programa por finca -->
       <div class="panel panel-primary">
         <div class="panel-heading">
           <h3 class="panel-title">Programación por Finca</h3>
@@ -229,12 +227,81 @@ $js = $libs->get_js();
                 </fieldset>
               </form>
               <!-- -->
+              <div id="resultados_sch"></div>  
+        </div>
+      </div>   
+    </div>
+    <div class="col-lg-8" id="resultados">
+      
+    </div>
+  </div>
+
+
+  <div class="modal fade" id="md-change-car">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="md md-clear"></i></button>
+          <h4 class="modal-title">Cambiar Vehiculo</h4>
+        </div>
+        <div class="modal-body">
+       <!-- formulario -->
+          <form class="form-horizontal" action="/" method="GET" id="frm_general">
+            <fieldset>
+              <div class="form-group">
+                <label class="col-lg-1 control-label"></label>
+                <div class="col-lg-9" style="margin-top: 30px">
+                  <input type="hidden" class="form-control" id="key">
+                  <?php echo $vh->get_options_vehiculos('cmd_vehiculo'); ?>
+                  <label for="fecha" class="">Nuevo Vehiculo</label>
+                </div>
+                <label class="col-lg-2 control-label">
+                </label>
+              </div>
+            </fieldset>
+          </form>
+       <!-- -->
+        </div>
+        <div class="modal-footer">
         </div>
       </div>
     </div>
   </div>
+
 <?php echo $html_snippet->load_footer(); ?>
     <script type="text/javascript">
+    function edt_tr(id){
+      $("#key").val(id);
+      $("#md-change-car").modal();
+    }
+
+    $("#cmd_vehiculo").change(function(){
+      var c = confirm("¿Está seguro que desea reemplazar este vehiculo?");
+      if(c){
+        $.ajax({      
+          url: "../../php/ajax_rutas.php",     
+          dataType: "json",     
+            type: "POST",     
+            data: { 
+                    action: "update_vh",
+                    id: $("#key").val(),
+                    vh: $("#cmd_vehiculo").val()
+                  },
+          success: function(data){    
+            if(data.res==true){ 
+                alert(data.mes);
+                location.reload();
+              }
+            else{
+                alert(data.mes);
+            }
+          }
+        });
+      }else{
+        alert('false');
+      }
+    });
+
     function change(o,id){
       var c = confirm("¿Confirma que desea ejecutar la siguiente operación?");
       if (c) {
@@ -265,45 +332,10 @@ $js = $libs->get_js();
         });
       };
     }
-    
-      (function(){
-        $('.bs-component [data-toggle="popover"]').popover();
-        $('.bs-component [data-toggle="tooltip"]').tooltip();
-
-        $(".bs-component").hover(function(){
-          $(this).append($button);
-          $button.show();
-        }, function(){
-          $button.hide();
-        });
-
-        function cleanSource(html) {
-          var lines = html.split(/\n/);
-
-          lines.shift();
-          lines.splice(-1, 1);
-
-          var indentSize = lines[0].length - lines[0].trim().length,
-              re = new RegExp(" {" + indentSize + "}");
-
-          lines = lines.map(function(line){
-            if (line.match(re)) {
-              line = line.substring(indentSize);
-            }
-
-            return line;
-          });
-
-          lines = lines.join("\n");
-
-          return lines;
-        }
-
-      })();
 
     /* Información de conductores */
     function get_info_cond(f,c){
-      $("#progress").fadeIn();
+      $("#progress").fadeIn();  
       $.ajax({      
         url: "../../php/ajax_rutas.php",     
         dataType: "json",     
@@ -327,8 +359,38 @@ $js = $libs->get_js();
         }
       });
     }
+    /* programación por finca */
+    function get_info_schedule(f,c){
+      $("#progress").fadeIn();
+      $.ajax({      
+        url: "../../php/ajax_rutas.php",     
+        dataType: "json",     
+          type: "POST",     
+          data: { 
+                  action: "get_info_schedule",
+                  f: $("#cod_finca").val()
+                },
+        success: function(data){    
+          if(data.res==true){ 
+            $("#resultados_sch").empty();
+            $("#resultados_sch").html(data.mes);
+            $(".panel-success").fadeIn("slow");
+            $("#progress").fadeOut();
+          }
+          else{
+            $("#resultados_sch").empty();
+            $("#resultados_sch").html(data.mes);
+          }
+        }
+      });
+    }
 
     $(function() {
+      $("#cod_finca").change(function(){
+        var fecha = $("#fecha").val();
+        var cod_f = $("#cod_finca").val();
+        get_info_schedule(fecha, cod_f);
+      });
       var f = new Date();
       var dt = f.getFullYear()+ "-" + (f.getMonth() +1) + "-"+ f.getDate();
       $("#fecha").val(dt);

@@ -195,7 +195,7 @@ class funciones{
 	function datepicker($id="",$f){
 		//año
 		$año ='	<select class="form-control valued" style="width:50px; float:left;" id="'.$id.'_y">';
-			for ($i=(date("Y")+1); $i >= 2000; $i--) { 
+			for ($i=(date("Y")+30); $i >= 2000; $i--) { 
 				$año.='<option value="'.$i.'">'.$i.'</option>';
 			}   
 	    $año.=' </select>';
@@ -217,11 +217,16 @@ class funciones{
 	    	case 'dmy':
 	    		return $dia.' '.$mes.' '.$año;
 	    	break;
+	    	case 'amd':
+	    		return $año.' '.$mes.' '.$dia;
+	    	break;
 	    }
-
-
-
 		
+	}
+
+	function breakpoint($t, $str){
+		echo "parando en ".$str;
+		sleep($t);
 	}
 }
 ?>

@@ -162,6 +162,37 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 
 		$con->disconnect();
 	}
+	//eliminar persona: borra usuario 
+	function del_persona(){
+		$fun = new funciones();
+		$msg = new messages();
+		$response = new StdClass;
+
+		/*recibimos variables*/
+		$id=$_POST["id"];
+
+		$con = new con();
+		$con->connect();
+
+		/* ingresamos datos de la finca */
+		$tbl="personas";
+		$cambios="pe_estado=99";
+		$where="pe_id=".$id;
+		$r = $fun->actualizar($tbl,$cambios,$where);
+		if($r){
+			$res=true;				
+			$mes=$msg->get_msg("e004");;
+		}else{
+			$res=false;
+			$mes=$msg->get_msg("e035");
+		}
+		
+		$response->res = $res;
+		$response->mes = $mes;
+		echo json_encode($response);
+
+		$con->disconnect();
+	}
 
   //validamos si es una petición ajax
   if(isset($_POST['action']) && !empty($_POST['action'])) {
@@ -170,6 +201,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
           case 'save' : add_persona();break;
           case 'des' : des_persona();break;
           case 'act' : act_persona();break;
+          case 'del' : del_persona();break;
       }
   }
 ?>

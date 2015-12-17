@@ -1,5 +1,4 @@
 <?php
-session_start();
 require("funciones.php");
 require("messages.php");
 
@@ -59,6 +58,9 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 				case 99: $btnset=$t2; break;//borrado
 			}
 
+			//funcion onclick-cambiar vehiculo
+			$btn_oc = 'edt_tr('.$row_des['pe_id'].')';
+
 			//titulo
 			if($iter==0){$title='Turno';}else{$title='Doblete';}
 			//md-well
@@ -69,7 +71,7 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 			        <div class="panel-body list-group-item">';
 						$item.='<table class="table table-striped table-hover "><tbody><tr>';
 						$item.='<td><i class="md md-person"></i> '.$row_des['pe_nombre'].'</td>';
-						$item.='<td><a href="#" class="btn btn-flat btn-info"><i class="md md-drive-eta"></i>'.$row_des['ve_placa'].'</a></td>';
+						$item.='<td><a href="#" onclick="'.$btn_oc.'" class="btn btn-flat btn-info"><i class="md md-drive-eta"></i>'.$row_des['ve_placa'].'</a></td>';
 						$item.='<td><i class="md md-access-alarm"></i> '.$row_des['tu_hora_ini'].'</td>';
 						$item.='<td title="Fecha Salida"><i class="md md-today"></i> '.$año."-".$mes."-".($dia+1).'</td>';						
 						$item.='<td><i class="md md-place"></i> '.$row_des['fi_codigo'].'</td>';
@@ -88,6 +90,62 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 		$html = $css.$script.$item;
 
 		if ($res_des) {
+			$res=true;
+			$mes=$html;
+		} else {
+			$res=false;
+			$mes=$msg->get_msg("e026");
+		}
+		
+		$con->disconnect();
+		
+		$response->res = $res;
+		$response->mes = $mes;
+		echo json_encode($response);
+	}
+
+	//Construimos programación para el día de la consulta y la finca seleccionada
+	function get_info_schedule(){	
+		$fun = new funciones();
+		$msg = new messages();
+		$response = new StdClass;
+
+		/*recibimos variables*/
+		$finca=$_POST["f"];
+
+		$con = new con();
+		$con->connect();
+
+		//traer información del turno segun sea la fecha
+		$iter = 0;
+		$script = '<script>$(document).on("ready", function(){';
+		$css = "<style>";
+		$item="<table class='table table-striped table-hover'>";
+		$html="";
+
+		$qry_des='SELECT * FROM tbl_turnos 
+		INNER JOIN tbl_despachos ON de_tu_id = tu_id
+		INNER JOIN tbl_inventario ON in_id = de_in_id
+		INNER JOIN tbl_fincas ON fi_codigo = "'.$finca.'";';
+
+		$data=$fun->get_array($qry_des);
+		for ($i=0; $i < count($data); $i++) { 
+			$fecha = explode(" ", $data[$i]['de_timestamp']);
+			$item.="<tr>";
+			$item.="<td>".$fecha[0]."</td>";
+			$item.="<td>".$data[$i]['tu_hora_ini']."</td>";
+			$item.="<td>".$data[$i]['de_pe_id']."</td>";
+			$item.="</tr>";
+		}
+	
+		$item.="</table>";
+
+		$css.='</style>';
+		$script.='});</script>';
+		
+		$html = $css.$script.$item;
+
+		if ($data!=false) {
 			$res=true;
 			$mes=$html;
 		} else {
@@ -167,13 +225,47 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 
 	}
 
+	//cambiar vehiculo
+	function upd_vehiculo(){
+		$fun = new funciones();
+		$msg = new messages();
+		$response = new StdClass;
 
+		/*recibimos variables*/
+		$id = $_POST['id'];
+		$vh = $_POST['vh'];
+
+		$con = new con();
+		$con->connect();
+
+		$t="personas";
+		$c="pe_ve_id=".$vh;
+		$w="pe_id=".$id;
+
+		$resp = $fun->actualizar($t, $c, $w);
+
+		if($resp){
+			$res=true;
+			$mes=$msg->get_msg("e004");
+		}else{
+			$res=false;
+			$mes=$msg->get_msg("e036");
+		}
+
+		$con->disconnect();
+		
+		$response->res = $res;
+		$response->mes = $mes;
+		echo json_encode($response);
+	}
   //validamos si es una petición ajax
   if(isset($_POST['action']) && !empty($_POST['action'])) {
       $action = $_POST['action'];
       switch($action) {
           case 'get_info_cond' : get_turnos_cond();break;
           case 'update_delivery' : upd_despacho();break;
+          case 'update_vh' : upd_vehiculo();break;
+          case 'get_info_schedule' : get_info_schedule();break;
       }
   }
 ?>

@@ -25,19 +25,20 @@ class personas{
 
         $btn_des = "des_persona('".$row_res["pe_id"]."',this)";
         $btn_act = "act_persona('".$row_res["pe_id"]."',this)";
+        $btn_del = "del_persona('".$row_res["pe_id"]."',this)";
 
         if($row_res["pe_estado"]==1 && $row_res["pe_tipo"]!=1 ){
           $btn_set = '<div id="edt-button" style="display:none;" onclick="" class="btn btn-floating-mini btn-success" title="Modificar"><i class="md  md-edit"></i></div>
                       <div id="des-button" onclick="'.$btn_des.'" class="btn btn-floating-mini btn-warning" title="Deshabilitar"><i class="md  md-visibility-off"></i></div>
-                      <div id="del-button" onclick="" class="btn btn-floating-mini btn-danger" title="Borrar"><i class="md  md-delete"></i></div>';
+                      <div id="del-button" onclick="'.$btn_del.'" class="btn btn-floating-mini btn-danger" title="Borrar"><i class="md  md-delete"></i></div>';
         }
         elseif($row_res["pe_estado"]==2 && $row_res["pe_tipo"]!=1 ){
           $btn_set = '<div id="edt-button" style="display:none;" onclick="" class="btn btn-floating-mini btn-success" title="Modificar"><i class="md  md-edit"></i></div>
                       <div id="act-button" onclick="'.$btn_act.'" class="btn btn-floating-mini btn-warning" title="Habilitar"><i class="md  md-visibility"></i></div>
-                      <div id="del-button" onclick="" class="btn btn-floating-mini btn-danger" title="Borrar"><i class="md  md-delete"></i></div>';
+                      <div id="del-button" onclick="'.$btn_del.'" class="btn btn-floating-mini btn-danger" title="Borrar"><i class="md  md-delete"></i></div>';
         }else{
           $btn_set = '<div id="edt-button" style="display:none;" onclick="" class="btn btn-floating-mini btn-success" title="Modificar"><i class="md  md-edit"></i></div>
-                      <div id="del-button" onclick="" class="btn btn-floating-mini btn-danger" title="Borrar"><i class="md  md-delete"></i></div>';
+                      <div id="del-button" onclick="'.$btn_del.'" class="btn btn-floating-mini btn-danger" title="Borrar"><i class="md  md-delete"></i></div>';
         }
         $item.='
               <tr id="'.$row_res["pe_cedula"].'">
