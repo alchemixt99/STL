@@ -5,7 +5,7 @@ class con {
     private $user = 'root';  
     private $pass = '';  
     public $type = 'mysql';  
-    private $db = "bd_stl_logistica";   
+    private $db = "stl_logistik";   
     public $lid = 0;  
 
     //funcion de conexion  

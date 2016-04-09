@@ -98,7 +98,7 @@ class funciones{
 		$respuesta = array();
 		//traemos consulta
 		$selectSQL =$qry;
-		//echo $selectSQL;
+		#echo $selectSQL;
 		$res_cons = mysql_query($selectSQL);
 		if($res_cons){
 			while($row_cons = mysql_fetch_assoc($res_cons)){
@@ -117,7 +117,7 @@ class funciones{
 		$con->connect();
 		//preguntamos si existe la finca en la matriz entregada
 		$selectSQL ="UPDATE tbl_".$tbl." SET ".$cambios." WHERE ".$where.";";
-		//echo $selectSQL;
+		#echo $selectSQL;
 		$res_upd = mysql_query($selectSQL);
 		if($res_upd){$respuesta=true;}else{$respuesta=false;}
 		

@@ -25,6 +25,8 @@ $js = $libs->get_js();
       
     <link rel="stylesheet" href="chart/morris.css" type="text/css"> 
 
+    <link rel="icon" href="favicon.ico" type="image/x-icon"/>
+
     <script src="js/jquery.min.js"></script>
     <script src="js/jquery.easing.js"></script>
     <script src="js/bootstrap.min.js"></script>

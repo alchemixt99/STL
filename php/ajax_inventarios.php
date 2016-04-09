@@ -295,7 +295,22 @@ if(!$fun->isAjax()){header ("Location: ../../mods/panel/panel.php");}
 
 		$res=$fun->actualizar($tbl, $cambios, $where);
 
-		if ($res) {
+		#tenemos que actualizar en control_inventarios
+		#traemos inventario total del lote
+		$inv_array = $fun->get_array("SELECT CI.ci_id, CI.ci_vol_act FROM tbl_control_inventarios CI 
+								  INNER JOIN tbl_inventario I ON I.in_lote = CI.ci_in_lote
+								  WHERE I.in_id =".$id.";");
+		$ni_r=($oin+$inv_array[0]['ci_vol_act'])-$inv;
+
+		#actualizamos
+		$tbl="control_inventarios";
+		$cambios = 'ci_vol_act = '.$ni_r;
+		$where = 'ci_id = '.$inv_array[0]['ci_id'];
+		$res2=$fun->actualizar($tbl, $cambios, $where);
+
+
+
+		if ($res && $res2) {
 			$res=true;
 			$mes=$msg->get_msg("e004");
 		}else{

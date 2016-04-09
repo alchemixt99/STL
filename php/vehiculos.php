@@ -12,10 +12,7 @@ class vehiculos{
 
     //consultamos usuarios
     if(isset($_SESSION["ses_id"])){
-      $qry='SELECT * FROM tbl_vehiculos AS V
-            INNER JOIN tbl_personas AS P ON P.pe_ve_id = V.ve_id
-            WHERE V.ve_estado=1;';
-      //echo $qry;
+      $qry='SELECT * FROM tbl_vehiculos V INNER JOIN tbl_personas P ON P.pe_id = V.ve_pe_id WHERE V.ve_estado=1;';
       $res = mysql_query($qry);
 
       $item =" ";

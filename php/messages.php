@@ -24,7 +24,7 @@ class messages{
 			"e016" => "016 - Problemas al borrar los lotes autorizados, comuniquese con soporte, gracias.",
 			"e017" => "017 - Problemas al borrar el control de inventarios, comuniquese con soporte, gracias.",
 			"e018" => "018 - Problemas al borrar inventarios asociados, comuniquese con soporte, gracias.",
-			"e019" => "019 - Problemas al borrar inventario, comuniquese con soporte, gracias.",
+			"e019" => "019 - Problemas al modificar inventario, comuniquese con soporte, gracias.",
 			"e020" => "020 - Este supervisor no se puede eliminar, comuniquese con soporte, gracias.",
 			"e021" => "021 - Este supervisor ya está registrado en el sistema.",
 			"e022" => "022 - Este vehiculo no se puede eliminar, comuniquese con soporte, gracias.",

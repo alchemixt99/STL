@@ -19,8 +19,13 @@ class rfisicas{
       $item =" ";
       $script ="<script>$(document).ready(function(){";
       while($row_res = mysql_fetch_assoc($res)) {
+        $denominador = $row_res["rf_dig_fin"]-$row_res["rf_dig_ini"];
         //calculamos porcentaje de uso
-          $porcentaje=(($row_res["rf_cant_usados"]*100)/($row_res["rf_dig_fin"]-$row_res["rf_dig_ini"]));
+        if($denominador>0){
+          $porcentaje=(($row_res["rf_cant_usados"]*100)/$denominador);}
+          else{
+            $porcentaje=0;
+          }
           //echo "datos: <br> -usados: ".$row_res["rf_cant_usados"]."<br>-fin: ".$row_res["rf_dig_fin"]."<br>-ini: ".$row_res["rf_dig_ini"];
         //boton de activacion/desactivación
           if ($row_res["rf_estado"]==1) {
